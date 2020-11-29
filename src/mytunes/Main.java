@@ -1,17 +1,17 @@
-package sample;
+package mytunes;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.gui.model.MusicPlayer;
+import mytunes.gui.model.MusicPlayer;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../sample/gui/view/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("mytunes/gui/view/sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();

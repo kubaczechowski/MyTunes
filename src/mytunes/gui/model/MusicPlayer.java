@@ -2,7 +2,7 @@
  * @author kjell
  */
 
-package sample.gui.model;
+package mytunes.gui.model;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
