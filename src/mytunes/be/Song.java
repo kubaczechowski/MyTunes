@@ -6,7 +6,7 @@ public class Song {
     private String title;
     private String artist;
     private String category;
-    private double time;
+    private int time;
     private String filePath;
 
     public Song(int id, String title, String artist, String category, String filePath) {
@@ -18,7 +18,7 @@ public class Song {
         this.filePath = filePath;
     }
 
-    private double countTime() {
+    private int countTime() {
         //needs implementation
         return 0;
     }
@@ -55,7 +55,7 @@ public class Song {
         this.category = category;
     }
 
-    public double getTime() {
+    public int getTime() {
         return time;
     }
 

@@ -1,48 +1,82 @@
 package mytunes.dal;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mytunes.be.Song;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SongDAO {
 
-    private SQLServerDataSource dataSource = new SQLServerDataSource();
+    private DatabaseConnector databaseConnector;
+
+    public SongDAO()  {
+        databaseConnector = new DatabaseConnector();
+    }
+
+    public List<Song> getAllSongs() {
+        ArrayList<Song> allSongs = new ArrayList<>();
+        try (Connection con = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM Songs;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String artist = rs.getString("artist");
+                String category = rs.getString("category");
+                String filePath = rs.getString("filePath");
+                Song song = new Song(id, title, artist, category, filePath);
+                allSongs.add(song);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return allSongs;
+    }
 
     /**
      * Creates a new song which is added to the database
      */
     private Song createSong(String title, String artist, String category, String filePath) {
 
-        try (Connection con = dataSource.getConnection()) {
+        Song song = null;
 
+        try (Connection con = databaseConnector.getConnection()) {
+
+            /*
             Statement s = con.createStatement();
             ResultSet r = s.executeQuery("SELECT COUNT(*) AS rowcount FROM Songs");
             r.next();
             int id = r.getInt("rowcount") + 1;
-            r.close() ;
+            r.close();
 
-            Song song = new Song(id, title, artist, category, filePath);
+             */
+
+            //i dont know what about id
+            int id = 0;
+
+            song = new Song(id, title, artist, category, filePath);
 
             String sql = "insert into Songs (title, artist, category, time, filePath) values (?, ?, ?, ?, ?);";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setString(1, song.getTitle());
             pstat.setString(2, song.getArtist());
             pstat.setString(3, song.getCategory());
-            pstat.setDouble(4, song.getTime());
+            pstat.setInt(4, song.getTime());
             pstat.setString(5, song.getFilePath());
             pstat.executeUpdate();
 
-            return song;
-
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
-            return null;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            return null;
         }
+
+        return song;
     }
 
     /**
@@ -50,7 +84,7 @@ public class SongDAO {
      */
     private void deleteSong(Song song) {
 
-        try (Connection con = dataSource.getConnection()) {
+        try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM Songs WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, song.getId());
@@ -67,7 +101,7 @@ public class SongDAO {
      */
     private void updateSong(Song song, String title, String artist, String category, String filePath) {
 
-        try (Connection con = dataSource.getConnection()) {
+        try (Connection con = databaseConnector.getConnection()) {
             String sql = "UPDATE Songs SET title=?, artist=?, category=?, filePath=? WHERE id=?";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setString(1, title);
@@ -90,8 +124,8 @@ public class SongDAO {
 
         Song song = null;
 
-        try (Connection con = dataSource.getConnection()) {
-            String sql = "SELECT * FROM SONGS WHERE id=?";
+        try (Connection con = databaseConnector.getConnection()) {
+            String sql = "SELECT * FROM Songs WHERE id=?";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, id);
             ResultSet result = pstat.executeQuery(sql);
@@ -100,7 +134,7 @@ public class SongDAO {
                 String title = result.getString("title");
                 String artist = result.getString("artist");
                 String category = result.getString("category");
-                double time = result.getDouble("time");
+                int time = result.getInt("time");
                 String filePath = result.getString("filePath");
 
                 song = new Song(id, title, artist, category, filePath);
