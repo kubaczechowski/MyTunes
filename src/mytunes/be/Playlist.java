@@ -1,5 +1,8 @@
 package mytunes.be;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,8 +26,8 @@ public class Playlist {
         this.name = name;
     }
 
-    public List<Song> getSongs() {
-        return songs;
+    public ObservableList<Song> getSongs() {
+        return FXCollections.observableArrayList(songs);
     }
 
     public void setSongs(List<Song> songs) {

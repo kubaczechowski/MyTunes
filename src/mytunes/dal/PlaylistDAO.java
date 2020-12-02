@@ -42,7 +42,7 @@ public class PlaylistDAO {
         return  allPlaylists;
     }
 
-    public Playlist createPlaylist(String playName) throws Exception {
+    public Playlist createPlaylist(String playName) {
         //create object later
         Playlist newPlaylist = null;
 
@@ -59,7 +59,7 @@ public class PlaylistDAO {
 
             //get the automatically created id from the playlist
             //and then create an object which has to be returned
-            String getID = "SELECT id FROM Playlist WHERE playName=?;";
+            String getID = "SELECT id FROM Playlists WHERE playName=?;";
             PreparedStatement preparedStatement2 = con.prepareStatement(getID);
             preparedStatement2.setString(1, playName);
             ResultSet resultSet = preparedStatement2.executeQuery(getID);
@@ -77,8 +77,12 @@ public class PlaylistDAO {
         }
 
         if(newPlaylist==null)
-            throw new Exception("Playlist is still empty. The name of the playlist: "+
-                    playName);
+            try {
+                throw new Exception("Playlist is still empty. The name of the playlist: "+
+                        playName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         return  newPlaylist;
     }
