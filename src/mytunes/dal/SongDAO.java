@@ -69,6 +69,21 @@ public class SongDAO {
             pstat.setInt(4, song.getTime());
             pstat.setString(5, song.getFilePath());
             pstat.executeUpdate();
+<<<<<<< Updated upstream
+=======
+            */
+
+
+            String getID = "SELECT id FROM Songs WHERE filePath=?;";
+            PreparedStatement preparedStatement2 = con.prepareStatement(getID);
+            preparedStatement2.setString(1, filePath);
+            ResultSet resultSet = preparedStatement2.executeQuery(getID);
+
+            id = resultSet.getInt("id");
+
+            song = new Song(id, title, artist, category, filePath);
+
+>>>>>>> Stashed changes
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
@@ -82,7 +97,7 @@ public class SongDAO {
     /**
      * Deletes given song
      */
-    private void deleteSong(Song song) {
+    public void deleteSong(Song song) {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM Songs WHERE id=?;";

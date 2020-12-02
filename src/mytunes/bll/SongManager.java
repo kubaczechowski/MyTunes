@@ -35,4 +35,8 @@ public class SongManager {
                 song.getCategory(),
                 song.getFilePath());
     }
+
+    public void delete(Song songToBeDeleted) {
+        songDAO.deleteSong(songToBeDeleted);
+    }
 }

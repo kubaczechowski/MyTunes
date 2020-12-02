@@ -4,6 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+<<<<<<< Updated upstream
+=======
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+>>>>>>> Stashed changes
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import mytunes.gui.model.SongModel;
@@ -48,7 +53,21 @@ public class Controller {
 
     }
 
-    public void DeleteSongButton(ActionEvent event) {
+    public void DeleteSongButton(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/deleteSongPrompt.fxml"));
+        Parent root = loader.load();
+        DeleteSongPrompt deleteSongPrompt = loader.getController();
+        //send the song to another controller
+        deleteSongPrompt.getSong(songsTable.getSelectionModel().getSelectedItem());
 
+<<<<<<< Updated upstream
+=======
+        Stage stage = new Stage();
+        stage.setTitle("Prompt");
+        stage.setScene(new Scene(root));
+        stage.show();
+
+     //data has to be passed back
+>>>>>>> Stashed changes
     }
 }

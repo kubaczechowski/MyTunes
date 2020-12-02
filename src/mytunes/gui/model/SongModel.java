@@ -21,4 +21,11 @@ public class SongModel {
     public void save(Song song) {
         songManager.save(song);
     }
+<<<<<<< Updated upstream
+=======
+
+    public void delete(Song songToBeDeleted) {
+        songManager.delete(songToBeDeleted);
+    }
+>>>>>>> Stashed changes
 }
