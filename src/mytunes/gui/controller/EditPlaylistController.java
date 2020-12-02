@@ -38,5 +38,6 @@ public class EditPlaylistController {
 
         Stage s = (Stage) txtField.getScene().getWindow();
         s.close();
+
     }
 }

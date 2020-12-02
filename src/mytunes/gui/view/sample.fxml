@@ -59,17 +59,17 @@
             <TableColumn fx:id="sTime" prefWidth="73.0" text="Time" />
         </columns>
       </TableView>
-      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" text="New...">
+      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#newSongButton" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Edit...">
+      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" onAction="#editSongButton" prefHeight="25.0" prefWidth="58.0" text="Edit...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Delete">
+      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" onAction="#DeleteSongButton" prefHeight="25.0" prefWidth="78.0" text="Delete">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

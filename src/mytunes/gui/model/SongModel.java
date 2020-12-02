@@ -1,14 +1,18 @@
 package mytunes.gui.model;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.Song;
 import mytunes.bll.SongManager;
+import java.net.URL;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SongModel {
+
 
     private SongManager songManager;
     private ObservableList<Song> songs;
@@ -29,6 +33,15 @@ public class SongModel {
             if(song.getTitle().contains(text) || song.getArtist().contains(text)) searchedSongs.add(song);
         }
         return FXCollections.observableArrayList(searchedSongs);
+    }
+
+    public int getSongTime(String mediaStringUrl) {
+       return songManager.getSongTime(mediaStringUrl);
+
+    }
+
+    public void save(Song song) {
+        songManager.save(song);
     }
 
 }

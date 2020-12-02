@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/mytunes/gui/view/sample.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
@@ -21,7 +21,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         String musicPath = "src/Music/song2.wav";
         MusicPlayer player = new MusicPlayer();
-        player.play(musicPath);
+      //  player.play(musicPath);
         launch(args);
     }
 }

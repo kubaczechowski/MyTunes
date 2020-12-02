@@ -41,20 +41,42 @@ public class SongDAO {
     /**
      * Creates a new song which is added to the database
      */
-    private Song createSong(String title, String artist, String category, String filePath) {
+
+   public Song createSong(String title, String artist, String category, String filePath) {
+
 
         Song song = null;
 
         try (Connection con = databaseConnector.getConnection()) {
 
+
             String sql = "insert into Songs (title, artist, category, playTime, filePath) values (?, ?, ?, ?, ?);";
-            PreparedStatement pstat = con.prepareStatement(sql);
+
+            /*
+            Statement s = con.createStatement();
+            ResultSet r = s.executeQuery("SELECT COUNT(*) AS rowcount FROM Songs");
+            r.next();
+            int id = r.getInt("rowcount") + 1;
+            r.close();
+
+             */
+
+            //i dont know what about id
+            int id = 0;
+
+            song = new Song(id, title, artist, category, filePath);
+
+         
+
+            /*PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setString(1, song.getTitle());
             pstat.setString(2, song.getArtist());
             pstat.setString(3, song.getCategory());
             pstat.setInt(4, song.getTime());
             pstat.setString(5, song.getFilePath());
             pstat.executeUpdate();
+            */
+
 
             String getID = "SELECT id FROM Songs WHERE filePath=?;";
             PreparedStatement preparedStatement2 = con.prepareStatement(getID);
@@ -64,6 +86,7 @@ public class SongDAO {
             int id = resultSet.getInt("id");
 
             song = new Song(id, title, artist, category, filePath);
+
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
@@ -129,7 +152,9 @@ public class SongDAO {
                 String title = result.getString("title");
                 String artist = result.getString("artist");
                 String category = result.getString("category");
+
                 int time = result.getInt("playTime");
+
                 String filePath = result.getString("filePath");
 
                 song = new Song(id, title, artist, category, filePath);
