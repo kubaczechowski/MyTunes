@@ -34,8 +34,8 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="arrowUP" layoutX="306.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowUPButton.css" />
-      <Button fx:id="arrowDOWN" layoutX="354.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowDOWNButton.css" />
+      <Button fx:id="arrowUP" layoutX="306.0" layoutY="569.0" mnemonicParsing="false" onAction="#sortAscending" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowUPButton.css" />
+      <Button fx:id="arrowDOWN" layoutX="354.0" layoutY="569.0" mnemonicParsing="false" onAction="#sortDescending" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowDOWNButton.css" />
       <Text layoutX="37.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Playlists">
          <font>
             <Font name="System Bold Italic" size="12.0" />

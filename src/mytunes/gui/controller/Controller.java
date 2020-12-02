@@ -21,12 +21,15 @@ import mytunes.gui.model.SongModel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
     public TableView<Playlist> playlistsTable;
-    public ListView songsOnPlaylistView;
+    public ListView<Song> songsOnPlaylistView;
     public TableView<Song> songsTable;
     public TextField searchBar;
     public TableColumn pName;
@@ -143,6 +146,32 @@ public class Controller implements Initializable {
 
     }
 
+    public void sortAscending(ActionEvent event) {
+        //get all songs in the table
+        ArrayList<Song> songArrayList= new ArrayList<>();
+        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
+
+        songArrayList.sort(Comparator.comparing(Song::getTitle));
+        songsOnPlaylistView.getItems().removeAll();
+
+        songsOnPlaylistView.getItems().addAll(songArrayList);
+       // songsOnPlaylistView
+    }
+
+    public void sortDescending(ActionEvent event) {
+
+        Comparator comparatorDesc = Collections.reverseOrder();
+
+        //get all songs in the table
+        ArrayList<Song> songArrayList= new ArrayList<>();
+        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
+
+        songArrayList.sort(Comparator.comparing(Song::getTitle).reversed());
+        songsOnPlaylistView.getItems().removeAll();
+
+        songsOnPlaylistView.getItems().addAll(songArrayList);
+        // songsOnPlaylistView
+    }
 }
 
 
