@@ -75,6 +75,7 @@ public class SongDAO {
             pstat.setInt(4, song.getTime());
             pstat.setString(5, song.getFilePath());
             pstat.executeUpdate();
+
             */
 
 
@@ -83,7 +84,8 @@ public class SongDAO {
             preparedStatement2.setString(1, filePath);
             ResultSet resultSet = preparedStatement2.executeQuery(getID);
 
-            int id = resultSet.getInt("id");
+
+            id = resultSet.getInt("id");
 
             song = new Song(id, title, artist, category, filePath);
 
@@ -100,7 +102,7 @@ public class SongDAO {
     /**
      * Deletes given song
      */
-    private void deleteSong(Song song) {
+    public void deleteSong(Song song) {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM Songs WHERE id=?;";

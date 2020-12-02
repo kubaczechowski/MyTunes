@@ -40,4 +40,8 @@ public class SongManager {
                 song.getFilePath());
 
     }
+
+    public void delete(Song songToBeDeleted) {
+        songDAO.deleteSong(songToBeDeleted);
+    }
 }

@@ -6,8 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+
+
+import javafx.stage.FileChooser;
+
 import javafx.stage.Stage;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
@@ -122,7 +127,18 @@ public class Controller implements Initializable {
 
     }
 
-    public void DeleteSongButton(ActionEvent event) {
+    public void DeleteSongButton(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/deleteSongPrompt.fxml"));
+        Parent root = loader.load();
+        DeleteSongPrompt deleteSongPrompt = loader.getController();
+        //send the song to another controller
+        deleteSongPrompt.getSong(songsTable.getSelectionModel().getSelectedItem());
+
+
+        Stage stage = new Stage();
+        stage.setTitle("Prompt");
+        stage.setScene(new Scene(root));
+        stage.show();
 
 
     }

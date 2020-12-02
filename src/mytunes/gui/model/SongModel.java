@@ -44,4 +44,9 @@ public class SongModel {
         songManager.save(song);
     }
 
+
+    public void delete(Song songToBeDeleted) {
+        songManager.delete(songToBeDeleted);
+    }
+
 }
