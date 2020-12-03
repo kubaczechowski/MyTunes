@@ -116,10 +116,7 @@ public class EditSongController implements Initializable {
 
 
         }
-    @FXML
-    public void initialize() {
-       //fileField.setText(file.getAbsolutePath());
-    }
+
 
     public void saveButtonAction(ActionEvent event) {
         //save the object in the DB
