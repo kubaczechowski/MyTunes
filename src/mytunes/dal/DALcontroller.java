@@ -1,8 +1,14 @@
 package mytunes.dal;
 
 import mytunes.be.Playlist;
+
 import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
+
+import mytunes.be.PlaylistItem;
+
+import mytunes.dal.interfaces.IPlaylistItemRepository;
+
 import mytunes.dal.interfaces.IPlaylistRepository;
 import mytunes.dal.interfaces.ISongRepository;
 
@@ -12,6 +18,9 @@ public class DALcontroller implements IDALFacade {
 
     private IPlaylistRepository playlistAccess;
     private ISongRepository songAccess;
+
+    private IPlaylistItemRepository itemAccess;
+
 
 
     public DALcontroller() {
@@ -65,4 +74,21 @@ public class DALcontroller implements IDALFacade {
     public Song getSong(int id) throws DALexception {
        return songAccess.getSong(id);
     }
+
+
+    @Override
+    public List<PlaylistItem> getAllPlaylistItems() {
+        return playlistAccess.getAllPlaylists();
+    }
+
+    @Override
+    public PlaylistItem createPlaylistItem(int songId, int playlistId) {
+        return null;
+    }
+
+    @Override
+    public void deleteSong(PlaylistItem playlistItem) {
+
+    }
+
 }

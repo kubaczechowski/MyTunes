@@ -4,6 +4,7 @@
 
 package mytunes.gui.model;
 
+
 import mytunes.be.Song;
 import mytunes.bll.MusicManager;
 import javafx.collections.FXCollections;
@@ -14,9 +15,18 @@ import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+
+
+
+
+
 public class MusicPlayer {
 
-    private MusicManager musicManager;
+    private SongManager songManager;
     private String currentlyPlaying;
     private Media media;
     private MediaPlayer audioPlayer;
@@ -25,9 +35,14 @@ public class MusicPlayer {
     private ObservableList<Song> songList;
 
     public MusicPlayer() {
-        musicManager = new MusicManager();
+        songManager = new SongManager();
         songList = FXCollections.observableArrayList();
-        songList.addAll(musicManager.getAllSongs());
+        try {
+            songList.addAll(songManager.getAllSongs());
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+
     }
 
     /**
@@ -36,6 +51,7 @@ public class MusicPlayer {
     public ObservableList<Song> getSongList() {
         return songList;
     }
+
 
     /**
      * Checks if song is paused, if it is, then play.
