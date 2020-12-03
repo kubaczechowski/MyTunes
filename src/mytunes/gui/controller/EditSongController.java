@@ -102,9 +102,9 @@ public class EditSongController implements Initializable {
                 //Desktop desktop = Desktop.getDesktop();
                 // it simply opens the file desktop.open(file);
                File file1;
-               // fileChooser.setInitialDirectory(
-               //         new File("D:\\onedrive2\\github\\Itunes on Kjell\\MyTunes\\src\\Music"));
-               //file1 = fileChooser.showSaveDialog(stage);
+               fileChooser.setInitialDirectory(
+                     new File("D:\\onedrive2\\github\\Itunes on Kjell\\MyTunes\\src\\Music"));
+               file1 = fileChooser.showSaveDialog(stage);
 
                 //save that file in the program
             }

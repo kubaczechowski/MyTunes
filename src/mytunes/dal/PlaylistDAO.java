@@ -3,20 +3,21 @@ package mytunes.dal;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mytunes.be.Playlist;
 import mytunes.be.PlaylistItem;
+import mytunes.dal.exception.DALexception;
+import mytunes.dal.interfaces.IPlaylistRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistDAO {
+public class PlaylistDAO implements IPlaylistRepository {
     private DatabaseConnector databaseConnector;
 
     public PlaylistDAO()  {
         databaseConnector = new DatabaseConnector();
     }
 
-    public List<Playlist> getAllPlaylists()
-    {
+    public List<Playlist> getAllPlaylists() throws DALexception {
         List<Playlist> allPlaylists = new ArrayList<>();
 
         try(Connection con = databaseConnector.getConnection())
@@ -36,13 +37,15 @@ public class PlaylistDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get All playlist", throwables);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get All playlist", throwables);
         }
         return  allPlaylists;
     }
 
-    public Playlist createPlaylist(String playName) {
+    public Playlist createPlaylist(String playName) throws DALexception {
         //create object later
         Playlist newPlaylist = null;
 
@@ -54,7 +57,7 @@ public class PlaylistDAO {
 
             if(checkIfExecuted<1)
             {
-                throw new Exception("Couldn't create a playlist");
+                throw new DALexception("Couldn't create a playlist");
             }
 
             //get the automatically created id from the playlist
@@ -70,19 +73,16 @@ public class PlaylistDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
-        } catch (SQLException throwables) {
+            throw new DALexception("Couldn't create a playlist", throwables);
+        } catch (SQLException | DALexception throwables) {
             throwables.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            throw new DALexception("Couldn't create a playlist", throwables);
         }
 
         if(newPlaylist==null)
-            try {
-                throw new Exception("Playlist is still empty. The name of the playlist: "+
+                throw new DALexception("Playlist is still empty. The name of the playlist: "+
                         playName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
         return  newPlaylist;
     }
@@ -92,8 +92,7 @@ public class PlaylistDAO {
      * I believe its a better idea.
      * @param playlist
      */
-    public void deletePlaylist(Playlist playlist)
-    {
+    public void deletePlaylist(Playlist playlist) throws DALexception {
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE * FROM Playlists WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
@@ -102,13 +101,14 @@ public class PlaylistDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete playlist", throwables);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete playlist", throwables);
         }
     }
 
-    public void updatePlaylistName(Playlist playlist, String newPlaylistName)
-    {
+    public void updatePlaylistName(Playlist playlist, String newPlaylistName) throws DALexception {
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "UPDATE Movies SET title=? WHERE id=?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -119,8 +119,10 @@ public class PlaylistDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update playlist name", throwables);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update playlist name", throwables);
         }
     }
 

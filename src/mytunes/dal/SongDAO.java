@@ -2,12 +2,14 @@ package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mytunes.be.Song;
+import mytunes.dal.exception.DALexception;
+import mytunes.dal.interfaces.ISongRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongDAO {
+public class SongDAO implements ISongRepository {
 
     private DatabaseConnector databaseConnector;
 
@@ -15,7 +17,7 @@ public class SongDAO {
         databaseConnector = new DatabaseConnector();
     }
 
-    public List<Song> getAllSongs() {
+    public List<Song> getAllSongs() throws DALexception {
         ArrayList<Song> allSongs = new ArrayList<>();
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM Songs;";
@@ -34,6 +36,7 @@ public class SongDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw new DALexception("Couldn't get all songs");
         }
         return allSongs;
     }
@@ -42,7 +45,7 @@ public class SongDAO {
      * Creates a new song which is added to the database
      */
 
-   public Song createSong(String title, String artist, String category, String filePath) {
+   public Song createSong(String title, String artist, String category, String filePath) throws DALexception {
 
 
         Song song = null;
@@ -92,8 +95,10 @@ public class SongDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("couldn't create s song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("couldn't create a song");
         }
 
         return song;
@@ -102,7 +107,7 @@ public class SongDAO {
     /**
      * Deletes given song
      */
-    public void deleteSong(Song song) {
+    public void deleteSong(Song song) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM Songs WHERE id=?;";
@@ -111,15 +116,17 @@ public class SongDAO {
             pstat.executeUpdate();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete song");
         }
     }
 
     /**
      * Updates the given song with given values
      */
-    private void updateSong(Song song, String title, String artist, String category, String filePath) {
+    public void updateSong(Song song, String title, String artist, String category, String filePath) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "UPDATE Songs SET title=?, artist=?, category=?, filePath=? WHERE id=?";
@@ -132,15 +139,17 @@ public class SongDAO {
             pstat.executeUpdate();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update song");
         }
     }
 
     /**
      * Returns a song with desired values
      */
-    private Song getSong(int id) {
+    public Song getSong(int id) throws DALexception {
 
         Song song = null;
 
@@ -164,8 +173,10 @@ public class SongDAO {
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get a song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get a song");
         }
 
         return song;

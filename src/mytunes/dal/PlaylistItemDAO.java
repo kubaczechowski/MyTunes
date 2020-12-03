@@ -2,12 +2,14 @@ package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mytunes.be.PlaylistItem;
+import mytunes.dal.exception.DALexception;
+import mytunes.dal.interfaces.IPlaylistItemRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistItemDAO {
+public class PlaylistItemDAO implements IPlaylistItemRepository {
 
     private DatabaseConnector databaseConnector;
 
@@ -15,7 +17,7 @@ public class PlaylistItemDAO {
         databaseConnector = new DatabaseConnector();
     }
 
-    public List<PlaylistItem> getAllPlaylistItems() {
+    public List<PlaylistItem> getAllPlaylistItems() throws DALexception {
 
         ArrayList<PlaylistItem> all = new ArrayList<>();
 
@@ -33,7 +35,8 @@ public class PlaylistItemDAO {
                 all.add(playlistItem);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+           // ex.printStackTrace();
+            throw new DALexception("Couldn't getAllPlaylistItems", ex);
         }
         return all;
     }
@@ -41,7 +44,7 @@ public class PlaylistItemDAO {
     /**
      * Creates a new playlistItem (adds a song to the playlist)
      */
-    private PlaylistItem createPlaylistItem(int songId, int playlistId) {
+    public PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception {
 
         PlaylistItem playlistItem = null;
 
@@ -56,9 +59,11 @@ public class PlaylistItemDAO {
             pstat.executeUpdate();
 
         } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
+            //hrowables.printStackTrace();
+            throw new DALexception("Couldn't create playlistItem", throwables);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            throw new DALexception("Couldn't create playlistItem", throwables);
         }
 
         return playlistItem;
@@ -67,7 +72,7 @@ public class PlaylistItemDAO {
     /**
      * Deletes given playlistItem (deleting song from a playlist)
      */
-    private void deleteSong(PlaylistItem playlistItem) {
+    public void deleteSong(PlaylistItem playlistItem) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM PlaylistItems WHERE songID=?, playlistID=?;";
@@ -77,9 +82,12 @@ public class PlaylistItemDAO {
 
             pstat.executeUpdate();
         } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
+            throw new DALexception("Couldn't delete song", throwables);
+           // throwables.printStackTrace();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new DALexception("Couldn't deleteSong", throwables);
+            //throwables.printStackTrace();
+
         }
     }
 

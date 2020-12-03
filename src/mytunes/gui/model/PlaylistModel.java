@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.Playlist;
 import mytunes.bll.PlaylistManager;
+import mytunes.bll.exeption.BLLexception;
 
 public class PlaylistModel {
 
@@ -13,7 +14,11 @@ public class PlaylistModel {
     public PlaylistModel() {
         playlistManager = new PlaylistManager();
         playlists = FXCollections.observableArrayList();
-        playlists.addAll(playlistManager.getAllPlaylists());
+        try {
+            playlists.addAll(playlistManager.getAllPlaylists());
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public ObservableList<Playlist> getAllPlaylists() {
@@ -21,15 +26,27 @@ public class PlaylistModel {
     }
 
     public void deletePlaylist(Playlist playlist) {
-        playlistManager.deletePlaylist(playlist);
+        try {
+            playlistManager.deletePlaylist(playlist);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
         playlists.remove(playlist);
     }
 
     public void newPlaylist(String name) {
-        playlists.add(playlistManager.newPlaylist(name));
+        try {
+            playlists.add(playlistManager.newPlaylist(name));
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public void updatePlaylist(String name, Playlist playlist) {
-        playlistManager.updatePlaylist(name, playlist);
+        try {
+            playlistManager.updatePlaylist(name, playlist);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 }

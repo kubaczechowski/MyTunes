@@ -42,6 +42,8 @@ public class Controller implements Initializable {
         playlistsTable.setItems(playlistModel.getAllPlaylists());
         songsTable.setItems(songModel.getAllSongs());
         filterButton = true;
+
+
     }
 
     public void newPlaylist(ActionEvent actionEvent) {
