@@ -21,10 +21,7 @@ import mytunes.gui.model.SongModel;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -147,6 +144,16 @@ public class Controller implements Initializable {
     }
 
     public void sortAscending(ActionEvent event) {
+        //get all songs from the ListView
+        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
+        //sort
+        allSongsOnPlaylistSorted.sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+
+        //upload the ListView
+        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
+        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+
+        /*
         //get all songs in the table
         ArrayList<Song> songArrayList= new ArrayList<>();
         songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
@@ -156,9 +163,22 @@ public class Controller implements Initializable {
 
         songsOnPlaylistView.getItems().addAll(songArrayList);
        // songsOnPlaylistView
+
+         */
     }
 
     public void sortDescending(ActionEvent event) {
+
+        //get all songs from the ListView
+        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
+        //sort
+        allSongsOnPlaylistSorted.sort((o1, o2) -> o2.getTitle().compareTo(o1.getTitle()));
+
+        //upload the ListView
+        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
+        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+
+        /*
 
         Comparator comparatorDesc = Collections.reverseOrder();
 
@@ -171,6 +191,8 @@ public class Controller implements Initializable {
 
         songsOnPlaylistView.getItems().addAll(songArrayList);
         // songsOnPlaylistView
+
+         */
     }
 }
 
