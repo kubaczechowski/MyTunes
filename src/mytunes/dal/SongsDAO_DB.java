@@ -28,10 +28,10 @@ public class SongsDAO_DB {
                 String title = rs.getString("title");
                 String artist = rs.getString("title");
                 String category = rs.getString("title");
-               double time = rs.getDouble("time");
+              // double time = rs.getDouble("time");
                 String filePath = rs.getString("filePath");
-               Song song = new Song(title, artist, category, time, filePath);
-                allSongs.add(song);
+               //Song song = new Song(title, artist, category, time, filePath);
+                //allSongs.add(song);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
