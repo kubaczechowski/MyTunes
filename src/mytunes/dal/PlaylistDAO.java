@@ -126,6 +126,44 @@ public class PlaylistDAO implements IPlaylistRepository {
         }
     }
 
+    public int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
+
+        try (Connection con = databaseConnector.getConnection()) {
+            Statement statement = con.createStatement();
+            String sql = "SELECT COUNT(*) AS row_count FROM Playlists;";
+            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet.next();
+            int numberOfSongs = resultSet.getInt("row_count");
+            return  numberOfSongs;
+
+        } catch (SQLServerException throwables) {
+           // throwables.printStackTrace();
+            throw new DALexception("Couldn't get the number of songs on the playlist", throwables);
+        } catch (SQLException throwables) {
+           // throwables.printStackTrace();
+            throw new DALexception("Couldn't get the number of songs on the playlist", throwables);
+        }
+        
+    }
+
+    public double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception {
+        try (Connection con = databaseConnector.getConnection()) {
+            String sql = "SELECT SUM(playlistID) FROM PlaylistItems WHERE songID=?; ";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setInt(1, playlist.getId());
+
+            double totalTime = preparedStatement.executeUpdate();
+            return totalTime;
+
+        } catch (SQLServerException throwables) {
+            //throwables.printStackTrace();
+            throw new DALexception("Couldn't get total time on the playlist", throwables);
+        } catch (SQLException throwables) {
+           // throwables.printStackTrace();
+            throw new DALexception("Couldn't get total time on the playlist", throwables);
+        }
+    }
+
 
 
 }
