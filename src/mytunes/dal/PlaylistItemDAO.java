@@ -35,7 +35,7 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
                 all.add(playlistItem);
             }
         } catch (SQLException ex) {
-           // ex.printStackTrace();
+            ex.printStackTrace();
             throw new DALexception("Couldn't getAllPlaylistItems", ex);
         }
         return all;

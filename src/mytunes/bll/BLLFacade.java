@@ -1,6 +1,11 @@
 package mytunes.bll;
 
 
+import mytunes.be.Playlist;
+import mytunes.be.Song;
+import mytunes.bll.exeption.BLLexception;
+
+import java.util.List;
 
 public interface BLLFacade {
     //PlaylistManager

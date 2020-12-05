@@ -18,6 +18,7 @@ public class DALcontroller implements IDALFacade {
 
     private IPlaylistRepository playlistAccess;
     private ISongRepository songAccess;
+    private IPlaylistItemRepository playlistItemAccess;
 
     private IPlaylistItemRepository itemAccess;
 
@@ -26,8 +27,12 @@ public class DALcontroller implements IDALFacade {
     public DALcontroller() {
         playlistAccess = new PlaylistDAO();
         songAccess = new SongDAO();
+        playlistItemAccess = new PlaylistItemDAO();
+
 
     }
+
+    //PlaylistDAO
 
     @Override
     public List<Playlist> getAllPlaylists() throws DALexception {
@@ -49,6 +54,7 @@ public class DALcontroller implements IDALFacade {
         playlistAccess.updatePlaylistName(playlist, newPlaylistName);
     }
 
+    //songDAO
     @Override
     public List<Song> getAllSongs() throws DALexception {
         return  songAccess.getAllSongs();
@@ -75,20 +81,20 @@ public class DALcontroller implements IDALFacade {
        return songAccess.getSong(id);
     }
 
-
+    //PlaylistItemDAO
     @Override
-    public List<PlaylistItem> getAllPlaylistItems() {
-        return playlistAccess.getAllPlaylists();
+    public List<PlaylistItem> getAllPlaylistItems() throws DALexception {
+        return playlistItemAccess.getAllPlaylistItems();
     }
 
     @Override
-    public PlaylistItem createPlaylistItem(int songId, int playlistId) {
-        return null;
+    public PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception {
+        return playlistItemAccess.createPlaylistItem(songId, playlistId);
     }
 
     @Override
-    public void deleteSong(PlaylistItem playlistItem) {
-
+    public void deleteSong(PlaylistItem playlistItem) throws DALexception {
+            playlistItemAccess.deleteSong(playlistItem);
     }
 
 }

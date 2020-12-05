@@ -15,6 +15,10 @@ import mytunes.dal.exception.DALexception;
 
 import java.lang.Object;
 
+/**
+ * author kuba czechowski
+ */
+
 public class SongManager {
     private SongDAO songDAO;
 
@@ -24,16 +28,16 @@ public class SongManager {
     }
 
 
-    public List<Song> getAllSongs() {
-        return songDAO.getAllSongs();
-	}
+
+
     public List<Song> getAllSongs() throws BLLexception {
+
         try {
             return songDAO.getAllSongs();
         } catch (DALexception daLexception) {
-            daLexception.printStackTrace();
-            throw new BLLexception("couldn't get all songs");
+            throw new BLLexception("Couldn't get all songs", daLexception);
         }
+
     }
 
     /**
@@ -43,20 +47,10 @@ public class SongManager {
     public int getSongTime(String mediaStringUrl) {
         Media media = new Media(mediaStringUrl);
         int time = (int) media.getDuration().toSeconds();
-
         return time;
-
-
     }
 
 
-    public void save(Song song) {
-        songDAO.createSong(
-                song.getTitle(),
-                song.getArtist(),
-                song.getCategory(),
-                song.getFilePath());
-    }
 
     public void save(Song song) throws BLLexception {
         try {
@@ -77,7 +71,7 @@ public class SongManager {
         try {
             songDAO.deleteSong(songToBeDeleted);
         } catch (DALexception daLexception) {
-            daLexception.printStackTrace();
+           // daLexception.printStackTrace();
             throw new BLLexception("couldn't delete a song");
         }
     }

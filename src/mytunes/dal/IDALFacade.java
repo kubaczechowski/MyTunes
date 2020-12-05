@@ -33,9 +33,9 @@ public interface IDALFacade {
     Song getSong(int id) throws DALexception;
 
     //PlaylistItemDAO
-    List<PlaylistItem> getAllPlaylistItems();
+    List<PlaylistItem> getAllPlaylistItems() throws DALexception;
 
-    PlaylistItem createPlaylistItem(int songId, int playlistId);
+    PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception;
 
-    void deleteSong(PlaylistItem playlistItem);
+    void deleteSong(PlaylistItem playlistItem) throws DALexception;
 }

@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.Song;
 import mytunes.bll.SongManager;
+import mytunes.bll.exeption.BLLexception;
+
 import java.net.URL;
 
 
@@ -20,7 +22,11 @@ public class SongModel {
     public SongModel() {
         songManager = new SongManager();
         songs = FXCollections.observableArrayList();
-        songs.addAll(songManager.getAllSongs());
+        try {
+            songs.addAll(songManager.getAllSongs());
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public ObservableList<Song> getAllSongs() {
@@ -41,12 +47,20 @@ public class SongModel {
     }
 
     public void save(Song song) {
-        songManager.save(song);
+        try {
+            songManager.save(song);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
 
     public void delete(Song songToBeDeleted) {
-        songManager.delete(songToBeDeleted);
+        try {
+            songManager.delete(songToBeDeleted);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
 }

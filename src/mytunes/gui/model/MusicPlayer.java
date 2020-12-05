@@ -11,6 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import mytunes.bll.SongManager;
+import mytunes.bll.exeption.BLLexception;
+
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -37,13 +40,15 @@ public class MusicPlayer {
     public MusicPlayer() {
         songManager = new SongManager();
         songList = FXCollections.observableArrayList();
-        try {
+       /* try {
             songList.addAll(songManager.getAllSongs());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
+            }
+        */
+
         }
 
-    }
 
     /**
      * @return list of all songs

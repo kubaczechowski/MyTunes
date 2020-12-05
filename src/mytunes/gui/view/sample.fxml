@@ -9,13 +9,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.gui.controller.Controller">
    <children>
       <TableView fx:id="playlistsTable" layoutX="37.0" layoutY="111.0" onMouseClicked="#playlistSelected" prefHeight="448.0" prefWidth="256.0">
         <columns>
-          <TableColumn fx:id="pName" prefWidth="129.0" text="Name" />
-          <TableColumn fx:id="pSongs" prefWidth="63.0" text="Songs" />
-            <TableColumn fx:id="pTime" prefWidth="63.0" text="Time" />
+          <TableColumn fx:id="columnName" prefWidth="129.0" text="Name" />
+          <TableColumn fx:id="columnSong" prefWidth="63.0" text="Songs" />
+            <TableColumn fx:id="columnTime" prefWidth="63.0" text="Time" />
         </columns>
       </TableView>
       <ListView fx:id="songsOnPlaylistView" layoutX="306.0" layoutY="111.0" prefHeight="448.0" prefWidth="180.0" />
@@ -59,17 +59,17 @@
             <TableColumn fx:id="sTime" prefWidth="73.0" text="Time" />
         </columns>
       </TableView>
-      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" text="New...">
+      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddEditWindow" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="Edit...">
+      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddEditWindow" prefHeight="25.0" prefWidth="58.0" text="Edit...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Delete">
+      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" onAction="#deleteSongButton" prefHeight="25.0" prefWidth="78.0" text="Delete">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
