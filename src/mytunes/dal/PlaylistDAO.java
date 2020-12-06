@@ -42,7 +42,52 @@ public class PlaylistDAO {
         return  allPlaylists;
     }
 
+<<<<<<< Updated upstream
     public Playlist createPlaylist(String playName) throws Exception {
+=======
+     */
+
+    /**
+     * for each playlist we simply get information about everything except
+     * the list of songs which has to be rertived from table
+     * PlaylistItems and theere WHERE PlaylistID=? we need to select all
+     * the songs and assign them to this very playlist
+     *
+     * instead if that ^ we will use a method form PlaylistItemDAO
+     * getSongsFromSpecificPlaylist(int playlistID)
+     * @return
+     * @throws DALexception
+     */
+    public List<Playlist> getAllPlaylists() throws DALexception
+    {
+        ArrayList<Playlist> allPlaylists = new ArrayList<>();
+        try(Connection con = databaseConnector.getConnection())
+        {
+            String sql = "SELECT * FROM Playlists;";
+            PreparedStatement pstat = con.prepareStatement(sql);
+            ResultSet resultSet = pstat.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("playName");
+                List<Song> songsList = playlistItemDAO.getSongsFromSpecificPlaylist(id);
+                int numberOfSongs = resultSet.getInt("numberOfSongs");
+                int totalPlaytime = resultSet.getInt("totalPlaytime");
+                Playlist playlist = new Playlist(id, name, songsList,
+                        numberOfSongs, totalPlaytime );
+                allPlaylists.add(playlist);
+            }
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return allPlaylists;
+    }
+
+
+    public Playlist createPlaylist(String playName) throws DALexception {
+>>>>>>> Stashed changes
         //create object later
         Playlist newPlaylist = null;
 

@@ -17,6 +17,63 @@ import java.io.IOException;
 
 public class Controller {
     private SongModel songModel;
+<<<<<<< Updated upstream
+=======
+    private boolean filterButton;
+
+    public Controller()
+    {
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //preparing
+        playlistModel = new PlaylistModel();
+        songModel = new SongModel();
+        //tablePlaylist.addAll(playlistModel.getAllPlaylists());
+
+        //I don't remember what it means
+        filterButton = true;
+
+        //TableView Playlists
+        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
+        columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
+        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("totalPlaytime"));
+        playlistsTable.setItems(playlistModel.getAllPlaylists());
+
+
+        //songModel.loadSongs();
+        //playlistsTable.setItems(songModel.getAllSongs());
+
+
+
+
+    }
+
+    public void newPlaylist(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
+            Parent root = loader.load();
+
+            EditPlaylistController controller = loader.getController();
+            controller.newOrEdit(true, playlistModel, null);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Add new playlist");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editPlaylist(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
+            Parent root = loader.load();
+>>>>>>> Stashed changes
 
 
     public void setModel(SongModel songModel) {

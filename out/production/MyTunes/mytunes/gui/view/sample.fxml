@@ -69,7 +69,11 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
+<<<<<<< Updated upstream
       <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" onAction="#DeleteSongButton" prefHeight="25.0" prefWidth="78.0" text="Delete">
+=======
+      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Delete">
+>>>>>>> Stashed changes
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
