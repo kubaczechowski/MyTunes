@@ -13,4 +13,9 @@ public interface IPlaylistRepository {
     void deletePlaylist(Playlist playlist) throws DALexception;
 
     void updatePlaylistName(Playlist playlist, String newPlaylistName) throws DALexception;
+
+    int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception;
+
+    double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
+
 }

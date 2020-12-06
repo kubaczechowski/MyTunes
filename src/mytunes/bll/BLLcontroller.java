@@ -91,4 +91,22 @@ public class BLLcontroller implements BLLFacade{
         }
 
     }
+
+    @Override
+    public int getNumberOfSongsOnPlaylist(Playlist playlist) throws BLLexception {
+        try {
+            return idalFacade.getNumberOfSongsOnPlaylist(playlist);
+        } catch (DALexception daLexception) {
+            throw new BLLexception("Couldn't get number of songs on the playlist", daLexception);
+        }
+    }
+
+    @Override
+    public double getTotalTimeOnPlaylist(Playlist playlist) throws BLLexception {
+        try {
+           return idalFacade.getTotalTimeOnPlaylist(playlist);
+        } catch (DALexception daLexception) {
+            throw new BLLexception("Couldn't get total time on playlist", daLexception);
+        }
+    }
 }

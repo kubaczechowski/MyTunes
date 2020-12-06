@@ -1,6 +1,9 @@
 package mytunes.gui.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
 import javafx.fxml.Initializable;
@@ -8,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 
@@ -31,17 +35,44 @@ public class Controller implements Initializable {
     public TextField searchBar;
     public TableColumn pName;
 
+    //TableView Columns PLAYLIST
+    @FXML
+    private TableColumn<Playlist, String> columnName;
+    @FXML
+    private TableColumn<Playlist, Integer> columnSong;
+    @FXML
+    private TableColumn<Playlist, String> columnTime;
+
+    private ObservableList<Playlist> tablePlaylist =
+            FXCollections.observableArrayList();
+
     private PlaylistModel playlistModel;
     private SongModel songModel;
     private boolean filterButton;
 
+    public Controller()
+    {
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //preparing
         playlistModel = new PlaylistModel();
         songModel = new SongModel();
-        playlistsTable.setItems(playlistModel.getAllPlaylists());
-        songsTable.setItems(songModel.getAllSongs());
+        //tablePlaylist.addAll(playlistModel.getAllPlaylists());
+
+        //I don't remember what it means
         filterButton = true;
+
+        //TableView Songs
+        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
+        columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
+        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("totalPlaytime"));
+        songModel.loadSongs();
+        playlistsTable.setItems(songModel.getObservableMovies());
+
+
 
 
     }
@@ -102,19 +133,12 @@ public class Controller implements Initializable {
         }
     }
 
-     public void newSongButton(ActionEvent event) throws IOException {
-       openAddEditWindow();
-    }
 
-
-    public void editSongButton(ActionEvent event) throws IOException {
-        openAddEditWindow();
-    }
 
     /**
-     * method created in order to obey repetition
-     * is used by the two methods newSongButton & editSongButton
+     *method opens a new window when button new or edit are pressed
      */
+    @FXML
     private void openAddEditWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/editSong.fxml"));
         Parent root = loader.load();
@@ -129,7 +153,10 @@ public class Controller implements Initializable {
 
     }
 
-    public void DeleteSongButton(ActionEvent event) throws IOException {
+    /**
+     * method opens an alert window when delete button is pressed
+     */
+    public void deleteSongButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/deleteSongPrompt.fxml"));
         Parent root = loader.load();
         DeleteSongPrompt deleteSongPrompt = loader.getController();

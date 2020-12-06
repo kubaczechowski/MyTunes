@@ -5,6 +5,8 @@ import javafx.scene.media.Media;
 import javafx.util.Duration;
 import mytunes.be.Song;
 import mytunes.bll.exeption.BLLexception;
+import mytunes.dal.DALcontroller;
+import mytunes.dal.IDALFacade;
 import mytunes.dal.SongDAO;
 
 import java.util.List;
@@ -20,11 +22,11 @@ import java.lang.Object;
  */
 
 public class SongManager {
-    private SongDAO songDAO;
+    private IDALFacade idalFacade;
 
     public SongManager()
     {
-        songDAO = new SongDAO();
+        idalFacade = new DALcontroller();
     }
 
 
@@ -33,7 +35,7 @@ public class SongManager {
     public List<Song> getAllSongs() throws BLLexception {
 
         try {
-            return songDAO.getAllSongs();
+            return idalFacade.getAllSongs();
         } catch (DALexception daLexception) {
             throw new BLLexception("Couldn't get all songs", daLexception);
         }
@@ -45,16 +47,14 @@ public class SongManager {
      */
 
     public int getSongTime(String mediaStringUrl) {
-        Media media = new Media(mediaStringUrl);
-        int time = (int) media.getDuration().toSeconds();
-        return time;
+       return idalFacade.getSongTime(mediaStringUrl);
     }
 
 
 
     public void save(Song song) throws BLLexception {
         try {
-            songDAO.createSong(
+            idalFacade.createSong(
                     song.getTitle(),
                     song.getArtist(),
                     song.getCategory(),
@@ -69,7 +69,7 @@ public class SongManager {
 
     public void delete(Song songToBeDeleted) throws BLLexception {
         try {
-            songDAO.deleteSong(songToBeDeleted);
+            idalFacade.deleteSong(songToBeDeleted);
         } catch (DALexception daLexception) {
            // daLexception.printStackTrace();
             throw new BLLexception("couldn't delete a song");

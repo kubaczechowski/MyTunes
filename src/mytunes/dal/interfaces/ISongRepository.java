@@ -20,4 +20,6 @@ public interface ISongRepository {
     Song getSong(int id) throws DALexception;
 
     void updateSong(int id);
+
+    int getSongTime(String mediaStringUrl);
 }

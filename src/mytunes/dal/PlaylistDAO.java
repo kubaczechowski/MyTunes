@@ -3,6 +3,7 @@ package mytunes.dal;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import mytunes.be.Playlist;
 import mytunes.be.PlaylistItem;
+import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
 import mytunes.dal.interfaces.IPlaylistRepository;
 
@@ -12,11 +13,14 @@ import java.util.List;
 
 public class PlaylistDAO implements IPlaylistRepository {
     private DatabaseConnector databaseConnector;
+    private PlaylistItemDAO playlistItemDAO;
 
     public PlaylistDAO()  {
         databaseConnector = new DatabaseConnector();
+        playlistItemDAO = new PlaylistItemDAO();
     }
 
+    /*
     public List<Playlist> getAllPlaylists() throws DALexception {
         List<Playlist> allPlaylists = new ArrayList<>();
 
@@ -45,6 +49,47 @@ public class PlaylistDAO implements IPlaylistRepository {
         return  allPlaylists;
     }
 
+     */
+
+    /**
+     * for each playlist we simply get information about everything except
+     * the list of songs which has to be rertived from table
+     * PlaylistItems and theere WHERE PlaylistID=? we need to select all
+     * the songs and assign them to this very playlist
+     *
+     * instead if that ^ we will use a method form PlaylistItemDAO
+     * getSongsFromSpecificPlaylist(int playlistID)
+     * @return
+     * @throws DALexception
+     */
+    public List<Playlist> getAllPlaylists() throws DALexception
+    {
+        ArrayList<Playlist> allPlaylists = new ArrayList<>();
+        try(Connection con = databaseConnector.getConnection())
+        {
+            String sql = "SELECT * FROM Playlists;";
+            PreparedStatement pstat = con.prepareStatement(sql);
+            ResultSet resultSet = pstat.executeQuery(sql);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("playName");
+                List<Song> songsList = playlistItemDAO.getSongsFromSpecificPlaylist(id);
+                int numberOfSongs = resultSet.getInt("numberOfSongs");
+                int totalPlaytime = resultSet.getInt("totalPlaytime");
+                Playlist playlist = new Playlist(id, name, songsList,
+                        numberOfSongs, totalPlaytime );
+                allPlaylists.add(playlist);
+            }
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return allPlaylists;
+    }
+
+
     public Playlist createPlaylist(String playName) throws DALexception {
         //create object later
         Playlist newPlaylist = null;
@@ -59,7 +104,6 @@ public class PlaylistDAO implements IPlaylistRepository {
             {
                 throw new DALexception("Couldn't create a playlist");
             }
-
             //get the automatically created id from the playlist
             //and then create an object which has to be returned
             String getID = "SELECT id FROM Playlists WHERE playName=?;";
@@ -68,9 +112,9 @@ public class PlaylistDAO implements IPlaylistRepository {
             ResultSet resultSet = preparedStatement2.executeQuery(getID);
 
             int id = resultSet.getInt("id");
-
-            newPlaylist = new Playlist(id, playName);
-
+            //this are initial values when a song is created
+            newPlaylist = new Playlist(id, playName, null,
+                    0, 0);
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
             throw new DALexception("Couldn't create a playlist", throwables);
@@ -82,8 +126,6 @@ public class PlaylistDAO implements IPlaylistRepository {
         if(newPlaylist==null)
                 throw new DALexception("Playlist is still empty. The name of the playlist: "+
                         playName);
-
-
         return  newPlaylist;
     }
 
@@ -143,7 +185,7 @@ public class PlaylistDAO implements IPlaylistRepository {
            // throwables.printStackTrace();
             throw new DALexception("Couldn't get the number of songs on the playlist", throwables);
         }
-        
+
     }
 
     public double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception {

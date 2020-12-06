@@ -18,6 +18,11 @@ public interface IDALFacade {
 
     void updatePlaylistName(Playlist playlist, String newPlaylistName) throws DALexception;
 
+    int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception;
+
+    double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
+
+
 
     //songDAO
     List<Song> getAllSongs() throws DALexception;
@@ -31,6 +36,8 @@ public interface IDALFacade {
                String artist, String category, String filePath) throws DALexception;
 
     Song getSong(int id) throws DALexception;
+
+    int getSongTime(String mediaStringUrl);
 
     //PlaylistItemDAO
     List<PlaylistItem> getAllPlaylistItems() throws DALexception;

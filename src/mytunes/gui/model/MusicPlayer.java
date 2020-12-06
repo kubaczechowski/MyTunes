@@ -6,30 +6,21 @@ package mytunes.gui.model;
 
 
 import mytunes.be.Song;
-import mytunes.bll.MusicManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import mytunes.bll.SongManager;
-import mytunes.bll.exeption.BLLexception;
+import mytunes.bll.BLLFacade;
+import mytunes.bll.BLLcontroller;
 
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.File;
-
-
-
-
 
 public class MusicPlayer {
 
-    private SongManager songManager;
+    private BLLFacade bllFacade;
     private String currentlyPlaying;
     private Media media;
     private MediaPlayer audioPlayer;
@@ -38,7 +29,7 @@ public class MusicPlayer {
     private ObservableList<Song> songList;
 
     public MusicPlayer() {
-        songManager = new SongManager();
+        bllFacade = new BLLcontroller();
         songList = FXCollections.observableArrayList();
        /* try {
             songList.addAll(songManager.getAllSongs());

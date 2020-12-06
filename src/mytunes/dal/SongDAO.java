@@ -1,6 +1,7 @@
 package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import javafx.scene.media.Media;
 import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
 import mytunes.dal.interfaces.ISongRepository;
@@ -30,8 +31,9 @@ public class SongDAO implements ISongRepository {
                 String title = rs.getString("title");
                 String artist = rs.getString("artist");
                 String category = rs.getString("category");
+                int playTime = rs.getInt("playTime");
                 String filePath = rs.getString("filePath");
-                Song song = new Song(id, title, artist, category, filePath);
+                Song song = new Song(id, title, artist, category, playTime, filePath);
                 allSongs.add(song);
             }
         } catch (SQLException ex) {
@@ -45,64 +47,36 @@ public class SongDAO implements ISongRepository {
      * Creates a new song which is added to the database
      */
 
-   public Song createSong(String title, String artist, String category, String filePath) throws DALexception {
+   public Song createSong(String title, String artist, String category,
+                          String filePath) throws DALexception {
+       try (Connection con = databaseConnector.getConnection()) {
+             String sql= " INSERT INTO SONGS (title, artist," +
+                     " category, playtime, filePath) values(?, ?, ?, ?, ?); ";
+           PreparedStatement preparedStatement = con.prepareStatement(sql);
+           preparedStatement.setString(1, title);
+           preparedStatement.setString(2, artist);
+           preparedStatement.setString(3, category);
+           preparedStatement.setInt(4, getSongTime(filePath) );
+           preparedStatement.setString(5, filePath);
 
+           preparedStatement.executeUpdate();
+           //song is created in the DB
 
-        Song song = null;
+           //pass it so that we can see it in the TableView
+           //Thanks to Observable pattern
 
-        try (Connection con = databaseConnector.getConnection()) {
+           String sql2 = "Select id FROM Songs WHERE title=?;";
+           PreparedStatement preparedStatement1 = con.prepareStatement(sql2);
+           ResultSet rs  = preparedStatement1.executeQuery();
+           int id = rs.getInt("id");
+           return new Song(id, title, artist, category, getSongTime(filePath), filePath);
 
-
-            String sql = "insert into Songs (title, artist, category, playTime, filePath) values (?, ?, ?, ?, ?);";
-
-            /*
-            Statement s = con.createStatement();
-            ResultSet r = s.executeQuery("SELECT COUNT(*) AS rowcount FROM Songs");
-            r.next();
-            int id = r.getInt("rowcount") + 1;
-            r.close();
-
-             */
-
-            //i dont know what about id
-            int id = 0;
-
-            song = new Song(id, title, artist, category, filePath);
-
-         
-
-            /*PreparedStatement pstat = con.prepareStatement(sql);
-            pstat.setString(1, song.getTitle());
-            pstat.setString(2, song.getArtist());
-            pstat.setString(3, song.getCategory());
-            pstat.setInt(4, song.getTime());
-            pstat.setString(5, song.getFilePath());
-            pstat.executeUpdate();
-
-            */
-
-
-            String getID = "SELECT id FROM Songs WHERE filePath=?;";
-            PreparedStatement preparedStatement2 = con.prepareStatement(getID);
-            preparedStatement2.setString(1, filePath);
-            ResultSet resultSet = preparedStatement2.executeQuery(getID);
-
-
-            id = resultSet.getInt("id");
-
-            song = new Song(id, title, artist, category, filePath);
-
-
-        } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
-            throw new DALexception("couldn't create s song");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            throw new DALexception("couldn't create a song");
-        }
-
-        return song;
-    }
+       } catch (SQLServerException throwables) {
+           throw new DALexception("Couldn't crate song", throwables);
+       } catch (SQLException throwables) {
+           throw new DALexception("Couldn't create song", throwables);
+       }
+   }
 
     /**
      * Deletes given song
@@ -129,7 +103,8 @@ public class SongDAO implements ISongRepository {
     public void updateSong(Song song, String title, String artist, String category, String filePath) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
-            String sql = "UPDATE Songs SET title=?, artist=?, category=?, filePath=? WHERE id=?";
+            String sql = "UPDATE Songs SET title=?, artist=?, " +
+                    "category=?, filePath=? WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setString(1, title);
             pstat.setString(2, artist);
@@ -154,7 +129,7 @@ public class SongDAO implements ISongRepository {
         Song song = null;
 
         try (Connection con = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM Songs WHERE id=?";
+            String sql = "SELECT * FROM Songs WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, id);
             ResultSet result = pstat.executeQuery(sql);
@@ -168,7 +143,7 @@ public class SongDAO implements ISongRepository {
 
                 String filePath = result.getString("filePath");
 
-                song = new Song(id, title, artist, category, filePath);
+                song = new Song(id, title, artist, category, time, filePath);
             }
 
         } catch (SQLServerException throwables) {
@@ -180,5 +155,21 @@ public class SongDAO implements ISongRepository {
         }
 
         return song;
+    }
+
+    //I don't know if this method is used somewhere
+    @Override
+    public void updateSong(int id) {
+
+    }
+
+
+    /**
+     * Method that returns the time of the song in the seconds
+     */
+    public int getSongTime(String mediaStringUrl) {
+        Media media = new Media(mediaStringUrl);
+        int time = (int) media.getDuration().toSeconds();
+        return time;
     }
 }

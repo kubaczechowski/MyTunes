@@ -9,19 +9,17 @@ public class Song {
     private int playTime;
     private String filePath;
 
-    public Song(int id, String title, String artist, String category, String filePath) {
+    public Song(int id, String title, String artist,
+                String category, int playTime, String filePath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.category = category;
-        this.playTime = countTime();
+        this.playTime = playTime;
         this.filePath = filePath;
     }
 
-    private int countTime() {
-        //needs implementation
-        return 0;
-    }
+
 
     public int getId() {
         return id;
