@@ -16,8 +16,22 @@ public class PlaylistModel {
     public PlaylistModel() {
         bllAccess = new BLLcontroller();
         playlists = FXCollections.observableArrayList();
+
+        /*
         try {
             playlists.addAll(bllAccess.getAllPlaylists());
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+
+         */
+    }
+
+    public void load()
+    {
+        try {
+            if(bllAccess.getAllPlaylists()!=null)
+                playlists.addAll(bllAccess.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
@@ -76,6 +90,10 @@ public class PlaylistModel {
             blLexception.printStackTrace();
         }
         return -1;
+
     }
 
+    //updateNumberOfSongsOnPlaylist
+
+    //updateTotalTimeOnPlaylist
 }

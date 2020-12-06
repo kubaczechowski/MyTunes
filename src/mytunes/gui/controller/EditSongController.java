@@ -129,7 +129,7 @@ public class EditSongController implements Initializable {
         int time = songModel.getSongTime(mediaStringUrl);
         //show time in the titleField
         titleField.setText(String.valueOf(time));
-        Song song = new Song(id, title, artist, category, filepath);
+        Song song = new Song(id, title, artist, category,time , filepath);
 
         //song goes down in the 3-layer architecture
         songModel.save(song);

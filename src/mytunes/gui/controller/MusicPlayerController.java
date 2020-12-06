@@ -28,7 +28,7 @@ public class MusicPlayerController implements Initializable {
     public MusicPlayerController() {
         volumeSlider = new Slider(0.0,1.0,0.5);
         allSongs = musicPlayer.getSongList();
-        song = new Song(1,"bla","blabla","pop","src/Music/song2.wav");
+       // song = new Song(1,"bla","blabla","pop","src/Music/song2.wav");
     }
 
     @Override

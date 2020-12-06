@@ -53,10 +53,10 @@
       </Button>
       <TableView fx:id="songsTable" layoutX="569.0" layoutY="111.0" prefHeight="448.0" prefWidth="477.0">
         <columns>
-          <TableColumn fx:id="sTitle" prefWidth="235.0" text="Title" />
-          <TableColumn fx:id="sArtist" prefWidth="95.0" text="Artist" />
-            <TableColumn fx:id="sCategory" prefWidth="73.0" text="Category" />
-            <TableColumn fx:id="sTime" prefWidth="73.0" text="Time" />
+          <TableColumn fx:id="columnTitle" prefWidth="235.0" text="Title" />
+          <TableColumn fx:id="columnArtist" prefWidth="95.0" text="Artist" />
+            <TableColumn fx:id="columnCategory" prefWidth="73.0" text="Category" />
+            <TableColumn fx:id="columnTimeSong" prefWidth="73.0" text="Time" />
         </columns>
       </TableView>
       <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddEditWindow" text="New...">
@@ -69,7 +69,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" onAction="#deleteSongButton" prefHeight="25.0" prefWidth="78.0" text="Delete">
+      <Button layoutX="703.0" layoutY="569.0" mnemonicParsing="false" onAction="#deletePlaylist" prefHeight="25.0" prefWidth="78.0" text="Delete">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

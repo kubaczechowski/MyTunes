@@ -43,8 +43,18 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Playlist, String> columnTime;
 
-    private ObservableList<Playlist> tablePlaylist =
-            FXCollections.observableArrayList();
+    //TableView Columns Songs
+    @FXML
+    private  TableColumn<Song, String> columnTitle;
+    @FXML
+    private  TableColumn<Song, String> columnArtist;
+    @FXML
+    private TableColumn<Song, String > columnCategory;
+
+    @FXML TableColumn<Song, Integer> columnTimeSong;
+
+    //private ObservableList<Playlist> tablePlaylist =
+          // FXCollections.observableArrayList();
 
     private PlaylistModel playlistModel;
     private SongModel songModel;
@@ -65,12 +75,25 @@ public class Controller implements Initializable {
         //I don't remember what it means
         filterButton = true;
 
-        //TableView Songs
+        //TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("totalPlaytime"));
-        songModel.loadSongs();
-        playlistsTable.setItems(songModel.getObservableMovies());
+        playlistModel.load();
+        playlistsTable.setItems(playlistModel.getAllPlaylists());
+
+        //TableView Songs
+        columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
+        columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
+        columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
+        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playTime"));
+        songModel.load();
+        songsTable.setItems(songModel.getAllSongs());
+
+
+
+
+
 
 
 

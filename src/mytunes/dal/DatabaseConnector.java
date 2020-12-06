@@ -27,9 +27,9 @@ public class DatabaseConnector {
 
         dataSource = new SQLServerDataSource();
         dataSource.setServerName("10.176.111.31");
-        dataSource.setUser("vCSe20B_8");
+        dataSource.setUser("CSe20B_8");
         dataSource.setPassword("potatoe2020");
-        dataSource.setDatabaseName("ItunesGROUP2");
+        dataSource.setDatabaseName("MyItuesKuba");
     }
 
     public Connection getConnection() throws SQLServerException

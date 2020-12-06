@@ -69,7 +69,7 @@ public class PlaylistDAO implements IPlaylistRepository {
         {
             String sql = "SELECT * FROM Playlists;";
             PreparedStatement pstat = con.prepareStatement(sql);
-            ResultSet resultSet = pstat.executeQuery(sql);
+            ResultSet resultSet = pstat.executeQuery();
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
