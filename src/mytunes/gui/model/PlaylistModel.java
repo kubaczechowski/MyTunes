@@ -10,11 +10,11 @@ import mytunes.bll.exeption.BLLexception;
 
 public class PlaylistModel {
 
-    private BLLFacade bllAccess;
+    private PlaylistManager playlistManager;
     private ObservableList playlists;
 
     public PlaylistModel() {
-        bllAccess = new BLLcontroller();
+       playlistManager = new PlaylistManager();
         playlists = FXCollections.observableArrayList();
 
 /*
@@ -33,7 +33,7 @@ public class PlaylistModel {
     {
         try {
            //if(bllAccess.getAllPlaylists()!=null)
-                playlists.addAll(bllAccess.getAllPlaylists());
+                playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class PlaylistModel {
 
     public void deletePlaylist(Playlist playlist) {
         try {
-            bllAccess.deletePlaylist(playlist);
+            playlistManager.deletePlaylist(playlist);
 
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -55,8 +55,8 @@ public class PlaylistModel {
 
     public void newPlaylist(String name) {
         try {
-            playlists.add(bllAccess.newPlaylist(name));
-            bllAccess.newPlaylist(name);
+            playlists.add( playlistManager.newPlaylist(name));
+            playlistManager.newPlaylist(name);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class PlaylistModel {
 
     public void updatePlaylist(String name, Playlist playlist) {
         try {
-           bllAccess.updatePlaylist(name, playlist);
+            playlistManager.updatePlaylist(name, playlist);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
@@ -73,29 +73,35 @@ public class PlaylistModel {
     /**
      *
      */
+    /*
     public int getNumberOfSongsOnPlaylist(Playlist playlist)
     {
         try {
-            return bllAccess.getNumberOfSongsOnPlaylist(playlist);
+            return playlistManager.getNumberOfSongsOnPlaylist(playlist);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
         return -1;
     }
+
+     */
 
     /**
      *
      */
+    /*
     public double getTotalTimeOnPlaylist(Playlist playlist)
     {
         try {
-            return bllAccess.getTotalTimeOnPlaylist(playlist);
+            return  playlistManager.getTotalTimeOnPlaylist(playlist);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
         return -1;
 
     }
+
+     */
 
     //updateNumberOfSongsOnPlaylist
 

@@ -77,7 +77,7 @@ public class Controller implements Initializable {
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
         columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
-        //playlistModel.load();
+        playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
 
         //TableView Songs
