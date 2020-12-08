@@ -28,7 +28,7 @@ public class DatabaseConnector {
         dataSource = new SQLServerDataSource();
         dataSource.setServerName("10.176.111.31");
         dataSource.setUser("CSe20B_8");
-        dataSource.setPassword("potatoe2020");
+        dataSource.setPassword("potatoe2021");
         dataSource.setDatabaseName("MyItuesKuba");
     }
 

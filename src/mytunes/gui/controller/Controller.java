@@ -1,7 +1,5 @@
 package mytunes.gui.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +39,7 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Playlist, Integer> columnSong;
     @FXML
-    private TableColumn<Playlist, String> columnTime;
+    private TableColumn<Playlist, Integer> columnTime;
 
     //TableView Columns Songs
     @FXML
@@ -78,15 +76,15 @@ public class Controller implements Initializable {
         //TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
-        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("totalPlaytime"));
-        playlistModel.load();
+        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+        //playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
 
         //TableView Songs
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playTime"));
+        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
 
@@ -142,7 +140,8 @@ public class Controller implements Initializable {
 
     public void playlistSelected(MouseEvent mouseEvent) {
         Playlist p = playlistsTable.getSelectionModel().getSelectedItem();
-        songsOnPlaylistView.setItems(p.getSongs());
+        //here is an exception
+       // songsOnPlaylistView.setItems(p.getSongs());
     }
 
     public void searchAction(ActionEvent actionEvent) {

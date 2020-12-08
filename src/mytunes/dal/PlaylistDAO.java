@@ -109,7 +109,7 @@ public class PlaylistDAO implements IPlaylistRepository {
             String getID = "SELECT id FROM Playlists WHERE playName=?;";
             PreparedStatement preparedStatement2 = con.prepareStatement(getID);
             preparedStatement2.setString(1, playName);
-            ResultSet resultSet = preparedStatement2.executeQuery(getID);
+            ResultSet resultSet = preparedStatement2.executeQuery();
 
             int id = resultSet.getInt("id");
             //this are initial values when a song is created

@@ -113,10 +113,7 @@ public class EditSongController implements Initializable {
 
         }
 
-
-
         }
-
 
     public void saveButtonAction(ActionEvent event) {
         //save the object in the DB
@@ -124,12 +121,13 @@ public class EditSongController implements Initializable {
         String title = titleField.getText();
         String artist = artistField.getText();
         String category = this.category.getText();
-        URL url = getClass().getResource(filepath);
+        String filePath2 = filepathField.getText();
+        URL url = getClass().getResource(filePath2);
         String mediaStringUrl = url.toExternalForm();
         int time = songModel.getSongTime(mediaStringUrl);
         //show time in the titleField
         titleField.setText(String.valueOf(time));
-        Song song = new Song(id, title, artist, category,time , filepath);
+        Song song = new Song(id, title, artist, category,time , filePath2);
 
         //song goes down in the 3-layer architecture
         songModel.save(song);

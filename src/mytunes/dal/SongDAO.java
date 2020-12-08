@@ -31,7 +31,7 @@ public class SongDAO implements ISongRepository {
                 String title = rs.getString("title");
                 String artist = rs.getString("artist");
                 String category = rs.getString("category");
-                int playTime = rs.getInt("playTime");
+                int playTime = rs.getInt("playtime");
                 String filePath = rs.getString("filePath");
                 Song song = new Song(id, title, artist, category, playTime, filePath);
                 allSongs.add(song);

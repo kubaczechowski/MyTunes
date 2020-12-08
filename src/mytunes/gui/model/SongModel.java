@@ -22,14 +22,14 @@ public class SongModel {
     public SongModel() {
         songManager = new SongManager();
         songs = FXCollections.observableArrayList();
-        /*
+
         try {
             songs.addAll(songManager.getAllSongs());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
 
-         */
+
     }
 
     public void load()

@@ -11,26 +11,28 @@ import mytunes.bll.exeption.BLLexception;
 public class PlaylistModel {
 
     private BLLFacade bllAccess;
-    private ObservableList<Playlist> playlists;
+    private ObservableList playlists;
 
     public PlaylistModel() {
         bllAccess = new BLLcontroller();
         playlists = FXCollections.observableArrayList();
 
-        /*
+/*
         try {
             playlists.addAll(bllAccess.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
 
-         */
+ */
+
+
     }
 
     public void load()
     {
         try {
-            if(bllAccess.getAllPlaylists()!=null)
+           //if(bllAccess.getAllPlaylists()!=null)
                 playlists.addAll(bllAccess.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -44,6 +46,7 @@ public class PlaylistModel {
     public void deletePlaylist(Playlist playlist) {
         try {
             bllAccess.deletePlaylist(playlist);
+
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
@@ -53,6 +56,7 @@ public class PlaylistModel {
     public void newPlaylist(String name) {
         try {
             playlists.add(bllAccess.newPlaylist(name));
+            bllAccess.newPlaylist(name);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
