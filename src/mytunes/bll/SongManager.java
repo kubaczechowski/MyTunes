@@ -68,8 +68,18 @@ public class SongManager {
         try {
             idalFacade.deleteSong(songToBeDeleted);
         } catch (DALexception daLexception) {
-           // daLexception.printStackTrace();
+           daLexception.printStackTrace();
             throw new BLLexception("couldn't delete a song");
+        }
+    }
+
+    public void update(Song song) throws BLLexception {
+        try {
+            idalFacade.updateSong(song, song.getTitle(), song.getArtist(),
+                    song.getCategory(), song.getFilePath());
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+            throw new BLLexception("couldn't update a song");
         }
     }
 }

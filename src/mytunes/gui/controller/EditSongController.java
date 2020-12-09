@@ -56,11 +56,10 @@ public class EditSongController implements Initializable {
         this.songModel = songModel;
         this.fileChooser = fileChooser; //its set in the controller
         this.selectedItem = selectedItem;
-    }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        categoryMenu.setText("genre");
+        if(selectedItem==null)
+            System.out.println("in set model selected item is null");
+
 
         if(selectedItem!=null)
         {
@@ -73,7 +72,11 @@ public class EditSongController implements Initializable {
 
         else
             System.out.println("Selected item is null");
+    }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        categoryMenu.setText("genre");
 
     }
 
@@ -138,10 +141,17 @@ public class EditSongController implements Initializable {
         //String mediaStringUrl = url.toExternalForm();
         //int time = songModel.getSongTime(mediaStringUrl);
         //show time in the titleField
-        Song song = new Song(id, title, artist, category,time , filepath);
+        Song song = new Song(id, title, artist, category, time, filepath);
+        if(selectedItem==null) {
 
-        //song goes down in the 3-layer architecture
-        songModel.save(song);
+            //song goes down in the 3-layer architecture
+            songModel.save(song);
+        }
+        else if(selectedItem!=null)
+        {
+            //update song not save another one
+            songModel.update(song);
+        }
 
         //Close the window if everything went correctly
         Node n = (Node) event.getSource();

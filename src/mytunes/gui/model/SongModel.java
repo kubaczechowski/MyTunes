@@ -92,4 +92,13 @@ public class SongModel {
         songs.remove(songToBeDeleted);
     }
 
+    public void update(Song song) {
+        try {
+            songManager.update(song);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+        songs.remove(song);
+        songs.add(song);
+    }
 }
