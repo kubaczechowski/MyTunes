@@ -15,6 +15,7 @@ import java.util.List;
 
 public class SongModel {
 
+    private static SongModel songModelInstance;
 
     private SongManager songManager;
     private ObservableList<Song> songs;
@@ -30,6 +31,16 @@ public class SongModel {
         }
 
  */
+
+    }
+
+    public static SongModel createOrGetInstance()
+    {
+        if( songModelInstance == null)
+        {
+            songModelInstance = new SongModel();
+        }
+        return songModelInstance;
 
     }
 

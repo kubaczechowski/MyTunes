@@ -11,7 +11,7 @@ public class DeleteSongPrompt {
 
     public DeleteSongPrompt()
     {
-        songModel = new SongModel();
+        songModel = SongModel.createOrGetInstance();
     }
 
     private Song songToBeDeleted;

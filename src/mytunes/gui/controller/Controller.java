@@ -33,6 +33,7 @@ public class Controller implements Initializable {
     public TextField searchBar;
     public TableColumn pName;
 
+
     //TableView Columns PLAYLIST
     @FXML
     private TableColumn<Playlist, String> columnName;
@@ -60,19 +61,19 @@ public class Controller implements Initializable {
 
     public Controller()
     {
-     songModel = new SongModel();
+     songModel = SongModel.createOrGetInstance();
     }
 
-    public void setModel(SongModel songModel)
+    public void setObservableTableSongs(SongModel songModel)
     {
-        this.songModel = songModel;
         songsTable.setItems(songModel.getAllSongs());
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //preparing
         playlistModel = new PlaylistModel();
-        setModel(songModel);
+        setObservableTableSongs(songModel);
+
         //tablePlaylist.addAll(playlistModel.getAllPlaylists());
 
         //I don't remember what it means
