@@ -1,6 +1,7 @@
 package mytunes.gui.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -35,7 +36,7 @@ public class EditSongController implements Initializable {
     @FXML
     private TextField filepathField;
     @FXML
-    private SplitMenuButton category;
+    private SplitMenuButton categoryMenu;
 
     @FXML
     private Button chooseButton;
@@ -56,8 +57,9 @@ public class EditSongController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        category.setText("choose:");
-        category.getItems().addAll(
+        categoryMenu.setText("genre");
+       // category.setText("choose:");
+        /*categoryMenu.getItems().addAll(
                 new javafx.scene.control.MenuItem("rap"),
                 new javafx.scene.control.MenuItem("pop"),
                 new javafx.scene.control.MenuItem("country"),
@@ -66,6 +68,11 @@ public class EditSongController implements Initializable {
                 new javafx.scene.control.MenuItem("blues"),
                 new javafx.scene.control.MenuItem("bednarek")
                 );
+
+
+         */
+
+
         //category.getItems();
 
     }
@@ -124,7 +131,8 @@ public class EditSongController implements Initializable {
         int id=-1; //id will be changed in the dal layer
         String title = titleField.getText();
         String artist = artistField.getText();
-        String category = this.category.getText();
+        String category = this.categoryMenu.getText();
+       // String category = this.categoryMenu.
         String filepath = filepathField.getText();
         int time = Integer.parseInt(timeField.getText());
         //URL url = getClass().getResource(filePath2);
@@ -144,5 +152,23 @@ public class EditSongController implements Initializable {
     }
 
 
+    public void rap(ActionEvent event) {
+        categoryMenu.setText("rap");
+    }
 
+    public void trap(ActionEvent event) {
+        categoryMenu.setText("trap");
+    }
+
+    public void pop(ActionEvent event) {
+        categoryMenu.setText("pop");
+    }
+
+    public void jazz(ActionEvent event) {
+        categoryMenu.setText("jazz");
+    }
+
+    public void rock(ActionEvent event) {
+        categoryMenu.setText("rock");
+    }
 }
