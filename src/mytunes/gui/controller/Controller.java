@@ -60,14 +60,19 @@ public class Controller implements Initializable {
 
     public Controller()
     {
-
+     songModel = new SongModel();
     }
 
+    public void setModel(SongModel songModel)
+    {
+        this.songModel = songModel;
+        songsTable.setItems(songModel.getAllSongs());
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //preparing
         playlistModel = new PlaylistModel();
-        songModel = new SongModel();
+        setModel(songModel);
         //tablePlaylist.addAll(playlistModel.getAllPlaylists());
 
         //I don't remember what it means
@@ -87,14 +92,6 @@ public class Controller implements Initializable {
         columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
-
-
-
-
-
-
-
-
 
     }
 

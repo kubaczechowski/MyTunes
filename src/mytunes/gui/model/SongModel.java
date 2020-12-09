@@ -31,7 +31,6 @@ public class SongModel {
 
  */
 
-
     }
 
     public void load()
@@ -63,19 +62,23 @@ public class SongModel {
 
     public void save(Song song) {
         try {
+
             songManager.save(song);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
+        songs.add(song);
     }
 
 
     public void delete(Song songToBeDeleted) {
         try {
+
             songManager.delete(songToBeDeleted);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
+        songs.remove(songToBeDeleted);
     }
 
 }
