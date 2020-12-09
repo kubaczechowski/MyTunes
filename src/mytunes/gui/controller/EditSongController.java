@@ -13,10 +13,17 @@ import mytunes.gui.model.SongModel;
 
 import javafx.scene.control.TextField;
 
+import javax.sound.midi.Track;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
+
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 
 public class EditSongController implements Initializable {
     @FXML
@@ -40,20 +47,18 @@ public class EditSongController implements Initializable {
     private FileChooser fileChooser;
 
     private SongModel songModel;
-    private String filepath;
+
 
     public void setModel(SongModel songModel, FileChooser fileChooser) {
         this.songModel = songModel;
-        this.fileChooser = fileChooser;
-        //Kamila's part for now i will live as it is
-        // tableMovie.setItems(movieModel.getObservableMovies());
+        this.fileChooser = fileChooser; //its set in the controller
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         category.setText("choose:");
-        category.getItems().addAll(new javafx.scene.control.MenuItem("rap"),
+        category.getItems().addAll(
+                new javafx.scene.control.MenuItem("rap"),
                 new javafx.scene.control.MenuItem("pop"),
                 new javafx.scene.control.MenuItem("country"),
                 new javafx.scene.control.MenuItem("rock"),
@@ -61,6 +66,8 @@ public class EditSongController implements Initializable {
                 new javafx.scene.control.MenuItem("blues"),
                 new javafx.scene.control.MenuItem("bednarek")
                 );
+        //category.getItems();
+
     }
 
     //Buttons below
@@ -79,41 +86,38 @@ public class EditSongController implements Initializable {
         //open a file explorer
         Node n = (Node) event.getSource();
         Stage stage = (Stage) n.getScene().getWindow();
-
-        fileChooser.setTitle("Add file");
+        fileChooser.setTitle("Choose song");
         File file = fileChooser.showOpenDialog(stage);
-        //set the file Path in the TextField
-        if (file != null) {
-            fileChooser.getExtensionFilters().addAll(
-                   // new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                  //  new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"),
-                    new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.aac"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*"));
 
-            //show the file path to the user
-             filepath = file.getAbsolutePath();
-            filepathField.setText(filepath);
-            //then we need to save a copy of the song in our program so that all the users will be able to listen to added song
-            //only a local path will be stored in the DB
-
-            //add a file to the program
-            if(file!= null)
-            {
-                //Desktop desktop = Desktop.getDesktop();
-                // it simply opens the file desktop.open(file);
-               File file1;
-               fileChooser.setInitialDirectory(
-                     new File("D:\\onedrive2\\github\\Itunes on Kjell\\MyTunes\\src\\Music"));
-               file1 = fileChooser.showSaveDialog(stage);
-
-                //save that file in the program
-            }
-
-
-
+        //create a copy of the chosen song in the application folder IF the file was chosen .mp3 / .wav
+        Path pathOrigin = Path.of(file.getAbsolutePath());
+        //set a new path
+        Path destinationPath;
+        if (pathOrigin.toString().contains(".wav")) {
+            destinationPath = Path.of("src/Music/" + titleField.getText() + ".wav");
+        } else if (pathOrigin.toString().contains(".mp3")) ;
+        {
+            destinationPath = Path.of("src/Music/" + titleField.getText() + ".mp3");
         }
 
+        try {
+            // here it creates a copy in the shown destination
+            Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        //show it in the filepathFiled
+        filepathField.setText(String.valueOf(destinationPath));
+
+        //calcutate the time of the song
+        int time = songModel.getSongTime(pathOrigin.toUri().toString());
+
+        //show it in the timeField
+        timeField.setText(String.valueOf(time));
+
+    }
+
 
     public void saveButtonAction(ActionEvent event) {
         //save the object in the DB
@@ -121,13 +125,13 @@ public class EditSongController implements Initializable {
         String title = titleField.getText();
         String artist = artistField.getText();
         String category = this.category.getText();
-        String filePath2 = filepathField.getText();
-        URL url = getClass().getResource(filePath2);
-        String mediaStringUrl = url.toExternalForm();
-        int time = songModel.getSongTime(mediaStringUrl);
+        String filepath = filepathField.getText();
+        int time = Integer.parseInt(timeField.getText());
+        //URL url = getClass().getResource(filePath2);
+        //String mediaStringUrl = url.toExternalForm();
+        //int time = songModel.getSongTime(mediaStringUrl);
         //show time in the titleField
-        titleField.setText(String.valueOf(time));
-        Song song = new Song(id, title, artist, category,time , filePath2);
+        Song song = new Song(id, title, artist, category,time , filepath);
 
         //song goes down in the 3-layer architecture
         songModel.save(song);
@@ -138,6 +142,7 @@ public class EditSongController implements Initializable {
         stage.close();
 
     }
+
 
 
 }

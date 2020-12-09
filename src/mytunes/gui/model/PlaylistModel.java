@@ -32,8 +32,7 @@ public class PlaylistModel {
     public void load()
     {
         try {
-           //if(bllAccess.getAllPlaylists()!=null)
-                playlists.addAll(playlistManager.getAllPlaylists());
+            playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }

@@ -1,7 +1,9 @@
 package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import javafx.beans.binding.StringBinding;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
 import mytunes.dal.interfaces.ISongRepository;
@@ -9,6 +11,7 @@ import mytunes.dal.interfaces.ISongRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SongDAO implements ISongRepository {
 
@@ -47,29 +50,32 @@ public class SongDAO implements ISongRepository {
      * Creates a new song which is added to the database
      */
 
-   public Song createSong(String title, String artist, String category,
+   public void createSong(String title, String artist, String category, int time ,
                           String filePath) throws DALexception {
-       try (Connection con = databaseConnector.getConnection()) {
-             String sql= " INSERT INTO SONGS (title, artist," +
-                     " category, playtime, filePath) values(?, ?, ?, ?, ?); ";
-           PreparedStatement preparedStatement = con.prepareStatement(sql);
+       String sql= " INSERT INTO SONGS (title, artist," +
+           " category, playtime, filePath) values(?, ?, ?, ?, ?); ";
+
+      // String sql2 = "Select id FROM Songs WHERE title=?;";
+
+       try (Connection con = databaseConnector.getConnection();
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+           // PreparedStatement preparedStatement1 = con.prepareStatement(sql2)
+       ) {
+            //create song in DB
            preparedStatement.setString(1, title);
            preparedStatement.setString(2, artist);
            preparedStatement.setString(3, category);
-           preparedStatement.setInt(4, getSongTime(filePath) );
+           preparedStatement.setInt(4,  time);
            preparedStatement.setString(5, filePath);
-
            preparedStatement.executeUpdate();
-           //song is created in the DB
 
-           //pass it so that we can see it in the TableView
-           //Thanks to Observable pattern
-
-           String sql2 = "Select id FROM Songs WHERE title=?;";
-           PreparedStatement preparedStatement1 = con.prepareStatement(sql2);
+/*
            ResultSet rs  = preparedStatement1.executeQuery();
            int id = rs.getInt("id");
-           return new Song(id, title, artist, category, getSongTime(filePath), filePath);
+           int songTime = rs.getInt("playTime");
+           return new Song(id, title, artist, category, songTime, filePath);
+
+ */
 
        } catch (SQLServerException throwables) {
            throw new DALexception("Couldn't crate song", throwables);
@@ -169,7 +175,30 @@ public class SongDAO implements ISongRepository {
      */
     public int getSongTime(String mediaStringUrl) {
         Media media = new Media(mediaStringUrl);
-        int time = (int) media.getDuration().toSeconds();
-        return time;
-    }
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        new StringBinding() {
+
+
+            @Override
+            protected String computeValue() {
+                String form = String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes((long)mediaPlayer.getCurrentTime().toMillis()),
+                        TimeUnit.MILLISECONDS.toSeconds((long)mediaPlayer.getCurrentTime().toMillis()) -
+                                TimeUnit.MINUTES.toSeconds(
+                                        TimeUnit.MILLISECONDS.toMinutes(
+                                                (long)mediaPlayer.getCurrentTime().toMillis()
+                                        )
+                                )
+                );
+
+                return form;
+            }
+        };
+
+            return -1;
+        }
+
+
+
+
 }

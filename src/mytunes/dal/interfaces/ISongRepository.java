@@ -9,8 +9,8 @@ public interface ISongRepository {
 
     List<Song> getAllSongs() throws DALexception;
 
-    Song createSong(String title, String artist,
-                    String category, String filePath) throws DALexception;
+    void createSong(String title, String artist,
+                    String category, int time, String filePath) throws DALexception;
 
     void deleteSong(Song song) throws DALexception;
 

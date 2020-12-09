@@ -29,9 +29,6 @@ public class SongManager {
         idalFacade = new DALcontroller();
     }
 
-
-
-
     public List<Song> getAllSongs() throws BLLexception {
 
         try {
@@ -41,7 +38,6 @@ public class SongManager {
         }
 
     }
-
     /**
      * Method that returns the time of the song in the seconds
      */
@@ -58,6 +54,7 @@ public class SongManager {
                     song.getTitle(),
                     song.getArtist(),
                     song.getCategory(),
+                    song.getPlaytime(),
                     song.getFilePath());
         } catch (DALexception daLexception) {
             daLexception.printStackTrace();
