@@ -58,8 +58,8 @@
         <items>
           <MenuItem mnemonicParsing="false" onAction="#rap" text="rap" />
           <MenuItem mnemonicParsing="false" onAction="#trap" text="trap" />
-           <MenuItem mnemonicParsing="false"  onAction="#pop" text="pop" />
-           <MenuItem mnemonicParsing="false"  onAction="#jazz" text="jazz" />
+           <MenuItem mnemonicParsing="false" onAction="#pop" text="pop" />
+           <MenuItem mnemonicParsing="false" onAction="#jazz" text="jazz" />
            <MenuItem mnemonicParsing="false" onAction="#rock" text="rock" />
         </items>
       </SplitMenuButton>

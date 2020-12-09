@@ -49,35 +49,34 @@ public class EditSongController implements Initializable {
 
     private SongModel songModel;
 
+    private Song selectedItem;
 
-    public void setModel(SongModel songModel, FileChooser fileChooser) {
+
+    public void setModel(SongModel songModel, FileChooser fileChooser, Song selectedItem) {
         this.songModel = songModel;
         this.fileChooser = fileChooser; //its set in the controller
+        this.selectedItem = selectedItem;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         categoryMenu.setText("genre");
-       // category.setText("choose:");
-        /*categoryMenu.getItems().addAll(
-                new javafx.scene.control.MenuItem("rap"),
-                new javafx.scene.control.MenuItem("pop"),
-                new javafx.scene.control.MenuItem("country"),
-                new javafx.scene.control.MenuItem("rock"),
-                new javafx.scene.control.MenuItem("jazz"),
-                new javafx.scene.control.MenuItem("blues"),
-                new javafx.scene.control.MenuItem("bednarek")
-                );
 
+        if(selectedItem!=null)
+        {
+            titleField.setText(selectedItem.getTitle());
+            artistField.setText(selectedItem.getArtist());
+            categoryMenu.setText(selectedItem.getCategory());
+            timeField.setText(String.valueOf(selectedItem.getPlaytime()));
+            filepathField.setText(selectedItem.getFilePath());
+        }
 
-         */
+        else
+            System.out.println("Selected item is null");
 
-
-        //category.getItems();
 
     }
 
-    //Buttons below
 
     /**
      * Method closes window and doesn't make any changes

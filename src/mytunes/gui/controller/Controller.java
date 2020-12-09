@@ -11,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
-
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
@@ -159,19 +157,42 @@ public class Controller implements Initializable {
      *method opens a new window when button new or edit are pressed
      */
     @FXML
-    private void openAddEditWindow() throws IOException {
+    private void openAddWindow() {
+        loadOpenAddSongWindow(null);
+    }
+
+    public void openEditSongButton(ActionEvent event) {
+        //check if item is selected if yess open normally window
+        //if not show a prompt
+        Song song = songsTable.getSelectionModel().getSelectedItem();
+
+        if(song!= null )
+            loadOpenAddSongWindow(song);
+
+
+    }
+
+
+    private void loadOpenAddSongWindow(Song selectedItem)
+    {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/editSong.fxml"));
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         EditSongController editSongController= loader.getController();
         //Create a file chooser object which then will be send to the EditSongController
         FileChooser fileChooser = new FileChooser();
-        editSongController.setModel(songModel, fileChooser);
+        editSongController.setModel(songModel, fileChooser, selectedItem);
         Stage stage = new Stage();
         stage.setTitle("New/Edit Song");
         stage.setScene(new Scene(root));
         stage.show();
-
     }
+
+
 
     /**
      * method opens an alert window when delete button is pressed
@@ -243,6 +264,8 @@ public class Controller implements Initializable {
 
          */
     }
+
+
 }
 
 

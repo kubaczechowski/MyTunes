@@ -59,12 +59,12 @@
             <TableColumn fx:id="columnTimeSong" prefWidth="73.0" text="Time" />
         </columns>
       </TableView>
-      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddEditWindow" text="New...">
+      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddWindow" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddEditWindow" prefHeight="25.0" prefWidth="58.0" text="Edit...">
+      <Button layoutX="631.0" layoutY="569.0" mnemonicParsing="false" onAction="#openEditSongButton" prefHeight="25.0" prefWidth="58.0" text="Edit...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
