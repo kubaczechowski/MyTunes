@@ -93,7 +93,7 @@ public class SongDAO implements ISongRepository {
             String sql = "DELETE FROM Songs WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, song.getId());
-            pstat.executeUpdate();
+            pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
             throw new DALexception("Couldn't delete song");

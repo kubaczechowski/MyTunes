@@ -136,10 +136,12 @@ public class PlaylistDAO implements IPlaylistRepository {
      */
     public void deletePlaylist(Playlist playlist) throws DALexception {
         try (Connection con = databaseConnector.getConnection()) {
-            String sql = "DELETE * FROM Playlists WHERE id=?;";
+            String sql = "DELETE FROM Playlists WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, playlist.getId());
-            ResultSet result = pstat.executeQuery(sql);
+            pstat.execute();
+            //ResultSet result = pstat.executeUpdate(sql);
+
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
