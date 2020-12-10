@@ -18,6 +18,8 @@ import mytunes.dal.exception.DALexception;
 import java.lang.Object;
 
 /**
+ * Class is a kind of connector between methods in GUI
+ * and DAO.
  * author kuba czechowski
  */
 

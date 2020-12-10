@@ -18,21 +18,32 @@ import mytunes.be.Playlist;
 import mytunes.be.Song;
 import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
+import mytunes.gui.util.AlertDisplayer;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Controller of main view window (sample.fxml)
+ * It enables the user to choose CRUD operations on both songs
+ * and playlists. Also it provides the functionality of playing songs
+ * and searching them based on title
+ *
+ * @author kamila potasiak & kuba
+ */
+
 public class Controller implements Initializable {
 
+    //Tables and Lists
     public TableView<Playlist> playlistsTable;
-    public ListView<Song> songsOnPlaylistView;
     public TableView<Song> songsTable;
+    public ListView<Song> songsOnPlaylistView;
+    //used for the searching functionality
     public TextField searchBar;
-    public TableColumn pName;
 
 
-    //TableView Columns PLAYLIST
+    //TableView Columns Playlists
     @FXML
     private TableColumn<Playlist, String> columnName;
     @FXML
@@ -47,51 +58,71 @@ public class Controller implements Initializable {
     private  TableColumn<Song, String> columnArtist;
     @FXML
     private TableColumn<Song, String > columnCategory;
+    @FXML
+    TableColumn<Song, Integer> columnTimeSong;
 
-    @FXML TableColumn<Song, Integer> columnTimeSong;
-
-    //private ObservableList<Playlist> tablePlaylist =
-          // FXCollections.observableArrayList();
-
+    //instances of models
     private PlaylistModel playlistModel;
     private SongModel songModel;
+    private AlertDisplayer alertDisplayer;
+
     private boolean filterButton;
 
     public Controller()
     {
      songModel = SongModel.createOrGetInstance();
+     playlistModel = PlaylistModel.createOrGetInstance();
+     alertDisplayer = new AlertDisplayer();
     }
 
-    public void setObservableTableSongs(SongModel songModel)
+    /**
+     * method sets the TableView Songs so that whenever change happen
+     * in Songs table in Database it is visible for the user
+     * @param songModel
+     */
+    private void setObservableTableSongs(SongModel songModel)
     {
         songsTable.setItems(songModel.getAllSongs());
-    }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //preparing
-        playlistModel = new PlaylistModel();
-        setObservableTableSongs(songModel);
 
-        //tablePlaylist.addAll(playlistModel.getAllPlaylists());
-
-        //I don't remember what it means
-        filterButton = true;
-
-        //TableView Playlists
-        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
-        columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
-        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
-        playlistModel.load();
-        playlistsTable.setItems(playlistModel.getAllPlaylists());
-
-        //TableView Songs
+        //Initialize TableView Songs
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
         columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
+    }
 
+    /**
+         method sets the TableView Playlists so that whenever change happen
+     * in Playlists table in Database it is visible for the user
+     * @param playlistModel
+     */
+    private void setObservableTablePlaylists(PlaylistModel playlistModel)
+    {
+        playlistsTable.setItems(playlistModel.getAllPlaylists());
+
+        //Initialize TableView Playlists
+        columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
+        columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
+        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+        playlistModel.load();
+        playlistsTable.setItems(playlistModel.getAllPlaylists());
+
+    }
+
+    /**
+     * method is called then insance Controller is created
+     * it is used to prepare the TableViews and set initial values
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setObservableTableSongs(songModel);
+        setObservableTablePlaylists(playlistModel);
+        //I don't remember what it means
+        filterButton = true;
     }
 
     public void newPlaylist(ActionEvent actionEvent) {
@@ -140,6 +171,8 @@ public class Controller implements Initializable {
        // songsOnPlaylistView.setItems(p.getSongs());
     }
 
+
+
     public void searchAction(ActionEvent actionEvent) {
         if(filterButton) {
             songsTable.setItems(songModel.searchSongs(searchBar.getText()));
@@ -154,25 +187,39 @@ public class Controller implements Initializable {
 
 
     /**
-     *method opens a new window when button new or edit are pressed
+     *method opens a new window when button new is pressed.
+     * When selectedItem is null it is the signal in the later part of the
+     * code that user wants to add new song. In the opposite case it indicates that
+     * user wants to edit selected song from the TableView
      */
     @FXML
     private void openAddWindow() {
         loadOpenAddSongWindow(null);
     }
 
+    /**
+     * method at first gets the selected item from the TableView
+     * and then assures that selected item is null
+     * if yes: it shows a prompt with information for the user
+     * if no(isn't null): it executes the request
+     * @param event
+     */
     public void openEditSongButton(ActionEvent event) {
-        //check if item is selected if yess open normally window
-        //if not show a prompt
         Song song = songsTable.getSelectionModel().getSelectedItem();
+        if (song==null)
+            alertDisplayer.displayInformationAlert("Song",
+                    "song isn't selected", "please choose song");
 
-        if(song!= null )
+        else if(song!= null )
             loadOpenAddSongWindow(song);
-
-
     }
 
 
+    /**
+     * Window opened when user creates or updates a song
+     * it opens a new window and sends the necessary data to other controller
+     * @param selectedItem
+     */
     private void loadOpenAddSongWindow(Song selectedItem)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/editSong.fxml"));
@@ -195,7 +242,9 @@ public class Controller implements Initializable {
 
 
     /**
-     * method opens an alert window when delete button is pressed
+     * Method opens confirmation window that is used to ensure
+     * that user wants to delete a song
+     * it also sends the selected item to the newly opened window
      */
     public void deleteSongButton(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/deleteSongPrompt.fxml"));
@@ -204,15 +253,17 @@ public class Controller implements Initializable {
         //send the song to another controller
         deleteSongPrompt.getSong(songsTable.getSelectionModel().getSelectedItem());
 
-
         Stage stage = new Stage();
         stage.setTitle("Prompt");
         stage.setScene(new Scene(root));
         stage.show();
-
-
     }
 
+    /**
+     * Method used to sort the ListView containing Playlists.
+     * It sorts alfabeticaly at the top is A and at the bottom is Z
+     * @param event
+     */
     public void sortAscending(ActionEvent event) {
         //get all songs from the ListView
         List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
@@ -237,6 +288,11 @@ public class Controller implements Initializable {
          */
     }
 
+    /**
+     * Method used to sort the ListView.
+     * It sorts in reversed order. at the top is Z and at the bottom is A
+     * @param event
+     */
     public void sortDescending(ActionEvent event) {
 
         //get all songs from the ListView
