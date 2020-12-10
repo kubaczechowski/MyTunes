@@ -30,7 +30,7 @@ import java.util.*;
  * and playlists. Also it provides the functionality of playing songs
  * and searching them based on title
  *
- * @author kamila potasiak & kuba
+ * @author kuba
  */
 
 public class Controller implements Initializable {
@@ -82,8 +82,6 @@ public class Controller implements Initializable {
      */
     private void setObservableTableSongs(SongModel songModel)
     {
-        songsTable.setItems(songModel.getAllSongs());
-
         //Initialize TableView Songs
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
@@ -100,7 +98,6 @@ public class Controller implements Initializable {
      */
     private void setObservableTablePlaylists(PlaylistModel playlistModel)
     {
-        playlistsTable.setItems(playlistModel.getAllPlaylists());
 
         //Initialize TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
@@ -124,14 +121,14 @@ public class Controller implements Initializable {
         //I don't remember what it means
         filterButton = true;
     }
-
+    /*
     public void newPlaylist(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
             Parent root = loader.load();
 
             EditPlaylistController controller = loader.getController();
-            controller.newOrEdit(true, playlistModel, null);
+            controller.setModel(true, playlistModel, null);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -143,32 +140,49 @@ public class Controller implements Initializable {
         }
     }
 
+     */
+    public void createPlaylist(ActionEvent actionEvent) {
+        openCreateOrEditPlaylistWindow(null);
+    }
     public void editPlaylist(ActionEvent actionEvent) {
+        Playlist playlist = playlistsTable.getSelectionModel().getSelectedItem();
+        if(playlist==null)
+            alertDisplayer.displayInformationAlert("Playlist", "No playlist selected",
+                    "Select playlist");
+        else
+            openCreateOrEditPlaylistWindow(playlistsTable.getSelectionModel().getSelectedItem());
+    }
+
+    private void openCreateOrEditPlaylistWindow(Playlist selectedItem)
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
+        Parent root =null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
-            Parent root = loader.load();
-
-            EditPlaylistController controller = loader.getController();
-            controller.newOrEdit(false, playlistModel, playlistsTable.getSelectionModel().getSelectedItem());
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Edit playlist");
-            stage.show();
-
+            root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //EditPlaylistController editPlaylistController = loader.getController();
+        //editPlaylistController.sendPlaylist(playlistsTable.getSelectionModel().getSelectedItem());
+        EditPlaylistController editPlaylistController = loader.getController();
+        if(selectedItem!=null)
+            editPlaylistController.sendPlaylist(selectedItem);
+        else
+            editPlaylistController.sendPlaylist(null);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("create/edit playlist");
+        stage.show();
     }
 
     public void deletePlaylist(ActionEvent actionEvent) {
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
 
+    //???
     public void playlistSelected(MouseEvent mouseEvent) {
         Playlist p = playlistsTable.getSelectionModel().getSelectedItem();
-        //here is an exception
-       // songsOnPlaylistView.setItems(p.getSongs());
     }
 
 

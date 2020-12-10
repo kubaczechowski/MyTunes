@@ -19,7 +19,7 @@
         </columns>
       </TableView>
       <ListView fx:id="songsOnPlaylistView" layoutX="306.0" layoutY="111.0" prefHeight="448.0" prefWidth="180.0" />
-      <Button layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#newPlaylist" text="New...">
+      <Button layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#createPlaylist" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

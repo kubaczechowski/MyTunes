@@ -90,11 +90,14 @@ public class PlaylistModel {
      * @param playlist
      */
     public void updatePlaylist(String name, Playlist playlist) {
+
         try {
             playlistManager.updatePlaylist(name, playlist);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
+        playlists.remove(playlist);
+        playlists.add(playlist);
     }
 
     /**

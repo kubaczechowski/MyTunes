@@ -6,38 +6,53 @@ import javafx.stage.Stage;
 import mytunes.be.Playlist;
 import mytunes.gui.model.PlaylistModel;
 
+/**
+ * Class responsible for creating a new playlist or
+ * editing an existing one
+ * @author kuba
+ */
 public class EditPlaylistController {
     public TextField txtField;
 
     private PlaylistModel playlistModel;
-    private Playlist editingPlaylist;
-    private boolean newSong;
+    private Playlist sentPlaylist;
+    //private boolean newSong;
 
-    /**
-     * true if new
-     * false if edit
-     */
-    public void newOrEdit(boolean bool, PlaylistModel playlistModel, Playlist playlist) {
-        this.playlistModel = playlistModel;
-        this.editingPlaylist = playlist;
-        this.newSong = bool;
+    public EditPlaylistController()
+    {
+     playlistModel = PlaylistModel.createOrGetInstance();
     }
 
+    /**
+     * method sets the playlist that should
+     * @param selectedItem
+     */
+    public void sendPlaylist(Playlist selectedItem) {
+        sentPlaylist = selectedItem;
+    }
+
+
     public void closeWindow(ActionEvent actionEvent) {
+        sentPlaylist=null;
+        closeStage();
+    }
+
+    private void closeStage()
+    {
         Stage s = (Stage) txtField.getScene().getWindow();
         s.close();
     }
 
     public void saveAction(ActionEvent actionEvent) {
-        if(newSong) {
+        if(sentPlaylist!=null)
+            playlistModel.updatePlaylist(txtField.getText(), sentPlaylist);
+        else
             playlistModel.newPlaylist(txtField.getText());
-        }
-        else {
-            playlistModel.updatePlaylist(txtField.getText(), editingPlaylist);
-        }
 
-        Stage s = (Stage) txtField.getScene().getWindow();
-        s.close();
 
+        sentPlaylist=null;
+        closeStage();
     }
+
+
 }
