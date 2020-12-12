@@ -113,21 +113,12 @@ public class EditSongController implements Initializable {
 
         //show it in the filepathFiled
         filepathField.setText(String.valueOf(destinationPath));
-/*
-        //calcutate the time of the song
+
         //int time = songModel.getSongTime(pathOrigin.toUri().toString());
-        Media media = new Media(destinationPath.toUri().toString());
+        Media media = new Media( pathOrigin.toUri().toString());
         MediaPlayer mediaPlayer= new MediaPlayer(media);
-        mediaPlayer.play();
-        if(mediaPlayer.getStatus()!=MediaPlayer.Status.READY)
-            System.out.println("media player is not ready");
-        String timer = String.valueOf(mediaPlayer.getTotalDuration().toMillis());
 
-        //show it in the timeField
-        timeField.setText(timer);
-
- */
-
+        timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
     }
 
     /**
@@ -143,7 +134,6 @@ public class EditSongController implements Initializable {
         String category = this.categoryMenu.getText();
         String filepath = filepathField.getText();
         int time = Integer.parseInt(timeField.getText());
-
         Song song = new Song(id, title, artist, category, time, filepath);
         return song;
     }
@@ -161,6 +151,7 @@ public class EditSongController implements Initializable {
             //song goes down in the 3-layer architecture
             songModel.save(getSong());
 
+
             //create a copy of the song in the program package song
             try {
                 // here it creates a copy in the shown destination
@@ -173,7 +164,8 @@ public class EditSongController implements Initializable {
         else if(selectedItem!=null)
         {
             //update song not save another one
-            songModel.update(getSong());
+            songModel.update(selectedItem);
+            songModel.load();
         }
 
         //Close the window if everything went correctly
