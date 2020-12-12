@@ -117,17 +117,18 @@ public class SongDAO implements ISongRepository {
      */
     public void updateSong(Song song, String title, String artist,
                            String category, String filePath) throws DALexception {
+        String sql = "UPDATE Songs SET title=?, artist=?, " +
+                "category=?, filePath=? WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement pstat = con.prepareStatement(sql)) {
 
-        try (Connection con = databaseConnector.getConnection()) {
-            String sql = "UPDATE Songs SET title=?, artist=?, " +
-                    "category=?, filePath=? WHERE id=?;";
-            PreparedStatement pstat = con.prepareStatement(sql);
+
             pstat.setString(1, title);
             pstat.setString(2, artist);
             pstat.setString(3, category);
             pstat.setString(4, filePath);
             pstat.setInt(5, song.getId());
-            pstat.executeUpdate();
+            pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
             throw new DALexception("Couldn't update song");

@@ -64,6 +64,11 @@ public class DALcontroller implements IDALFacade {
         return playlistAccess.getTotalTimeOnPlaylist(playlist);
     }
 
+    @Override
+    public Playlist getPlaylist(int id) throws DALexception {
+        return playlistAccess.getPlaylist(id);
+    }
+
     //songDAO
     @Override
     public List<Song> getAllSongs() throws DALexception {

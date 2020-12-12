@@ -27,7 +27,7 @@ public interface IDALFacade {
 
     double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
 
-
+    Playlist getPlaylist(int id) throws DALexception;
 
     //songDAO
     List<Song> getAllSongs() throws DALexception;

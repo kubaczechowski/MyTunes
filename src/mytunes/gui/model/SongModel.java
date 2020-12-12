@@ -52,6 +52,7 @@ public class SongModel {
     public void load()
     {
         try {
+            songs.clear();
             songs.addAll(songManager.getAllSongs());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -110,10 +111,26 @@ public class SongModel {
     public void update(Song song) {
         try {
             songManager.update(song);
+            load();
+           //updateSong(song);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
-        songs.remove(song);
-        songs.add(song);
+       // songs.remove(song);
+       /* songs.add(new Song(song.getId(), song.getTitle(),
+                song.getArtist(), song.getCategory(), song.getPlaytime(),
+                song.getFilePath()));
+
+        */
     }
+
+   /* private void updateSong(Song song) {
+        int index = songs.indexOf(song);
+        songs.set(index, new Song(song.getId(), song.getTitle(),
+                song.getArtist(), song.getCategory(), song.getPlaytime(),
+                song.getFilePath()));
+
+    }
+
+    */
 }

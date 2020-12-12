@@ -12,6 +12,7 @@ import mytunes.gui.model.PlaylistModel;
  * @author kuba
  */
 public class EditPlaylistController {
+    private  Controller mainCtrl;
     public TextField txtField;
 
     private PlaylistModel playlistModel;
@@ -20,8 +21,9 @@ public class EditPlaylistController {
 
     public EditPlaylistController()
     {
-     playlistModel = PlaylistModel.createOrGetInstance();
+        playlistModel = PlaylistModel.createOrGetInstance();
     }
+
 
     /**
      * method sets the playlist that should
@@ -45,7 +47,9 @@ public class EditPlaylistController {
 
     public void saveAction(ActionEvent actionEvent) {
         if(sentPlaylist!=null)
-            playlistModel.updatePlaylist(txtField.getText(), sentPlaylist);
+        { playlistModel.updatePlaylist(txtField.getText(), sentPlaylist);
+            playlistModel.load();
+        }
         else
             playlistModel.newPlaylist(txtField.getText());
 

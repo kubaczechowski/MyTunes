@@ -65,6 +65,7 @@ public class Controller implements Initializable {
     private PlaylistModel playlistModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
+  
 
     private boolean filterButton;
 
@@ -73,6 +74,7 @@ public class Controller implements Initializable {
      songModel = SongModel.createOrGetInstance();
      playlistModel = PlaylistModel.createOrGetInstance();
      alertDisplayer = new AlertDisplayer();
+
     }
 
     /**
@@ -120,27 +122,9 @@ public class Controller implements Initializable {
         setObservableTablePlaylists(playlistModel);
         //I don't remember what it means
         filterButton = true;
-    }
-    /*
-    public void newPlaylist(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
-            Parent root = loader.load();
 
-            EditPlaylistController controller = loader.getController();
-            controller.setModel(true, playlistModel, null);
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add new playlist");
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-     */
     public void createPlaylist(ActionEvent actionEvent) {
         openCreateOrEditPlaylistWindow(null);
     }
@@ -151,6 +135,7 @@ public class Controller implements Initializable {
                     "Select playlist");
         else
             openCreateOrEditPlaylistWindow(playlistsTable.getSelectionModel().getSelectedItem());
+
     }
 
     private void openCreateOrEditPlaylistWindow(Playlist selectedItem)
@@ -166,7 +151,9 @@ public class Controller implements Initializable {
         //editPlaylistController.sendPlaylist(playlistsTable.getSelectionModel().getSelectedItem());
         EditPlaylistController editPlaylistController = loader.getController();
         if(selectedItem!=null)
-            editPlaylistController.sendPlaylist(selectedItem);
+        {editPlaylistController.sendPlaylist(selectedItem);
+        //playlistModel.updatePlaylist();
+        }
         else
             editPlaylistController.sendPlaylist(null);
 

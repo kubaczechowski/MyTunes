@@ -16,7 +16,7 @@ import mytunes.bll.exeption.BLLexception;
 public class PlaylistModel {
 
     private PlaylistManager playlistManager;// class from BLL
-    private ObservableList playlists;
+    private ObservableList<Playlist> playlists;
     private static PlaylistModel playlistModelInstance;
 
     public PlaylistModel() {
@@ -44,6 +44,7 @@ public class PlaylistModel {
     public void load()
     {
         try {
+            playlists.clear();
             playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -90,14 +91,22 @@ public class PlaylistModel {
      * @param playlist
      */
     public void updatePlaylist(String name, Playlist playlist) {
-
         try {
             playlistManager.updatePlaylist(name, playlist);
+            updateListOfPlaylists(playlist);
+
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
-        playlists.remove(playlist);
-        playlists.add(playlist);
+
+    }
+
+    private void updateListOfPlaylists(Playlist playlist)
+    {
+        int index = playlists.indexOf(playlist);
+
+        playlists.set(index, new Playlist(playlist.getId(),playlist.getName(),playlist.getSongs(),
+                playlist.getNumberOfSongs(),playlist.getTotalPlaytime()));
     }
 
     /**

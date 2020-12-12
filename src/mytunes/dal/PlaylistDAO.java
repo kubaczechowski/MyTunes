@@ -74,14 +74,6 @@ public class PlaylistDAO implements IPlaylistRepository {
             {
                 throw new DALexception("Couldn't create a playlist");
             }
-            //get the automatically created id from the playlist
-            //and then create an object which has to be returned
-           /* String getID = "SELECT id FROM Playlists WHERE playName=?;";
-            PreparedStatement preparedStatement2 = con.prepareStatement(getID);
-            preparedStatement2.setString(1, playName);
-            ResultSet resultSet = preparedStatement2.executeQuery();
-            int id = resultSet.getInt("id");
-            */
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             int id = resultSet.getInt(1);
@@ -134,7 +126,7 @@ public class PlaylistDAO implements IPlaylistRepository {
             preparedStatement.setString(1, newPlaylistName);
             preparedStatement.setInt(2, playlist.getId());
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
@@ -144,6 +136,33 @@ public class PlaylistDAO implements IPlaylistRepository {
             throw new DALexception("Couldn't update playlist name", throwables);
         }
     }
+
+    public Playlist getPlaylist(int id) throws DALexception {
+        String sql = "SELECT * FROM Playlists WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql);) {
+                preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id1 = resultSet.getInt("id");
+                String name = resultSet.getString("playName");
+                List<Song> songsList = playlistItemDAO.getSongsFromSpecificPlaylist(id);
+                int numberOfSongs = resultSet.getInt("numberOfSongs");
+                int totalPlaytime = resultSet.getInt("totalPlaytime");
+                Playlist playlist = new Playlist(id, name, songsList,
+                        numberOfSongs, totalPlaytime);
+                return playlist;
+            }
+        } catch (SQLServerException throwables) {
+            throw new DALexception("Couldn't get get the playlist", throwables);
+        } catch (SQLException throwables) {
+            throw new DALexception("Couldn't get get the playlist", throwables);
+        }
+
+        return null;
+    }
+
 
     public int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
 
