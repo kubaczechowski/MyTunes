@@ -1,5 +1,7 @@
 package mytunes.gui.controller;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,16 +13,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
+import mytunes.gui.model.MusicPlayer;
 import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
 import mytunes.gui.util.AlertDisplayer;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -41,6 +46,14 @@ public class Controller implements Initializable {
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
     public TextField searchBar;
+
+    // Music Player
+    private MusicPlayer musicPlayer;
+    @FXML
+    private Slider volumeSlider;
+    @FXML
+    private Text nowPlaying;
+    private Song song;
 
 
     //TableView Columns Playlists
@@ -69,13 +82,37 @@ public class Controller implements Initializable {
 
     private boolean filterButton;
 
-    public Controller()
-    {
+    public Controller() {
      songModel = SongModel.createOrGetInstance();
      playlistModel = PlaylistModel.createOrGetInstance();
      alertDisplayer = new AlertDisplayer();
 
+     musicPlayer = new MusicPlayer();
+     volumeSlider = new Slider(0.0,1.0,0.5);
     }
+
+    /**
+     * method is called then insance Controller is created
+     * it is used to prepare the TableViews and set initial values
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setObservableTableSongs(songModel);
+        setObservableTablePlaylists(playlistModel);
+        //I don't remember what it means
+        filterButton = true;
+
+        // Music player
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                musicPlayer.setVolume(volumeSlider.getValue());
+            }
+        });
+    }
+
 
     /**
      * method sets the TableView Songs so that whenever change happen
@@ -110,24 +147,21 @@ public class Controller implements Initializable {
 
     }
 
-    /**
-     * method is called then insance Controller is created
-     * it is used to prepare the TableViews and set initial values
-     * @param url
-     * @param resourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setObservableTableSongs(songModel);
-        setObservableTablePlaylists(playlistModel);
-        //I don't remember what it means
-        filterButton = true;
+
+
+    
+    public void newPlaylist(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
+            Parent root = loader.load();
+
 
     }
 
     public void createPlaylist(ActionEvent actionEvent) {
         openCreateOrEditPlaylistWindow(null);
     }
+
     public void editPlaylist(ActionEvent actionEvent) {
         Playlist playlist = playlistsTable.getSelectionModel().getSelectedItem();
         if(playlist==null)
@@ -211,7 +245,7 @@ public class Controller implements Initializable {
             alertDisplayer.displayInformationAlert("Song",
                     "song isn't selected", "please choose song");
 
-        else if(song!= null )
+        else if(song != null)
             loadOpenAddSongWindow(song);
     }
 
@@ -265,6 +299,7 @@ public class Controller implements Initializable {
      * It sorts alfabeticaly at the top is A and at the bottom is Z
      * @param event
      */
+
     public void sortAscending(ActionEvent event) {
         //get all songs from the ListView
         List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
@@ -323,6 +358,18 @@ public class Controller implements Initializable {
     }
 
 
+    public void play(ActionEvent actionEvent) throws MalformedURLException {
+        //musicPlayer.setVolume(volumeSlider.getValue());
+        if (songsTable.getSelectionModel().getSelectedItem() != null) {
+            song = songsTable.getSelectionModel().getSelectedItem();
+            musicPlayer.loadMedia(song);
+        } else {
+            musicPlayer.loadMedia(songModel.getAllSongs().get(0));
+        }
+        if (musicPlayer.getSong() != null) {
+            musicPlayer.setVolume(volumeSlider.getValue());
+            musicPlayer.play();
+            nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+        }
+    }
 }
-
-
