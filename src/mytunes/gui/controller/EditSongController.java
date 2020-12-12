@@ -126,7 +126,7 @@ public class EditSongController implements Initializable {
      * window creates a song and then returns it.
      * @return Song
      */
-    public Song getSong()
+    public Song getSongFromTable()
     {
         int id=-1; //id will be changed in the dal layer
         String title = titleField.getText();
@@ -149,7 +149,7 @@ public class EditSongController implements Initializable {
     public void saveButtonAction(ActionEvent event) {
         if(selectedItem==null) {
             //song goes down in the 3-layer architecture
-            songModel.save(getSong());
+            songModel.save(getSongFromTable());
 
 
             //create a copy of the song in the program package song
@@ -164,7 +164,15 @@ public class EditSongController implements Initializable {
         else if(selectedItem!=null)
         {
             //update song not save another one
-            songModel.update(selectedItem);
+            int id = selectedItem.getId();
+            String title = titleField.getText();
+            String artist = artistField.getText();
+            String category = this.categoryMenu.getText();
+            String filepath = filepathField.getText();
+            int time = Integer.parseInt(timeField.getText());
+
+            Song songToUpdate = new Song(id, title, artist, category, time, filepath);
+            songModel.update(songToUpdate);
             songModel.load();
         }
 
