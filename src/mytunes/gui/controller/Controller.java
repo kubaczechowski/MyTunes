@@ -24,6 +24,7 @@ import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
 import mytunes.gui.util.AlertDisplayer;
 
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -147,16 +148,6 @@ public class Controller implements Initializable {
 
     }
 
-
-
-    
-    public void newPlaylist(ActionEvent actionEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/myTunes/gui/view/editPlaylist.fxml"));
-            Parent root = loader.load();
-
-
-    }
 
     public void createPlaylist(ActionEvent actionEvent) {
         openCreateOrEditPlaylistWindow(null);
