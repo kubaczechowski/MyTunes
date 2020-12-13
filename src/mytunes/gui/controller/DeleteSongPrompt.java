@@ -6,12 +6,16 @@ import javafx.stage.Stage;
 import mytunes.be.Song;
 import mytunes.gui.model.SongModel;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class DeleteSongPrompt {
     private SongModel songModel;
 
     public DeleteSongPrompt()
     {
-        songModel = new SongModel();
+        songModel = SongModel.createOrGetInstance();
     }
 
     private Song songToBeDeleted;
@@ -46,5 +50,15 @@ public class DeleteSongPrompt {
 
     public void getSong(Song selectedItem) {
         songToBeDeleted = selectedItem;
+    }
+
+    public void yesSong(ActionEvent event) {
+        songModel.delete(songToBeDeleted);
+        try {
+            Files.delete(Path.of(songToBeDeleted.getFilePath()));
+        } catch (IOException e) {
+            System.out.println("couldn't delete song");
+            e.printStackTrace();
+        }
     }
 }

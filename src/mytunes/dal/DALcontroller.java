@@ -1,10 +1,14 @@
 package mytunes.dal;
 
 import mytunes.be.Playlist;
-import mytunes.be.PlaylistItem;
+
 import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
+
+import mytunes.be.PlaylistItem;
+
 import mytunes.dal.interfaces.IPlaylistItemRepository;
+
 import mytunes.dal.interfaces.IPlaylistRepository;
 import mytunes.dal.interfaces.ISongRepository;
 
@@ -14,14 +18,21 @@ public class DALcontroller implements IDALFacade {
 
     private IPlaylistRepository playlistAccess;
     private ISongRepository songAccess;
+    private IPlaylistItemRepository playlistItemAccess;
+
     private IPlaylistItemRepository itemAccess;
+
 
 
     public DALcontroller() {
         playlistAccess = new PlaylistDAO();
         songAccess = new SongDAO();
+        playlistItemAccess = new PlaylistItemDAO();
+
 
     }
+
+    //PlaylistDAO
 
     @Override
     public List<Playlist> getAllPlaylists() throws DALexception {
@@ -44,13 +55,29 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
+    public int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
+        return  playlistAccess.getNumberOfSongsOnPlaylist(playlist);
+    }
+
+    @Override
+    public double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception {
+        return playlistAccess.getTotalTimeOnPlaylist(playlist);
+    }
+
+    @Override
+    public Playlist getPlaylist(int id) throws DALexception {
+        return playlistAccess.getPlaylist(id);
+    }
+
+    //songDAO
+    @Override
     public List<Song> getAllSongs() throws DALexception {
         return  songAccess.getAllSongs();
     }
 
     @Override
-    public Song createSong(String title, String artist, String category, String filePath) throws DALexception {
-        return  songAccess.createSong(title, artist, category, filePath );
+    public void createSong(String title, String artist, String category, int time, String filePath) throws DALexception {
+          songAccess.createSong(title, artist, category, time,  filePath );
     }
 
     @Override
@@ -70,17 +97,24 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
-    public List<PlaylistItem> getAllPlaylistItems() {
-        return playlistAccess.getAllPlaylists();
+    public int getSongTime(String mediaStringUrl) {
+        return songAccess.getSongTime(mediaStringUrl);
+    }
+
+    //PlaylistItemDAO
+    @Override
+    public List<PlaylistItem> getAllPlaylistItems() throws DALexception {
+        return playlistItemAccess.getAllPlaylistItems();
     }
 
     @Override
-    public PlaylistItem createPlaylistItem(int songId, int playlistId) {
-        return null;
+    public PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception {
+        return playlistItemAccess.createPlaylistItem(songId, playlistId);
     }
 
     @Override
-    public void deleteSong(PlaylistItem playlistItem) {
-
+    public void deleteSong(PlaylistItem playlistItem) throws DALexception {
+            playlistItemAccess.deleteSong(playlistItem);
     }
+
 }

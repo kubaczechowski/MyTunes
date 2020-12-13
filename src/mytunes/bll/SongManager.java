@@ -1,80 +1,87 @@
 package mytunes.bll;
 
+
 import javafx.scene.media.Media;
 import javafx.util.Duration;
 import mytunes.be.Song;
 import mytunes.bll.exeption.BLLexception;
+import mytunes.dal.DALcontroller;
+import mytunes.dal.IDALFacade;
 import mytunes.dal.SongDAO;
-<<<<<<< Updated upstream
-
-=======
-import mytunes.dal.exception.DALexception;
 
 import java.util.List;
->>>>>>> Stashed changes
+
+import mytunes.dal.exception.DALexception;
+
+
+
 import java.lang.Object;
 
+/**
+ * Class is a kind of connector between methods in GUI
+ * and DAO.
+ * author kuba czechowski
+ */
+
 public class SongManager {
-    private SongDAO songDAO;
+    private IDALFacade idalFacade;
 
     public SongManager()
     {
-        songDAO = new SongDAO();
+        idalFacade = new DALcontroller();
     }
 
-<<<<<<< Updated upstream
-=======
     public List<Song> getAllSongs() throws BLLexception {
+
         try {
-            return songDAO.getAllSongs();
+            return idalFacade.getAllSongs();
         } catch (DALexception daLexception) {
-            daLexception.printStackTrace();
-            throw new BLLexception("couldn't get all songs");
+            throw new BLLexception("Couldn't get all songs", daLexception);
         }
+
     }
->>>>>>> Stashed changes
     /**
      * Method that returns the time of the song in the seconds
      */
 
     public int getSongTime(String mediaStringUrl) {
-        Media media = new Media(mediaStringUrl);
-        int time = (int) media.getDuration().toSeconds();
-
-        return time;
-
-
+       return idalFacade.getSongTime(mediaStringUrl);
     }
 
-<<<<<<< Updated upstream
-    public void save(Song song) {
-        songDAO.createSong(
-                song.getTitle(),
-                song.getArtist(),
-                song.getCategory(),
-                song.getFilePath());
-=======
+
+
     public void save(Song song) throws BLLexception {
         try {
-            songDAO.createSong(
+            idalFacade.createSong(
                     song.getTitle(),
                     song.getArtist(),
                     song.getCategory(),
+                    song.getPlaytime(),
                     song.getFilePath());
         } catch (DALexception daLexception) {
             daLexception.printStackTrace();
             throw new BLLexception("couldn't save song");
         }
 
->>>>>>> Stashed changes
+
     }
 
     public void delete(Song songToBeDeleted) throws BLLexception {
         try {
-            songDAO.deleteSong(songToBeDeleted);
+            idalFacade.deleteSong(songToBeDeleted);
+        } catch (DALexception daLexception) {
+           daLexception.printStackTrace();
+            throw new BLLexception("couldn't delete a song");
+        }
+    }
+
+    public void update(Song song) throws BLLexception {
+        try {
+            idalFacade.updateSong(song, song.getTitle(), song.getArtist(),
+                    song.getCategory(), song.getFilePath());
         } catch (DALexception daLexception) {
             daLexception.printStackTrace();
-            throw new BLLexception("couldn't delete a song");
+            throw new BLLexception("couldn't update a song");
         }
     }
 }

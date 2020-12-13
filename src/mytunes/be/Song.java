@@ -1,20 +1,33 @@
 package mytunes.be;
 
 public class Song {
+
+    private int id;
     private String title;
     private String artist;
     private String category;
-    private double time;
+    private int playtime;
     private String filePath;
 
-    public Song(String title, String artist, String category, double time, String filePath) {
+    public Song(int id, String title, String artist,
+                String category, int playTime, String filePath) {
+        this.id = id;
         this.title = title;
         this.artist = artist;
         this.category = category;
-        this.time = time;
+        this.playtime = playTime;
         this.filePath = filePath;
     }
 
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -40,12 +53,8 @@ public class Song {
         this.category = category;
     }
 
-    public double getTime() {
-        return time;
-    }
-
-    public void setTime(double time) {
-        this.time = time;
+    public int getPlaytime() {
+        return playtime;
     }
 
     public String getFilePath() {

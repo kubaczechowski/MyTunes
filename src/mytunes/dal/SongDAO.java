@@ -1,13 +1,24 @@
 package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import javafx.beans.binding.StringBinding;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import mytunes.be.Song;
+import mytunes.dal.exception.DALexception;
+import mytunes.dal.interfaces.ISongRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class SongDAO {
+/**
+ * class used for communication with DB
+ * provides CRUD functionality
+ * @author kuba
+ */
+public class SongDAO implements ISongRepository {
 
     private DatabaseConnector databaseConnector;
 
@@ -15,7 +26,12 @@ public class SongDAO {
         databaseConnector = new DatabaseConnector();
     }
 
-    public List<Song> getAllSongs() {
+    /**
+     * method returns all songs that are in DB
+     * @return
+     * @throws DALexception
+     */
+    public List<Song> getAllSongs() throws DALexception {
         ArrayList<Song> allSongs = new ArrayList<>();
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "SELECT * FROM Songs;";
@@ -23,17 +39,18 @@ public class SongDAO {
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
-
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String artist = rs.getString("artist");
                 String category = rs.getString("category");
+                int playTime = rs.getInt("playtime");
                 String filePath = rs.getString("filePath");
-                Song song = new Song(id, title, artist, category, filePath);
+                Song song = new Song(id, title, artist, category, playTime, filePath);
                 allSongs.add(song);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            throw new DALexception("Couldn't get all songs");
         }
         return allSongs;
     }
@@ -41,106 +58,95 @@ public class SongDAO {
     /**
      * Creates a new song which is added to the database
      */
-   public Song createSong(String title, String artist, String category, String filePath) {
 
-        Song song = null;
+   public void createSong(String title, String artist, String category, int time ,
+                          String filePath) throws DALexception {
+       String sql= " INSERT INTO SONGS (title, artist," +
+           " category, playtime, filePath) values(?, ?, ?, ?, ?); ";
 
-        try (Connection con = databaseConnector.getConnection()) {
+      // String sql2 = "Select id FROM Songs WHERE title=?;";
 
-            /*
-            Statement s = con.createStatement();
-            ResultSet r = s.executeQuery("SELECT COUNT(*) AS rowcount FROM Songs");
-            r.next();
-            int id = r.getInt("rowcount") + 1;
-            r.close();
+       try (Connection con = databaseConnector.getConnection();
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+           // PreparedStatement preparedStatement1 = con.prepareStatement(sql2)
+       ) {
+            //create song in DB
+           preparedStatement.setString(1, title);
+           preparedStatement.setString(2, artist);
+           preparedStatement.setString(3, category);
+           preparedStatement.setInt(4,  time);
+           preparedStatement.setString(5, filePath);
+           preparedStatement.executeUpdate();
 
-             */
+/*
+           ResultSet rs  = preparedStatement1.executeQuery();
+           int id = rs.getInt("id");
+           int songTime = rs.getInt("playTime");
+           return new Song(id, title, artist, category, songTime, filePath);
 
-            //i dont know what about id
-            int id = 0;
+ */
 
-            song = new Song(id, title, artist, category, filePath);
-
-            String sql = "insert into Songs (title, artist, category, time, filePath) values (?, ?, ?, ?, ?);";
-            PreparedStatement pstat = con.prepareStatement(sql);
-            pstat.setString(1, song.getTitle());
-            pstat.setString(2, song.getArtist());
-            pstat.setString(3, song.getCategory());
-            pstat.setInt(4, song.getTime());
-            pstat.setString(5, song.getFilePath());
-            pstat.executeUpdate();
-<<<<<<< Updated upstream
-=======
-            */
-
-
-            String getID = "SELECT id FROM Songs WHERE filePath=?;";
-            PreparedStatement preparedStatement2 = con.prepareStatement(getID);
-            preparedStatement2.setString(1, filePath);
-            ResultSet resultSet = preparedStatement2.executeQuery(getID);
-
-            id = resultSet.getInt("id");
-
-            song = new Song(id, title, artist, category, filePath);
-
->>>>>>> Stashed changes
-
-        } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return song;
-    }
+       } catch (SQLServerException throwables) {
+           throw new DALexception("Couldn't crate song", throwables);
+       } catch (SQLException throwables) {
+           throw new DALexception("Couldn't create song", throwables);
+       }
+   }
 
     /**
      * Deletes given song
      */
-    public void deleteSong(Song song) {
+    public void deleteSong(Song song) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM Songs WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, song.getId());
-            pstat.executeUpdate();
+            pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't delete song");
         }
     }
 
     /**
      * Updates the given song with given values
      */
-    private void updateSong(Song song, String title, String artist, String category, String filePath) {
+    public void updateSong(Song song, String title, String artist,
+                           String category, String filePath) throws DALexception {
+        String sql = "UPDATE Songs SET title=?, artist=?, " +
+                "category=?, filePath=? WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement pstat = con.prepareStatement(sql)) {
 
-        try (Connection con = databaseConnector.getConnection()) {
-            String sql = "UPDATE Songs SET title=?, artist=?, category=?, filePath=? WHERE id=?";
-            PreparedStatement pstat = con.prepareStatement(sql);
+
             pstat.setString(1, title);
             pstat.setString(2, artist);
             pstat.setString(3, category);
             pstat.setString(4, filePath);
             pstat.setInt(5, song.getId());
-            pstat.executeUpdate();
+            pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't update song");
         }
     }
 
     /**
      * Returns a song with desired values
      */
-    private Song getSong(int id) {
+    public Song getSong(int id) throws DALexception {
 
         Song song = null;
 
         try (Connection con = databaseConnector.getConnection()) {
-            String sql = "SELECT * FROM Songs WHERE id=?";
+            String sql = "SELECT * FROM Songs WHERE id=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, id);
             ResultSet result = pstat.executeQuery(sql);
@@ -149,18 +155,79 @@ public class SongDAO {
                 String title = result.getString("title");
                 String artist = result.getString("artist");
                 String category = result.getString("category");
-                int time = result.getInt("time");
+
+                int time = result.getInt("playTime");
+
                 String filePath = result.getString("filePath");
 
-                song = new Song(id, title, artist, category, filePath);
+                song = new Song(id, title, artist, category, time, filePath);
             }
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get a song");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new DALexception("Couldn't get a song");
         }
 
         return song;
     }
+
+    //I don't know if this method is used somewhere
+    @Override
+    public void updateSong(int id) {
+
+    }
+
+
+
+
+    /**
+     * Method that returns the time of the song in the seconds
+     */
+    /*
+    public int getSongTime(String mediaStringUrl) {
+        Media media = new Media(mediaStringUrl);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        new StringBinding() {
+
+
+            @Override
+            protected String computeValue() {
+                String form = String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes((long)mediaPlayer.getCurrentTime().toMillis()),
+                        TimeUnit.MILLISECONDS.toSeconds((long)mediaPlayer.getCurrentTime().toMillis()) -
+                                TimeUnit.MINUTES.toSeconds(
+                                        TimeUnit.MILLISECONDS.toMinutes(
+                                                (long)mediaPlayer.getCurrentTime().toMillis()
+                                        )
+                                )
+                );
+
+                return form;
+            }
+        };
+
+            return -1;
+        }
+
+     */
+
+    public int getSongTime(String mediaStringUrl){
+        Media media = new Media(mediaStringUrl);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+
+        if(mediaPlayer.getStatus()==MediaPlayer.Status.READY)
+            return (int) mediaPlayer.getStopTime().toSeconds();
+
+         else
+            System.out.println("player is not ready");
+            return -1;
+    }
+
+
+
+
 }

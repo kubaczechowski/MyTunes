@@ -1,0 +1,21 @@
+#background{
+    -fx-background-image: url("../images/background.png");
+}
+
+#background1{
+    -fx-background-image: url("../images/background.png");
+    -fx-background-position:center;
+    -fx-background-size: 439 289;
+}
+
+#background2{
+    -fx-background-image: url("../images/background.png");
+    -fx-background-position:center;
+    -fx-background-size: 356 163;
+}
+
+#background3{
+    -fx-background-image: url("../images/background.png");
+    -fx-background-position:center;
+    -fx-background-size: 400 200;
+}
