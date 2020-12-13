@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
@@ -9,17 +10,17 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.gui.controller.Controller">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.gui.controller.Controller">
    <children>
       <TableView fx:id="playlistsTable" layoutX="37.0" layoutY="111.0" onMouseClicked="#playlistSelected" prefHeight="448.0" prefWidth="256.0">
         <columns>
           <TableColumn fx:id="columnName" prefWidth="129.0" text="Name" />
           <TableColumn fx:id="columnSong" prefWidth="63.0" text="Songs" />
-            <TableColumn fx:id="columnTime" prefWidth="63.0" text="Time" />
+            <TableColumn fx:id="columnTime" prefWidth="62.99998474121094" text="Time" />
         </columns>
       </TableView>
       <ListView fx:id="songsOnPlaylistView" layoutX="306.0" layoutY="111.0" prefHeight="448.0" prefWidth="180.0" />
-      <Button layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#newPlaylist" text="New...">
+      <Button layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#newPlaylist" prefHeight="25.0" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -59,7 +60,7 @@
             <TableColumn fx:id="columnTimeSong" prefWidth="73.0" text="Time" />
         </columns>
       </TableView>
-      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddWindow" text="New...">
+      <Button layoutX="569.0" layoutY="569.0" mnemonicParsing="false" onAction="#openAddWindow" prefHeight="25.0" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -97,8 +98,14 @@
       <Button fx:id="arrowLEFTButton" layoutX="503.0" layoutY="111.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="48.0" stylesheets="/mytunes/gui/css/ArrowLEFTButton.css" />
       <TextField fx:id="searchBar" layoutX="885.0" layoutY="24.0" prefHeight="25.0" prefWidth="121.0" />
       <Button fx:id="lupaButton" layoutX="1013.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="33.0" stylesheets="/mytunes/gui/css/LupaButton.css" />
-      <Button fx:id="playButton" layoutX="130.0" layoutY="12.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="67.0" stylesheets="/mytunes/gui/css/PlayButton.css" />
-      <Button fx:id="buttonBack" layoutX="46.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/BackButton.css" />
-      <Button fx:id="buttonForward" layoutX="213.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
+      <Button fx:id="playButton" layoutX="124.0" layoutY="10.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="67.0" stylesheets="/mytunes/gui/css/PlayButton.css" />
+      <Button fx:id="buttonBack" layoutX="58.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/BackButton.css" />
+      <Button fx:id="buttonForward" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
    </children>
+   <stylesheets>
+      <URL value="@../css/TableViewStyle.css" />
+      <URL value="@../css/ListViewStyle.css" />
+      <URL value="@../css/TextButtonsStyle.css" />
+      <URL value="@../css/BackgroundStyle.css" />
+   </stylesheets>
 </AnchorPane>
