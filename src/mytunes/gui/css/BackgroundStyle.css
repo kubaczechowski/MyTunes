@@ -13,3 +13,9 @@
     -fx-background-position:center;
     -fx-background-size: 356 163;
 }
+
+#background3{
+    -fx-background-image: url("../images/background.png");
+    -fx-background-position:center;
+    -fx-background-size: 400 200;
+}
