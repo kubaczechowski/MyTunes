@@ -112,22 +112,9 @@ public class MusicPlayer {
     public void setVolume(double sliderValue) {
         audioPlayer.setVolume(sliderValue);
     }
+
+    public Song getSong() {
+        return song;
+    }
+
 }
-
-//    /**
-//     * Checks if file is an mp3 or wav audio file.
-//     * @param name song name in directory
-//     * @return boolean
-//     */
-//    public boolean acceptFile(String name) {
-//        return name.endsWith(".wav") || name.endsWith(".mp3");
-//    }
-
-// Convert from multiple decimals to 2.
-//AudioFormat format = audioInput.getFormat();
-//double frames = audioInput.getFrameLength();
-//double durationInSeconds = (frames+0.0) / format.getFrameRate();
-//double durationInMinutes = (durationInSeconds/60);
-//DecimalFormat dF = new DecimalFormat("#.##");
-//System.out.println("Seconds: " + dF.format(durationInSeconds));
-//System.out.println("Minutes: " + dF.format(durationInMinutes));

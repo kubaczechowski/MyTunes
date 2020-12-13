@@ -7,6 +7,11 @@ import mytunes.dal.exception.DALexception;
 
 import java.util.List;
 
+/**
+ * facade in DAO package
+
+ */
+
 public interface IDALFacade {
 
     //PlaylistDAO
@@ -22,7 +27,7 @@ public interface IDALFacade {
 
     double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
 
-
+    Playlist getPlaylist(int id) throws DALexception;
 
     //songDAO
     List<Song> getAllSongs() throws DALexception;

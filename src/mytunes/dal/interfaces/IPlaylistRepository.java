@@ -18,4 +18,6 @@ public interface IPlaylistRepository {
 
     double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
 
+    Playlist getPlaylist(int id) throws DALexception;
+
 }

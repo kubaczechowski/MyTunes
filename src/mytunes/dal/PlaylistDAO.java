@@ -20,37 +20,6 @@ public class PlaylistDAO implements IPlaylistRepository {
         playlistItemDAO = new PlaylistItemDAO();
     }
 
-    /*
-    public List<Playlist> getAllPlaylists() throws DALexception {
-        List<Playlist> allPlaylists = new ArrayList<>();
-
-        try(Connection con = databaseConnector.getConnection())
-        {
-            String sqlCommand = "SELECT * FROM Playlists;";
-            Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery(sqlCommand);
-
-            while (rs.next()) {
-
-                int id = rs.getInt("songID");
-                String playName = rs.getString("playlistID");
-
-                Playlist playlist = new Playlist(id, playName);
-                allPlaylists.add(playlist);
-            }
-
-        } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
-            throw new DALexception("Couldn't get All playlist", throwables);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            throw new DALexception("Couldn't get All playlist", throwables);
-        }
-        return  allPlaylists;
-    }
-
-     */
-
     /**
      * for each playlist we simply get information about everything except
      * the list of songs which has to be rertived from table
@@ -96,7 +65,8 @@ public class PlaylistDAO implements IPlaylistRepository {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sqlCommand = "INSERT INTO Playlists (playName) VALUES(?)";
-            PreparedStatement preparedStatement = con.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = con.prepareStatement(sqlCommand,
+                    Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, playName);
             int checkIfExecuted = preparedStatement.executeUpdate();
 
@@ -104,14 +74,10 @@ public class PlaylistDAO implements IPlaylistRepository {
             {
                 throw new DALexception("Couldn't create a playlist");
             }
-            //get the automatically created id from the playlist
-            //and then create an object which has to be returned
-            String getID = "SELECT id FROM Playlists WHERE playName=?;";
-            PreparedStatement preparedStatement2 = con.prepareStatement(getID);
-            preparedStatement2.setString(1, playName);
-            ResultSet resultSet = preparedStatement2.executeQuery();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int id = resultSet.getInt(1);
 
-            int id = resultSet.getInt("id");
             //this are initial values when a song is created
             newPlaylist = new Playlist(id, playName, null,
                     0, 0);
@@ -153,13 +119,14 @@ public class PlaylistDAO implements IPlaylistRepository {
     }
 
     public void updatePlaylistName(Playlist playlist, String newPlaylistName) throws DALexception {
-        try (Connection con = databaseConnector.getConnection()) {
-            String sql = "UPDATE Movies SET title=? WHERE id=?";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
+        String sql = "UPDATE Playlists SET playName=? WHERE id=?";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql);) {
+
             preparedStatement.setString(1, newPlaylistName);
             preparedStatement.setInt(2, playlist.getId());
 
-            preparedStatement.executeUpdate();
+            preparedStatement.execute();
 
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
@@ -169,6 +136,33 @@ public class PlaylistDAO implements IPlaylistRepository {
             throw new DALexception("Couldn't update playlist name", throwables);
         }
     }
+
+    public Playlist getPlaylist(int id) throws DALexception {
+        String sql = "SELECT * FROM Playlists WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql);) {
+                preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id1 = resultSet.getInt("id");
+                String name = resultSet.getString("playName");
+                List<Song> songsList = playlistItemDAO.getSongsFromSpecificPlaylist(id);
+                int numberOfSongs = resultSet.getInt("numberOfSongs");
+                int totalPlaytime = resultSet.getInt("totalPlaytime");
+                Playlist playlist = new Playlist(id, name, songsList,
+                        numberOfSongs, totalPlaytime);
+                return playlist;
+            }
+        } catch (SQLServerException throwables) {
+            throw new DALexception("Couldn't get get the playlist", throwables);
+        } catch (SQLException throwables) {
+            throw new DALexception("Couldn't get get the playlist", throwables);
+        }
+
+        return null;
+    }
+
 
     public int getNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
 

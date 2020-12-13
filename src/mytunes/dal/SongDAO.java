@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * class used for communication with DB
+ * provides CRUD functionality
+ * @author kuba
+ */
 public class SongDAO implements ISongRepository {
 
     private DatabaseConnector databaseConnector;
@@ -21,6 +26,11 @@ public class SongDAO implements ISongRepository {
         databaseConnector = new DatabaseConnector();
     }
 
+    /**
+     * method returns all songs that are in DB
+     * @return
+     * @throws DALexception
+     */
     public List<Song> getAllSongs() throws DALexception {
         ArrayList<Song> allSongs = new ArrayList<>();
         try (Connection con = databaseConnector.getConnection()) {
@@ -29,7 +39,6 @@ public class SongDAO implements ISongRepository {
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
-
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
                 String artist = rs.getString("artist");
@@ -106,18 +115,20 @@ public class SongDAO implements ISongRepository {
     /**
      * Updates the given song with given values
      */
-    public void updateSong(Song song, String title, String artist, String category, String filePath) throws DALexception {
+    public void updateSong(Song song, String title, String artist,
+                           String category, String filePath) throws DALexception {
+        String sql = "UPDATE Songs SET title=?, artist=?, " +
+                "category=?, filePath=? WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement pstat = con.prepareStatement(sql)) {
 
-        try (Connection con = databaseConnector.getConnection()) {
-            String sql = "UPDATE Songs SET title=?, artist=?, " +
-                    "category=?, filePath=? WHERE id=?;";
-            PreparedStatement pstat = con.prepareStatement(sql);
+
             pstat.setString(1, title);
             pstat.setString(2, artist);
             pstat.setString(3, category);
             pstat.setString(4, filePath);
             pstat.setInt(5, song.getId());
-            pstat.executeUpdate();
+            pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
             throw new DALexception("Couldn't update song");
@@ -170,9 +181,12 @@ public class SongDAO implements ISongRepository {
     }
 
 
+
+
     /**
      * Method that returns the time of the song in the seconds
      */
+    /*
     public int getSongTime(String mediaStringUrl) {
         Media media = new Media(mediaStringUrl);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -197,6 +211,21 @@ public class SongDAO implements ISongRepository {
 
             return -1;
         }
+
+     */
+
+    public int getSongTime(String mediaStringUrl){
+        Media media = new Media(mediaStringUrl);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
+
+        if(mediaPlayer.getStatus()==MediaPlayer.Status.READY)
+            return (int) mediaPlayer.getStopTime().toSeconds();
+
+         else
+            System.out.println("player is not ready");
+            return -1;
+    }
 
 
 

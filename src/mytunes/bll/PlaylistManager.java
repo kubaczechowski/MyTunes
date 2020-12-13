@@ -52,4 +52,13 @@ public class PlaylistManager {
             throw new BLLexception("Couldn't updatePlaylist");
         }
     }
+
+    public Playlist getPlaylist(int id) throws BLLexception {
+        try {
+            return idalFacade.getPlaylist(id);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+            throw new BLLexception("Couldn't get a playlist with id: " + id);
+        }
+    }
 }

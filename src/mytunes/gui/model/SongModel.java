@@ -13,6 +13,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class is responsible for one directional communication with
+ * Business logic layer. Also it provides Observable list that
+ * is used in the TableView Songs.
+ * @author kuba @ kamila potasiak
+ */
 public class SongModel {
 
     private static SongModel songModelInstance;
@@ -23,17 +29,13 @@ public class SongModel {
     public SongModel() {
         songManager = new SongManager();
         songs = FXCollections.observableArrayList();
-/*
-        try {
-            songs.addAll(songManager.getAllSongs());
-        } catch (BLLexception blLexception) {
-            blLexception.printStackTrace();
-        }
-
- */
-
     }
 
+    /**
+     * method used to create instance. when created in this
+     * way we ensure that we only use one instance when its needed
+     * @return SongModel
+     */
     public static SongModel createOrGetInstance()
     {
         if( songModelInstance == null)
@@ -44,9 +46,13 @@ public class SongModel {
 
     }
 
+    /**
+     * method loads all playlist objects into observable list
+     */
     public void load()
     {
         try {
+            songs.clear();
             songs.addAll(songManager.getAllSongs());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -54,10 +60,14 @@ public class SongModel {
 
     }
 
-    public ObservableList<Song> getAllSongs() {
-        return songs;
-    }
-
+    /**
+     * searching funcionality in the TableView Songs
+     * @param text
+     * @return ObservableList<Song>
+     * @author kamila
+     */
+    // meybe we should move searching funcitnoality to BLL?
+    //here its extremely simple
     public ObservableList<Song> searchSongs(String text) {
         List<Song> searchedSongs = new ArrayList<>();
         for(Song song : songs) {
@@ -69,6 +79,12 @@ public class SongModel {
     public int getSongTime(String mediaStringUrl) {
        return songManager.getSongTime(mediaStringUrl);
 
+    }
+
+    //Below are methods for crud operations
+
+    public ObservableList<Song> getAllSongs() {
+        return songs;
     }
 
     public void save(Song song) {
@@ -95,10 +111,26 @@ public class SongModel {
     public void update(Song song) {
         try {
             songManager.update(song);
+            load();
+           //updateSong(song);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }
-        songs.remove(song);
-        songs.add(song);
+       // songs.remove(song);
+       /* songs.add(new Song(song.getId(), song.getTitle(),
+                song.getArtist(), song.getCategory(), song.getPlaytime(),
+                song.getFilePath()));
+
+        */
     }
+
+   /* private void updateSong(Song song) {
+        int index = songs.indexOf(song);
+        songs.set(index, new Song(song.getId(), song.getTitle(),
+                song.getArtist(), song.getCategory(), song.getPlaytime(),
+                song.getFilePath()));
+
+    }
+
+    */
 }
