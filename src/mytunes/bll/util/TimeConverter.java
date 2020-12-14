@@ -8,6 +8,7 @@ public class TimeConverter {
         if(timeInSec==0)
             return "00:00";
 
+        //if the time is bigger or equal ti an hour
         if(timeInSec>=60*60)
         {
             //when downcasting  to int 4.9 we get 4
@@ -18,6 +19,7 @@ public class TimeConverter {
 
             return hours + ":" + minutes + ":" + seconds;
         }
+        //if a time is smaller than an hour
         else
         {
             int minutes = (int) timeInSec/60;

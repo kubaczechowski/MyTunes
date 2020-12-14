@@ -153,7 +153,6 @@ public class Controller implements Initializable {
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
         //columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
 
-
         columnTime.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Playlist, String>,
                 ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Playlist, String> p) {

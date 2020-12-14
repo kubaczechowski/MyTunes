@@ -202,6 +202,13 @@ public class PlaylistDAO implements IPlaylistRepository {
         }
     }
 
+    public double updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime)
+    {
+        String sql = "UPDATE Playlists SET totalPlaytime=? WHERE id=?;";
+
+
+    }
+
 
 
 }
