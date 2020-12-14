@@ -79,17 +79,14 @@ public class Controller implements Initializable {
     private PlaylistModel playlistModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
-  
+
 
     private boolean filterButton;
 
     public Controller() {
-     songModel = SongModel.createOrGetInstance();
-     playlistModel = PlaylistModel.createOrGetInstance();
-     alertDisplayer = new AlertDisplayer();
-
-     musicPlayer = new MusicPlayer();
-     volumeSlider = new Slider(0.0,1.0,0.5);
+         songModel = SongModel.createOrGetInstance();
+         playlistModel = PlaylistModel.createOrGetInstance();
+         alertDisplayer = new AlertDisplayer();
     }
 
     /**
@@ -102,15 +99,24 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setObservableTableSongs(songModel);
         setObservableTablePlaylists(playlistModel);
+        songsOnPlaylistView = new ListView<>();
+
         //I don't remember what it means
         filterButton = true;
 
         // Music player
+        musicPlayer = new MusicPlayer();
+        volumeSlider = new Slider(0.1,1.0,0.5);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 musicPlayer.setVolume(volumeSlider.getValue());
             }
+        });
+
+        playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            System.out.println(newSelection);
+            songsOnPlaylistView.setItems(playlistsTable.getSelectionModel().getSelectedItem().getSongs());
         });
     }
 
@@ -175,7 +181,7 @@ public class Controller implements Initializable {
         //EditPlaylistController editPlaylistController = loader.getController();
         //editPlaylistController.sendPlaylist(playlistsTable.getSelectionModel().getSelectedItem());
         EditPlaylistController editPlaylistController = loader.getController();
-        if(selectedItem!=null)
+        if (selectedItem!=null)
         {editPlaylistController.sendPlaylist(selectedItem);
         //playlistModel.updatePlaylist();
         }
@@ -191,13 +197,6 @@ public class Controller implements Initializable {
     public void deletePlaylist(ActionEvent actionEvent) {
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
-
-    //???
-    public void playlistSelected(MouseEvent mouseEvent) {
-        Playlist p = playlistsTable.getSelectionModel().getSelectedItem();
-    }
-
-
 
     public void searchAction(ActionEvent actionEvent) {
         if(filterButton) {
@@ -350,17 +349,28 @@ public class Controller implements Initializable {
 
 
     public void play(ActionEvent actionEvent) throws MalformedURLException {
-        //musicPlayer.setVolume(volumeSlider.getValue());
         if (songsTable.getSelectionModel().getSelectedItem() != null) {
             song = songsTable.getSelectionModel().getSelectedItem();
             musicPlayer.loadMedia(song);
-        } else {
-            musicPlayer.loadMedia(songModel.getAllSongs().get(0));
         }
+
         if (musicPlayer.getSong() != null) {
-            musicPlayer.setVolume(volumeSlider.getValue());
             musicPlayer.play();
             nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+        }
+    }
+
+    public void addSongToPlaylist(ActionEvent actionEvent) {
+        try {
+            Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+            Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+
+
+            playlistSelected.addSongToPlaylist(songSelected);
+            //playlistModel.updatePlaylist(playlistSelected.getName(),playlistSelected);
+
+        } catch (Exception e) {
+            System.out.println("No song or playlist selected");
         }
     }
 }

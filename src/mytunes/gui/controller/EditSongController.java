@@ -165,7 +165,7 @@ public class EditSongController implements Initializable {
             }
         }
 
-        else if(selectedItem!=null)
+        else if(selectedItem != null)
         {
             //update song not save another one
             int id = selectedItem.getId();
