@@ -15,5 +15,12 @@ public class timeConverter {
 
             return hours + ":" + minutes + ":" + seconds;
         }
+        else
+        {
+            int minutes = (int) timeInSec/60;
+            int seconds = (int) (timeInSec - minutes*60);
+
+            return minutes + ":" + seconds;
+        }
     }
 }
