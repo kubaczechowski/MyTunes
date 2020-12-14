@@ -1,10 +1,13 @@
 package mytunes.bll.util;
 
-public class timeConverter {
+public class TimeConverter {
 
     public String convertToString(int timeInMillis)
     {
         int timeInSec = timeInMillis/1000;
+        if(timeInSec==0)
+            return "00:00";
+
         if(timeInSec>=60*60)
         {
             //when downcasting  to int 4.9 we get 4

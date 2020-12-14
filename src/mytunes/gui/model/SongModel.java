@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import mytunes.be.Song;
 import mytunes.bll.SongManager;
 import mytunes.bll.exeption.BLLexception;
+import mytunes.bll.util.TimeConverter;
 
 import java.net.URL;
 
@@ -25,10 +26,12 @@ public class SongModel {
 
     private SongManager songManager;
     private ObservableList<Song> songs;
+    private TimeConverter timeConverter;
 
     public SongModel() {
         songManager = new SongManager();
         songs = FXCollections.observableArrayList();
+        timeConverter = new TimeConverter();
     }
 
     /**
@@ -58,6 +61,11 @@ public class SongModel {
             blLexception.printStackTrace();
         }
 
+    }
+
+    public String convertToString(int timeInMillis)
+    {
+        return timeConverter.convertToString(timeInMillis);
     }
 
     /**

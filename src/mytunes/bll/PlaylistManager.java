@@ -61,4 +61,13 @@ public class PlaylistManager {
             throw new BLLexception("Couldn't get a playlist with id: " + id);
         }
     }
+
+    public double getTotalTimeOnPlaylist(Playlist playlist) throws BLLexception {
+        try {
+            return idalFacade.getTotalTimeOnPlaylist(playlist);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+            throw new BLLexception("Couldn't get total time on playlist");
+        }
+    }
 }
