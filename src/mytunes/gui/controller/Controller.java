@@ -2,6 +2,8 @@ package mytunes.gui.controller;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
 import mytunes.gui.model.MusicPlayer;
@@ -66,14 +69,14 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Playlist, Integer> columnSong;
     @FXML
-    private TableColumn<Playlist, Integer> columnTime;
+    private TableColumn<Playlist, String> columnTime;
 
     //TableView Columns Songs
     @FXML private TableColumn<Song, ImageView> columnImage;
     @FXML private  TableColumn<Song, String> columnTitle;
     @FXML private  TableColumn<Song, String> columnArtist;
     @FXML private TableColumn<Song, String > columnCategory;
-    @FXML TableColumn<Song, Integer> columnTimeSong;
+    @FXML TableColumn<Song, String> columnTimeSong;
 
     //instances of models
     private PlaylistModel playlistModel;
@@ -84,12 +87,9 @@ public class Controller implements Initializable {
     private boolean filterButton;
 
     public Controller() {
-     songModel = SongModel.createOrGetInstance();
-     playlistModel = PlaylistModel.createOrGetInstance();
-     alertDisplayer = new AlertDisplayer();
-
-     musicPlayer = new MusicPlayer();
-     volumeSlider = new Slider(0.0,1.0,0.5);
+         songModel = SongModel.createOrGetInstance();
+         playlistModel = PlaylistModel.createOrGetInstance();
+         alertDisplayer = new AlertDisplayer();
     }
 
     /**
@@ -102,10 +102,14 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setObservableTableSongs(songModel);
         setObservableTablePlaylists(playlistModel);
+        songsOnPlaylistView = new ListView<>();
+
         //I don't remember what it means
         filterButton = true;
 
         // Music player
+        musicPlayer = new MusicPlayer();
+        volumeSlider = new Slider(0.1,1.0,0.5);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -114,6 +118,11 @@ public class Controller implements Initializable {
         });
 
         mainImage.setImage(new Image("/Images/default.png"));
+
+        playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            System.out.println(newSelection);
+            songsOnPlaylistView.setItems(playlistsTable.getSelectionModel().getSelectedItem().getSongs());
+        });
     }
 
 
@@ -122,14 +131,20 @@ public class Controller implements Initializable {
      * in Songs table in Database it is visible for the user
      * @param songModel
      */
-    private void setObservableTableSongs(SongModel songModel)
-    {
+    private void setObservableTableSongs(SongModel songModel) {
         //Initialize TableView Songs
         columnImage.setCellValueFactory(new PropertyValueFactory<Song, ImageView>("image"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
+
+
+        columnTimeSong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Song, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Song, String> p) {
+                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getPlaytime()));
+            }
+        });
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
     }
@@ -145,7 +160,16 @@ public class Controller implements Initializable {
         //Initialize TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
-        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+        //columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+
+
+        columnTime.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Playlist, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Playlist, String> p) {
+                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getTotalPlaytime()));
+            }
+        });
+
         playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
 
@@ -178,7 +202,7 @@ public class Controller implements Initializable {
         //EditPlaylistController editPlaylistController = loader.getController();
         //editPlaylistController.sendPlaylist(playlistsTable.getSelectionModel().getSelectedItem());
         EditPlaylistController editPlaylistController = loader.getController();
-        if(selectedItem!=null)
+        if (selectedItem!=null)
         {editPlaylistController.sendPlaylist(selectedItem);
         //playlistModel.updatePlaylist();
         }
@@ -194,13 +218,6 @@ public class Controller implements Initializable {
     public void deletePlaylist(ActionEvent actionEvent) {
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
-
-    //???
-    public void playlistSelected(MouseEvent mouseEvent) {
-        Playlist p = playlistsTable.getSelectionModel().getSelectedItem();
-    }
-
-
 
     public void searchAction(ActionEvent actionEvent) {
         if(filterButton) {
@@ -353,19 +370,31 @@ public class Controller implements Initializable {
 
 
     public void play(ActionEvent actionEvent) throws MalformedURLException {
-        //musicPlayer.setVolume(volumeSlider.getValue());
         if (songsTable.getSelectionModel().getSelectedItem() != null) {
             song = songsTable.getSelectionModel().getSelectedItem();
             musicPlayer.loadMedia(song);
-        } else {
-            musicPlayer.loadMedia(songModel.getAllSongs().get(0));
         }
+
         if (musicPlayer.getSong() != null) {
             musicPlayer.setVolume(volumeSlider.getValue());
             musicPlayer.play();
             nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
             //nowPlayingArtist.setText();
             //mainImage.setImage();
+        }
+    }
+
+    public void addSongToPlaylist(ActionEvent actionEvent) {
+        try {
+            Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+            Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+
+
+            playlistSelected.addSongToPlaylist(songSelected);
+            //playlistModel.updatePlaylist(playlistSelected.getName(),playlistSelected);
+
+        } catch (Exception e) {
+            System.out.println("No song or playlist selected");
         }
     }
 }
