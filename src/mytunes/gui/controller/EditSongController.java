@@ -118,6 +118,7 @@ public class EditSongController implements Initializable {
         Media media = new Media( pathOrigin.toUri().toString());
         MediaPlayer mediaPlayer= new MediaPlayer(media);
 
+       // timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
         timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
     }
 
@@ -133,8 +134,11 @@ public class EditSongController implements Initializable {
         String artist = artistField.getText();
         String category = this.categoryMenu.getText();
         String filepath = filepathField.getText();
-        int time = Integer.parseInt(timeField.getText());
-        Song song = new Song(id, title, artist, category, time, filepath);
+       // int time = Integer.parseInt(timeField.getText());
+        String preparedTimeField = timeField.getText().substring(0, timeField.getText().length()-3);
+        int timeInMillis = (int) Float.parseFloat(preparedTimeField);
+
+        Song song = new Song(id, title, artist, category, timeInMillis, filepath);
         return song;
     }
 
