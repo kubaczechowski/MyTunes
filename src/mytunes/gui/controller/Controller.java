@@ -126,7 +126,26 @@ public class Controller implements Initializable {
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
+        //columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
+       /* columnTimeSong.setCellFactory((tableColumn -> {
+            TableCell<Song, String> timeCell = new TableCell<>(){
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    this.setText(null);
+                    this.setGraphic(null);
+
+                    if(!empty){
+                        this.setText(songModel.convertTime());
+                    }
+                }
+            };
+
+            return timeCell;
+        }));
+
+        */
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
     }
