@@ -2,6 +2,8 @@ package mytunes.gui.controller;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
 import mytunes.gui.model.MusicPlayer;
@@ -63,7 +66,7 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Playlist, Integer> columnSong;
     @FXML
-    private TableColumn<Playlist, Integer> columnTime;
+    private TableColumn<Playlist, String> columnTime;
 
     //TableView Columns Songs
     @FXML
@@ -73,7 +76,7 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<Song, String > columnCategory;
     @FXML
-    TableColumn<Song, Integer> columnTimeSong;
+    TableColumn<Song, String> columnTimeSong;
 
     //instances of models
     private PlaylistModel playlistModel;
@@ -126,13 +129,19 @@ public class Controller implements Initializable {
      * in Songs table in Database it is visible for the user
      * @param songModel
      */
-    private void setObservableTableSongs(SongModel songModel)
-    {
+    private void setObservableTableSongs(SongModel songModel) {
         //Initialize TableView Songs
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playtime"));
+
+
+        columnTimeSong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Song, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Song, String> p) {
+                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getPlaytime()));
+            }
+        });
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
     }
@@ -148,7 +157,16 @@ public class Controller implements Initializable {
         //Initialize TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
-        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+        //columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
+
+
+        columnTime.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Playlist, String>,
+                ObservableValue<String>>() {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Playlist, String> p) {
+                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getTotalPlaytime()));
+            }
+        });
+
         playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
 
