@@ -51,6 +51,7 @@ public class PlaylistModel {
             blLexception.printStackTrace();
         }
         playlists.remove(playlist);
+
     }
 
     public void newPlaylist(String name) {

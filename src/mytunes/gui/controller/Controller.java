@@ -17,7 +17,9 @@ import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
 import mytunes.be.Playlist;
+import mytunes.be.PlaylistItem;
 import mytunes.be.Song;
+import mytunes.gui.model.PlaylistItemModel;
 import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
 
@@ -28,6 +30,7 @@ import java.util.*;
 public class Controller implements Initializable {
 
     public TableView<Playlist> playlistsTable;
+    public TableView<PlaylistItem> playlistItemTableView;
     public ListView<Song> songsOnPlaylistView;
     public TableView<Song> songsTable;
     public TextField searchBar;
@@ -55,6 +58,7 @@ public class Controller implements Initializable {
           // FXCollections.observableArrayList();
 
     private PlaylistModel playlistModel;
+    private PlaylistItemModel playlistItemModel;
     private SongModel songModel;
     private boolean filterButton;
 
@@ -195,6 +199,7 @@ public class Controller implements Initializable {
     }
 
     public void sortAscending(ActionEvent event) {
+
         //get all songs from the ListView
         List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
         //sort
@@ -204,7 +209,9 @@ public class Controller implements Initializable {
         songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
         songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
 
-        /*
+
+
+
         //get all songs in the table
         ArrayList<Song> songArrayList= new ArrayList<>();
         songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
@@ -213,13 +220,17 @@ public class Controller implements Initializable {
         songsOnPlaylistView.getItems().removeAll();
 
         songsOnPlaylistView.getItems().addAll(songArrayList);
-       // songsOnPlaylistView
 
-         */
+
+
+
+
+
+
     }
 
     public void sortDescending(ActionEvent event) {
-
+        /*
         //get all songs from the ListView
         List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
         //sort
@@ -229,8 +240,10 @@ public class Controller implements Initializable {
         songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
         songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
 
-        /*
+         */
 
+
+        /*
         Comparator comparatorDesc = Collections.reverseOrder();
 
         //get all songs in the table
@@ -244,6 +257,16 @@ public class Controller implements Initializable {
         // songsOnPlaylistView
 
          */
+
+
+    }
+
+    public void btnDeleteSongsFromPlaylist(ActionEvent event) {
+        playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
+    }
+
+    public void btnClose(ActionEvent event) {
+        System.exit(0);
     }
 }
 

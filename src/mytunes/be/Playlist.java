@@ -65,6 +65,8 @@ public class Playlist {
     public void setTotalPlaytime(int totalPlaytime) {
         this.totalPlaytime = totalPlaytime;
     }
+
+
 }
 
 

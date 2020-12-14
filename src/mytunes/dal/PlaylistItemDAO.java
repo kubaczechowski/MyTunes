@@ -67,7 +67,7 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
             //retrieve songs from the list of songs that have the SongID
             //we need to iterate through it
 
-            //piszesz komende i zamiast while dajesz for i cyk iterujesz
+            //piszesz komende i zamiast while dajesz for i cyk iterujesz1
             String sql2 = "Select * Songs WHERE SongID=?;";
             PreparedStatement preparedStatement2 = con.prepareStatement(sql2);
 

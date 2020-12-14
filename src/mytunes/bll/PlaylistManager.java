@@ -1,10 +1,10 @@
 package mytunes.bll;
 
 import mytunes.be.Playlist;
+import mytunes.be.PlaylistItem;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.dal.DALcontroller;
 import mytunes.dal.IDALFacade;
-import mytunes.dal.PlaylistDAO;
 import mytunes.dal.exception.DALexception;
 
 import java.util.List;
@@ -52,4 +52,5 @@ public class PlaylistManager {
             throw new BLLexception("Couldn't updatePlaylist");
         }
     }
+
 }

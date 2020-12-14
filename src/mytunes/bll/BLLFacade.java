@@ -2,6 +2,7 @@ package mytunes.bll;
 
 
 import mytunes.be.Playlist;
+import mytunes.be.PlaylistItem;
 import mytunes.be.Song;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.dal.exception.DALexception;
