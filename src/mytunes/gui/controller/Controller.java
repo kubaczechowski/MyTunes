@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -48,13 +50,14 @@ public class Controller implements Initializable {
     //used for the searching functionality
     public TextField searchBar;
 
+
     // Music Player
     private MusicPlayer musicPlayer;
-    @FXML
-    private Slider volumeSlider;
-    @FXML
-    private Text nowPlaying;
+    @FXML private Slider volumeSlider;
+    @FXML private Text nowPlaying;
+    @FXML private Text nowPlayingArtist;
     private Song song;
+    public ImageView mainImage;
 
 
     //TableView Columns Playlists
@@ -66,14 +69,11 @@ public class Controller implements Initializable {
     private TableColumn<Playlist, Integer> columnTime;
 
     //TableView Columns Songs
-    @FXML
-    private  TableColumn<Song, String> columnTitle;
-    @FXML
-    private  TableColumn<Song, String> columnArtist;
-    @FXML
-    private TableColumn<Song, String > columnCategory;
-    @FXML
-    TableColumn<Song, Integer> columnTimeSong;
+    @FXML private TableColumn<Song, ImageView> columnImage;
+    @FXML private  TableColumn<Song, String> columnTitle;
+    @FXML private  TableColumn<Song, String> columnArtist;
+    @FXML private TableColumn<Song, String > columnCategory;
+    @FXML TableColumn<Song, Integer> columnTimeSong;
 
     //instances of models
     private PlaylistModel playlistModel;
@@ -112,6 +112,8 @@ public class Controller implements Initializable {
                 musicPlayer.setVolume(volumeSlider.getValue());
             }
         });
+
+        mainImage.setImage(new Image("/Images/default.png"));
     }
 
 
@@ -123,6 +125,7 @@ public class Controller implements Initializable {
     private void setObservableTableSongs(SongModel songModel)
     {
         //Initialize TableView Songs
+        columnImage.setCellValueFactory(new PropertyValueFactory<Song, ImageView>("image"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
@@ -361,6 +364,8 @@ public class Controller implements Initializable {
             musicPlayer.setVolume(volumeSlider.getValue());
             musicPlayer.play();
             nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+            //nowPlayingArtist.setText();
+            //mainImage.setImage();
         }
     }
 }

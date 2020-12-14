@@ -89,7 +89,8 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
                 String category = resultSet1.getString("category");
                 int playTime = resultSet1.getInt("playTime");
                 String filePath = resultSet1.getString("filePath");
-                Song song = new Song(id, title, artist, category, playTime, filePath);
+                String imagePath = resultSet1.getString("imagePath");
+                Song song = new Song(id, title, artist, category, playTime, filePath, imagePath);
 
                 map.put(key, song);
 

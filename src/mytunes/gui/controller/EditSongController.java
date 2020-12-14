@@ -27,6 +27,8 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
  */
 public class EditSongController implements Initializable {
     @FXML
+    private TextField imagePathField;
+    @FXML
     private TextField titleField;
     @FXML
     private TextField artistField;
@@ -44,6 +46,9 @@ public class EditSongController implements Initializable {
 
     private Path pathOrigin;
     private Path destinationPath;
+
+    private Path pathImageOrigin;
+    private Path destinationImagePath;
 
 
     public void setModel(SongModel songModel, FileChooser fileChooser, Song selectedItem) {
@@ -72,6 +77,7 @@ public class EditSongController implements Initializable {
         categoryMenu.setText(selectedItem.getCategory());
         timeField.setText(String.valueOf(selectedItem.getPlaytime()));
         filepathField.setText(selectedItem.getFilePath());
+        imagePathField.setText(selectedItem.getImagePath());
     }
 
     @Override
@@ -101,7 +107,7 @@ public class EditSongController implements Initializable {
         File file = fileChooser.showOpenDialog(stage);
 
         //create a copy of the chosen song in the application folder if the file was chosen .mp3 / .wav
-         pathOrigin = Path.of(file.getAbsolutePath());
+        pathOrigin = Path.of(file.getAbsolutePath());
         //set a new path
 
         if (pathOrigin.toString().contains(".wav")) {
@@ -122,6 +128,32 @@ public class EditSongController implements Initializable {
         timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
     }
 
+    public void chooseImageAction(ActionEvent actionEvent) {
+        pathImageOrigin=null;
+        destinationImagePath=null;
+
+        //open a file explorer
+        Node n = (Node) actionEvent.getSource();
+        Stage stage = (Stage) n.getScene().getWindow();
+        fileChooser.setTitle("Choose image");
+        File file = fileChooser.showOpenDialog(stage);
+
+        //create a copy of the chosen image in the application folder if the file was chosen .png / .jpg
+        pathImageOrigin = Path.of(file.getAbsolutePath());
+        //set a new path
+
+        if (pathImageOrigin.toString().contains(".png")) {
+            destinationImagePath = Path.of("src/Images/" + titleField.getText() + ".png");
+        } else if (pathImageOrigin.toString().contains(".jpg")) {
+            destinationImagePath = Path.of("src/Images/" + titleField.getText() + ".jpg");
+        } else {
+            destinationImagePath = Path.of("src/Images/default.png");
+        }
+
+        //show it in the text field
+        imagePathField.setText(String.valueOf(destinationImagePath));
+    }
+
     /**
      * method based on the inserted information to the
      * window creates a song and then returns it.
@@ -134,11 +166,17 @@ public class EditSongController implements Initializable {
         String artist = artistField.getText();
         String category = this.categoryMenu.getText();
         String filepath = filepathField.getText();
+        String imagePath;
+        if(imagePathField.getText().equals("")) {
+            imagePath = "src/Images/default.png";
+        } else {
+            imagePath = imagePathField.getText();
+        }
        // int time = Integer.parseInt(timeField.getText());
         String preparedTimeField = timeField.getText().substring(0, timeField.getText().length()-3);
         int timeInMillis = (int) Float.parseFloat(preparedTimeField);
 
-        Song song = new Song(id, title, artist, category, timeInMillis, filepath);
+        Song song = new Song(id, title, artist, category, timeInMillis, filepath, imagePath);
         return song;
     }
 
@@ -156,10 +194,11 @@ public class EditSongController implements Initializable {
             songModel.save(getSongFromTable());
 
 
-            //create a copy of the song in the program package song
+            //create a copy of the song and image in the program package song
             try {
                 // here it creates a copy in the shown destination
                 Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES);
+                Files.copy(pathImageOrigin, destinationImagePath, COPY_ATTRIBUTES);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -173,9 +212,10 @@ public class EditSongController implements Initializable {
             String artist = artistField.getText();
             String category = this.categoryMenu.getText();
             String filepath = filepathField.getText();
+            String imagePath = imagePathField.getText();
             int time = Integer.parseInt(timeField.getText());
 
-            Song songToUpdate = new Song(id, title, artist, category, time, filepath);
+            Song songToUpdate = new Song(id, title, artist, category, time, filepath, imagePath);
             songModel.update(songToUpdate);
             songModel.load();
         }
