@@ -53,6 +53,7 @@ public class PlaylistModel {
     {
         try {
             playlists.clear();
+            //playlists.removeAll(playlistManager.getAllPlaylists());
             playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();

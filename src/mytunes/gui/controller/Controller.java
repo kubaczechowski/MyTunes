@@ -125,6 +125,7 @@ public class Controller implements Initializable {
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
         });
+
     }
 
     /**
@@ -340,27 +341,21 @@ public class Controller implements Initializable {
      */
 
     public void sortAscending(ActionEvent event) {
-        //get all songs from the ListView
-        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
-        //sort
-        allSongsOnPlaylistSorted.sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        //Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+         List<Song> unsortedList = songsOnPlaylistView.getItems();
 
-        //upload the ListView
-        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
-        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+        Comparator<Song> compareByTitle = new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        };
 
-        /*
-        //get all songs in the table
-        ArrayList<Song> songArrayList= new ArrayList<>();
-        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
+        Collections.sort(unsortedList, compareByTitle);
 
-        songArrayList.sort(Comparator.comparing(Song::getTitle));
-        songsOnPlaylistView.getItems().removeAll();
+       songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
 
-        songsOnPlaylistView.getItems().addAll(songArrayList);
-       // songsOnPlaylistView
 
-         */
     }
 
     /**
@@ -369,31 +364,19 @@ public class Controller implements Initializable {
      * @param event
      */
     public void sortDescending(ActionEvent event) {
+        List<Song> unsortedList = songsOnPlaylistView.getItems();
 
-        //get all songs from the ListView
-        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
-        //sort
-        allSongsOnPlaylistSorted.sort((o1, o2) -> o2.getTitle().compareTo(o1.getTitle()));
+        Comparator<Song> compareByTitle = new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
+                return o2.getTitle().compareTo(o1.getTitle());
+            }
+        };
 
-        //upload the ListView
-        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
-        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+        Collections.sort(unsortedList, compareByTitle);
 
-        /*
+        songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
 
-        Comparator comparatorDesc = Collections.reverseOrder();
-
-        //get all songs in the table
-        ArrayList<Song> songArrayList= new ArrayList<>();
-        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
-
-        songArrayList.sort(Comparator.comparing(Song::getTitle).reversed());
-        songsOnPlaylistView.getItems().removeAll();
-
-        songsOnPlaylistView.getItems().addAll(songArrayList);
-        // songsOnPlaylistView
-
-         */
     }
 
 
@@ -424,10 +407,14 @@ public class Controller implements Initializable {
 
     public void addSongToPlaylist(ActionEvent actionEvent) {
         try {
+
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
             Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
             playlistSelected.addSongToPlaylist(songSelected);
             songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
+
+            //addingNewSongToPlaylist(playlistSelected, songSelected.getPlaytime());
+
 
         } catch (Exception e) {
             System.out.println("No song or playlist selected");
