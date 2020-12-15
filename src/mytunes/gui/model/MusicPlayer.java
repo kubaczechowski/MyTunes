@@ -31,23 +31,7 @@ public class MusicPlayer {
     public MusicPlayer() {
         bllFacade = new BLLcontroller();
         songList = FXCollections.observableArrayList();
-       /* try {
-            songList.addAll(songManager.getAllSongs());
-        } catch (BLLexception blLexception) {
-            blLexception.printStackTrace();
-            }
-        */
-
-        }
-
-
-    /**
-     * @return list of all songs
-     */
-    public ObservableList<Song> getSongList() {
-        return songList;
     }
-
 
     /**
      * Checks if song is paused, if it is, then play.
@@ -116,5 +100,7 @@ public class MusicPlayer {
     public Song getSong() {
         return song;
     }
+
+
 
 }

@@ -76,8 +76,8 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
-    public void createSong(String title, String artist, String category, int time, String filePath) throws DALexception {
-          songAccess.createSong(title, artist, category, time,  filePath );
+    public void createSong(String title, String artist, String category, int time, String filePath, String imagePath) throws DALexception {
+          songAccess.createSong(title, artist, category, time,  filePath, imagePath );
     }
 
     @Override
@@ -87,8 +87,8 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
-    public void updateSong(Song song, String title, String artist, String category, String filePath) throws DALexception {
-        songAccess.updateSong(song, title, artist, category, filePath);
+    public void updateSong(Song song, String title, String artist, String category, String filePath, String imagePath) throws DALexception {
+        songAccess.updateSong(song, title, artist, category, filePath, imagePath);
     }
 
     @Override

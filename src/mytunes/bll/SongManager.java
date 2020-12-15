@@ -57,7 +57,8 @@ public class SongManager {
                     song.getArtist(),
                     song.getCategory(),
                     song.getPlaytime(),
-                    song.getFilePath());
+                    song.getFilePath(),
+                    song.getImagePath());
         } catch (DALexception daLexception) {
             daLexception.printStackTrace();
             throw new BLLexception("couldn't save song");
@@ -78,7 +79,7 @@ public class SongManager {
     public void update(Song song) throws BLLexception {
         try {
             idalFacade.updateSong(song, song.getTitle(), song.getArtist(),
-                    song.getCategory(), song.getFilePath());
+                    song.getCategory(), song.getFilePath(), song.getImagePath());
         } catch (DALexception daLexception) {
             daLexception.printStackTrace();
             throw new BLLexception("couldn't update a song");

@@ -7,6 +7,7 @@ import mytunes.bll.BLLFacade;
 import mytunes.bll.BLLcontroller;
 import mytunes.bll.PlaylistManager;
 import mytunes.bll.exeption.BLLexception;
+import mytunes.bll.util.TimeConverter;
 
 /**
  * Class plays important role in creating a TableView Playlists'
@@ -18,10 +19,12 @@ public class PlaylistModel {
     private PlaylistManager playlistManager;// class from BLL
     private ObservableList<Playlist> playlists;
     private static PlaylistModel playlistModelInstance;
+    private TimeConverter timeConverter;
 
     public PlaylistModel() {
        playlistManager = new PlaylistManager();
         playlists = FXCollections.observableArrayList();
+        timeConverter = new TimeConverter();
     }
 
     /**
@@ -36,6 +39,11 @@ public class PlaylistModel {
         }
         return playlistModelInstance;
 
+    }
+
+    public String convertToString(int timeInMilis)
+    {
+        return timeConverter.convertToString(timeInMilis);
     }
 
     /**
@@ -128,7 +136,7 @@ public class PlaylistModel {
     /**
      *
      */
-    /*
+
     public double getTotalTimeOnPlaylist(Playlist playlist)
     {
         try {
@@ -140,7 +148,7 @@ public class PlaylistModel {
 
     }
 
-     */
+
 
     //updateNumberOfSongsOnPlaylist
 

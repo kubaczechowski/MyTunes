@@ -45,7 +45,8 @@ public class SongDAO implements ISongRepository {
                 String category = rs.getString("category");
                 int playTime = rs.getInt("playtime");
                 String filePath = rs.getString("filePath");
-                Song song = new Song(id, title, artist, category, playTime, filePath);
+                String imagePath = rs.getString("imagePath");
+                Song song = new Song(id, title, artist, category, playTime, filePath, imagePath);
                 allSongs.add(song);
             }
         } catch (SQLException ex) {
@@ -60,9 +61,9 @@ public class SongDAO implements ISongRepository {
      */
 
    public void createSong(String title, String artist, String category, int time ,
-                          String filePath) throws DALexception {
+                          String filePath, String imagePath) throws DALexception {
        String sql= " INSERT INTO SONGS (title, artist," +
-           " category, playtime, filePath) values(?, ?, ?, ?, ?); ";
+           " category, playtime, filePath, imagePath) values(?, ?, ?, ?, ?, ?); ";
 
       // String sql2 = "Select id FROM Songs WHERE title=?;";
 
@@ -76,6 +77,7 @@ public class SongDAO implements ISongRepository {
            preparedStatement.setString(3, category);
            preparedStatement.setInt(4,  time);
            preparedStatement.setString(5, filePath);
+           preparedStatement.setString(6, imagePath);
            preparedStatement.executeUpdate();
 
 /*
@@ -116,9 +118,9 @@ public class SongDAO implements ISongRepository {
      * Updates the given song with given values
      */
     public void updateSong(Song song, String title, String artist,
-                           String category, String filePath) throws DALexception {
+                           String category, String filePath, String imagePath) throws DALexception {
         String sql = "UPDATE Songs SET title=?, artist=?, " +
-                "category=?, filePath=? WHERE id=?;";
+                "category=?, filePath=?, imagePath=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement pstat = con.prepareStatement(sql)) {
 
@@ -127,7 +129,8 @@ public class SongDAO implements ISongRepository {
             pstat.setString(2, artist);
             pstat.setString(3, category);
             pstat.setString(4, filePath);
-            pstat.setInt(5, song.getId());
+            pstat.setString(5, imagePath);
+            pstat.setInt(6, song.getId());
             pstat.execute();
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
@@ -155,12 +158,11 @@ public class SongDAO implements ISongRepository {
                 String title = result.getString("title");
                 String artist = result.getString("artist");
                 String category = result.getString("category");
-
                 int time = result.getInt("playTime");
-
                 String filePath = result.getString("filePath");
+                String imagePath = result.getString("imagePath");
 
-                song = new Song(id, title, artist, category, time, filePath);
+                song = new Song(id, title, artist, category, time, filePath, imagePath);
             }
 
         } catch (SQLServerException throwables) {

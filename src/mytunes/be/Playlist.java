@@ -65,6 +65,10 @@ public class Playlist {
     public void setTotalPlaytime(int totalPlaytime) {
         this.totalPlaytime = totalPlaytime;
     }
+
+    public void addSongToPlaylist(Song song) {
+        songs.add(song);
+    }
 }
 
 
