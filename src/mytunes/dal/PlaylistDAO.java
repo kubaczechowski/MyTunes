@@ -245,7 +245,7 @@ public class PlaylistDAO implements IPlaylistRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
+        return playlist.getNumberOfSongs()+1;
     }
 
 
