@@ -202,12 +202,52 @@ public class PlaylistDAO implements IPlaylistRepository {
         }
     }
 
-    public double updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime)
+    /**
+     * method will be called when adding a new item to the Playlist ListView
+     * @param playlist
+     * @param addedSongTime
+     * @return
+     */
+    public int updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime)
     {
         String sql = "UPDATE Playlists SET totalPlaytime=? WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 
+            preparedStatement.setInt(1, addedSongTime+playlist.getTotalPlaytime());
+            preparedStatement.setInt(2, playlist.getId());
+
+            preparedStatement.execute();
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return playlist.getTotalPlaytime() +addedSongTime;
+    }
+
+    /**
+     * method will be called when adding a new item to the Playlist ListView
+     * @param playlist
+     * @return
+     */
+    public int incrementTheNumberOfSongsOnPlaylist(Playlist playlist)
+    {
+        String sql = "UPDATE playlists SET numberOfSongs=? WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+            preparedStatement.setInt(1, playlist.getNumberOfSongs()+1);
+            preparedStatement.setInt(2, playlist.getId());
+            preparedStatement.execute();
+
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
+
 
 
 
