@@ -65,6 +65,16 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
+    public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) throws DALexception {
+        playlistAccess.updateTotalTimeOnPlaylist(playlist, addedSongTime);
+    }
+
+    @Override
+    public void incrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
+         playlistAccess.incrementTheNumberOfSongsOnPlaylist(playlist);
+    }
+
+    @Override
     public Playlist getPlaylist(int id) throws DALexception {
         return playlistAccess.getPlaylist(id);
     }

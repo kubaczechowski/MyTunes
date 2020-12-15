@@ -208,7 +208,7 @@ public class PlaylistDAO implements IPlaylistRepository {
      * @param addedSongTime
      * @return
      */
-    public int updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime) throws DALexception {
+    public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) throws DALexception {
         String sql = "UPDATE Playlists SET totalPlaytime=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -223,7 +223,7 @@ public class PlaylistDAO implements IPlaylistRepository {
         } catch (SQLException throwables) {
             throw new DALexception("Couldn't update total playtime of playlist", throwables);
         }
-        return playlist.getTotalPlaytime() +addedSongTime;
+      //  return playlist.getTotalPlaytime() +addedSongTime;
     }
 
     /**
@@ -231,7 +231,7 @@ public class PlaylistDAO implements IPlaylistRepository {
      * @param playlist
      * @return
      */
-    public int incrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
+    public void incrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
         String sql = "UPDATE playlists SET numberOfSongs=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -248,7 +248,7 @@ public class PlaylistDAO implements IPlaylistRepository {
             throw new DALexception("Couldn't increament (it means refresh) the number of songs on" +
                     "the playlist:" + playlist.getName(), throwables);
         }
-        return playlist.getNumberOfSongs()+1;
+       // return playlist.getNumberOfSongs()+1;
     }
 
 

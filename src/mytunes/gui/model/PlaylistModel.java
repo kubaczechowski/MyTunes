@@ -148,6 +148,21 @@ public class PlaylistModel {
 
     }
 
+    public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) {
+        playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+    }
+
+    public void updateTotalTimeOnPlaylistRemove(Playlist playlist, int removedSongTime) {
+        playlistManager.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
+    }
+
+    public void incrementNumberOfSongsOnPlaylist(Playlist playlist) {
+        playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+    }
+
+    public void decrementNumberOfSongsOnPlaylist(Playlist playlist) {
+        playlistManager.decrementNumberOfSongsOnPlaylist(playlist);
+    }
 
 
     //updateNumberOfSongsOnPlaylist
