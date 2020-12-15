@@ -125,6 +125,35 @@ public class Controller implements Initializable {
         });
     }
 
+    /**
+     * Method will be called whenever we will add a new song to PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+    private void addingNewSongToPlaylist(Playlist playlist, int addedSongTime)
+    {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
+    }
+
+
+    /**
+     * Method will be called whenever we remove a song from a PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
+    {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
+        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
+    }
+
 
     /**
      * method sets the TableView Songs so that whenever change happen
@@ -161,7 +190,6 @@ public class Controller implements Initializable {
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
         //columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
-
 
         columnTime.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Playlist, String>,
                 ObservableValue<String>>() {
