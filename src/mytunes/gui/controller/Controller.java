@@ -2,6 +2,8 @@ package mytunes.gui.controller;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -82,7 +84,7 @@ public class Controller implements Initializable {
     private PlaylistModel playlistModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
-  
+
 
     private boolean filterButton;
 
@@ -117,7 +119,7 @@ public class Controller implements Initializable {
             }
         });
 
-        mainImage.setImage(new Image("/Images/default.png"));
+        songsOnPlaylistView.setItems(FXCollections.emptyObservableList());
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             System.out.println(newSelection);
@@ -125,55 +127,13 @@ public class Controller implements Initializable {
         });
     }
 
-    /**
-     * Method will be called whenever we will add a new song to PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
-     */
-    private void addingNewSongToPlaylist(Playlist playlist, int addedSongTime)
+    private void setObservableTableSongs(SongModel songModel)
     {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
-        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
-
-        //force TableView Playlists to refresh
-        playlistModel.load();
-    }
-
-
-    /**
-     * Method will be called whenever we remove a song from a PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
-     */
-    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
-    {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
-        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
-
-        //force TableView Playlists to refresh
-        playlistModel.load();
-    }
-
-
-    /**
-     * method sets the TableView Songs so that whenever change happen
-     * in Songs table in Database it is visible for the user
-     * @param songModel
-     */
-    private void setObservableTableSongs(SongModel songModel) {
         //Initialize TableView Songs
-        columnImage.setCellValueFactory(new PropertyValueFactory<Song, ImageView>("image"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-
-
-        columnTimeSong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Song, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Song, String> p) {
-                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getPlaytime()));
-            }
-        });
+        columnTimeSong.setCellValueFactory(new PropertyValueFactory<Song, String>("playtime"));
         songModel.load();
         songsTable.setItems(songModel.getAllSongs());
     }
@@ -189,15 +149,7 @@ public class Controller implements Initializable {
         //Initialize TableView Playlists
         columnName.setCellValueFactory(new PropertyValueFactory<Playlist, String>("name"));
         columnSong.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("numberOfSongs"));
-        //columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, Integer>("totalPlaytime"));
-
-        columnTime.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Playlist, String>,
-                ObservableValue<String>>() {
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Playlist, String> p) {
-                return new ReadOnlyObjectWrapper(songModel.convertToString(  p.getValue().getTotalPlaytime()));
-            }
-        });
-
+        columnTime.setCellValueFactory(new PropertyValueFactory<Playlist, String>("totalPlaytime"));
         playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
 
@@ -403,12 +355,22 @@ public class Controller implements Initializable {
             musicPlayer.loadMedia(song);
         }
 
-        if (musicPlayer.getSong() != null) {
-            musicPlayer.setVolume(volumeSlider.getValue());
-            musicPlayer.play();
-            nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
-            //nowPlayingArtist.setText();
-            //mainImage.setImage();
+        if (songsTable.getSelectionModel().getSelectedItem() == null) {
+            alertDisplayer.displayInformationAlert("","Please select a song from the song list","Select a song");
+        }
+
+        try {
+            if (!musicPlayer.isPaused()) {
+                musicPlayer.pause();
+                nowPlaying.setText("Paused");
+            }
+
+            if (musicPlayer.isPaused()) {
+                musicPlayer.play();
+                nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+            }
+        } catch (Exception e) {
+            System.out.println("Select a song");
         }
     }
 
