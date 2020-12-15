@@ -23,7 +23,16 @@ public class Song {
         this.playtime = playTime;
         this.filePath = filePath;
         this.imagePath = imagePath;
-        this.image = new ImageView(new Image(imagePath.replace("src", "")));
+
+        if(imagePath==null) {
+            image = new ImageView("/Images/default.png");
+        } else {
+            image = new ImageView(imagePath.replace("src", ""));
+        }
+
+        //Image image = new Image(getClass().getResource(filePath).toURI().toString());
+        // this.image = new ImageView(new Image(imagePath.replace("src/", "")));
+      //  this.image = new ImageView(image);
         this.image.setFitHeight(20);
         this.image.setFitWidth(20);
     }

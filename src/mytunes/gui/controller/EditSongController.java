@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * class is a controller of editSong.fxml window
@@ -189,23 +190,39 @@ public class EditSongController implements Initializable {
      * @param event
      */
     public void saveButtonAction(ActionEvent event) {
+        //when creating a new row in a tableview
         if(selectedItem==null) {
             //song goes down in the 3-layer architecture
             songModel.save(getSongFromTable());
 
-
             //create a copy of the song and image in the program package song
             try {
                 // here it creates a copy in the shown destination
-                Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES);
-                Files.copy(pathImageOrigin, destinationImagePath, COPY_ATTRIBUTES);
+                Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
+
+               if(pathImageOrigin!=null)
+                    Files.copy(pathImageOrigin, destinationImagePath, COPY_ATTRIBUTES, REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
+        //editing existing row
         else if(selectedItem != null)
         {
+            try {
+                Files.delete(destinationPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             //update song not save another one
             int id = selectedItem.getId();
             String title = titleField.getText();
@@ -213,8 +230,8 @@ public class EditSongController implements Initializable {
             String category = this.categoryMenu.getText();
             String filepath = filepathField.getText();
             String imagePath = imagePathField.getText();
-            int time = Integer.parseInt(timeField.getText());
-
+            String preparedtime = timeField.getText().substring(0, timeField.getText().length()-3);
+            int time = (int) Float.parseFloat(preparedtime);
             Song songToUpdate = new Song(id, title, artist, category, time, filepath, imagePath);
             songModel.update(songToUpdate);
             songModel.load();
