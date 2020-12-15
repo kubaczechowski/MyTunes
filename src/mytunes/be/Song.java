@@ -14,8 +14,7 @@ public class Song {
     private String imagePath;
     private ImageView image;
 
-    public Song(int id, String title, String artist,
-                String category, int playTime, String filePath, String imagePath) {
+    public Song(int id, String title, String artist, String category, int playTime, String filePath, String imagePath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -80,6 +79,7 @@ public class Song {
         this.filePath = filePath;
     }
 
+
     public String getImagePath() {
         return imagePath;
     }
@@ -94,5 +94,10 @@ public class Song {
 
     public void setImage(ImageView image) {
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

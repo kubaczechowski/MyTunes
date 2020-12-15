@@ -89,9 +89,10 @@ public class Controller implements Initializable {
     private boolean filterButton;
 
     public Controller() {
-         songModel = SongModel.createOrGetInstance();
-         playlistModel = PlaylistModel.createOrGetInstance();
-         alertDisplayer = new AlertDisplayer();
+        songModel = SongModel.createOrGetInstance();
+        playlistModel = PlaylistModel.createOrGetInstance();
+        alertDisplayer = new AlertDisplayer();
+        musicPlayer = new MusicPlayer();
     }
 
     /**
@@ -104,14 +105,14 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setObservableTableSongs(songModel);
         setObservableTablePlaylists(playlistModel);
-        songsOnPlaylistView = new ListView<>();
+
 
         //I don't remember what it means
         filterButton = true;
 
         // Music player
-        musicPlayer = new MusicPlayer();
         volumeSlider = new Slider(0.1,1.0,0.5);
+
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -122,8 +123,7 @@ public class Controller implements Initializable {
         mainImage.setImage(new Image("/Images/default.png"));
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            System.out.println(newSelection);
-            songsOnPlaylistView.setItems(playlistsTable.getSelectionModel().getSelectedItem().getSongs());
+            songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
         });
     }
 
@@ -315,8 +315,6 @@ public class Controller implements Initializable {
         stage.show();
     }
 
-
-
     /**
      * Method opens confirmation window that is used to ensure
      * that user wants to delete a song
@@ -400,7 +398,7 @@ public class Controller implements Initializable {
 
 
     public void play(ActionEvent actionEvent) throws MalformedURLException {
-        if (songsTable.getSelectionModel().getSelectedItem() != null) {
+        if (songsTable.getSelectionModel().getSelectedItem() != null && musicPlayer.getSong() == null) {
             song = songsTable.getSelectionModel().getSelectedItem();
             musicPlayer.loadMedia(song);
         }
@@ -428,13 +426,12 @@ public class Controller implements Initializable {
         try {
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
             Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
-
-
             playlistSelected.addSongToPlaylist(songSelected);
-            //playlistModel.updatePlaylist(playlistSelected.getName(),playlistSelected);
+            songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
 
         } catch (Exception e) {
             System.out.println("No song or playlist selected");
+            e.printStackTrace();
         }
     }
 }

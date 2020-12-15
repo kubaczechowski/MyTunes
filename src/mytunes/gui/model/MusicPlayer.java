@@ -36,14 +36,12 @@ public class MusicPlayer {
     /**
      * Checks if song is paused, if it is, then play.
      */
-    public void play(){
-        if (audioPlayer != null){
-            if (isPaused()) {
-                audioPlayer.play();
-            } else {
-                audioPlayer.pause();
-            }
-        }
+    public void play() {
+        audioPlayer.play();
+    }
+
+    public void pause() {
+        audioPlayer.pause();
     }
 
     /**
@@ -102,5 +100,11 @@ public class MusicPlayer {
     }
 
 
+    public MediaPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
 
+    public boolean isOver() {
+        return audioPlayer.onEndOfMediaProperty().isBound();
+    }
 }
