@@ -21,7 +21,7 @@ import java.nio.file.Path;
 public class MusicPlayer {
 
     private BLLFacade bllFacade;
-    private String currentlyPlaying;
+    private Song currentlyPlaying;
     private Media media;
     private MediaPlayer audioPlayer;
     private Song song;
@@ -65,7 +65,7 @@ public class MusicPlayer {
         media = new Media(filePath.toUri().toURL().toExternalForm());
        // System.out.println(audioPath.toUri().toURL().toExternalForm());
         audioPlayer = new MediaPlayer(media);
-        currentlyPlaying = song.getTitle();
+        currentlyPlaying = song;
     }
 
     /**
@@ -74,9 +74,9 @@ public class MusicPlayer {
      */
     public void setCurrentlyPlaying() {
         if (!isPaused()) {
-            currentlyPlaying = "Paused";
+            currentlyPlaying.setTitle("Paused");
         } else {
-            currentlyPlaying = song.getTitle();
+            currentlyPlaying = song;
         }
     }
 
@@ -84,7 +84,7 @@ public class MusicPlayer {
      * Updates the current playing song and returns it.
      * @return the current playing song
      */
-    public String getCurrentlyPlaying() {
+    public Song getCurrentlyPlaying() {
         setCurrentlyPlaying();
         return currentlyPlaying;
     }

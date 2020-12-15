@@ -149,7 +149,11 @@ public class PlaylistModel {
     }
 
     public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) {
-        playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        try {
+            playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public void updateTotalTimeOnPlaylistRemove(Playlist playlist, int removedSongTime) {
@@ -157,7 +161,11 @@ public class PlaylistModel {
     }
 
     public void incrementNumberOfSongsOnPlaylist(Playlist playlist) {
-        playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+        try {
+            playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public void decrementNumberOfSongsOnPlaylist(Playlist playlist) {

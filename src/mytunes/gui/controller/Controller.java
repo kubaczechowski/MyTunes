@@ -406,9 +406,9 @@ public class Controller implements Initializable {
         if (musicPlayer.getSong() != null) {
             musicPlayer.setVolume(volumeSlider.getValue());
             musicPlayer.play();
-            nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
-            //nowPlayingArtist.setText();
-            //mainImage.setImage();
+            nowPlaying.setText(musicPlayer.getCurrentlyPlaying().getTitle());
+            nowPlayingArtist.setText(musicPlayer.getCurrentlyPlaying().getArtist());
+            mainImage.setImage(new Image(musicPlayer.getCurrentlyPlaying().getImagePath().replace("src", "")));
         }
     }
 
