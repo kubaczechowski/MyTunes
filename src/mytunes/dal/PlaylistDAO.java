@@ -208,8 +208,7 @@ public class PlaylistDAO implements IPlaylistRepository {
      * @param addedSongTime
      * @return
      */
-    public int updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime)
-    {
+    public int updateTotalTimeOnPlaylist(Playlist playlist, int addedSongTime) throws DALexception {
         String sql = "UPDATE Playlists SET totalPlaytime=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -219,9 +218,10 @@ public class PlaylistDAO implements IPlaylistRepository {
 
             preparedStatement.execute();
         } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            throw new DALexception("Couldn't update total playtime of playlist", throwables);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throw new DALexception("Couldn't update total playtime of playlist", throwables);
         }
         return playlist.getTotalPlaytime() +addedSongTime;
     }
@@ -231,8 +231,7 @@ public class PlaylistDAO implements IPlaylistRepository {
      * @param playlist
      * @return
      */
-    public int incrementTheNumberOfSongsOnPlaylist(Playlist playlist)
-    {
+    public int incrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception {
         String sql = "UPDATE playlists SET numberOfSongs=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
@@ -241,9 +240,13 @@ public class PlaylistDAO implements IPlaylistRepository {
             preparedStatement.execute();
 
         } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
+           // throwables.printStackTrace();
+            throw new DALexception("Couldn't increament (it means refresh) the number of songs on" +
+                    "the playlist:" + playlist.getName(), throwables);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            throw new DALexception("Couldn't increament (it means refresh) the number of songs on" +
+                    "the playlist:" + playlist.getName(), throwables);
         }
         return playlist.getNumberOfSongs()+1;
     }
