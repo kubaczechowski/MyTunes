@@ -417,7 +417,7 @@ public class Controller implements Initializable {
 
             if (musicPlayer.isPaused()) {
                 musicPlayer.play();
-                nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+                nowPlaying.setText(musicPlayer.getCurrentlyPlaying().getTitle());
             }
         } catch (Exception e) {
             System.out.println("Select a song");
