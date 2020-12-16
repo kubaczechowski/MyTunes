@@ -67,6 +67,8 @@ public class Controller implements Initializable {
     @FXML private Text nowPlayingArtist;
     private Song song;
     public ImageView mainImage;
+    private int songListIterator = 0;
+    private List<Song> songList;
 
 
     //TableView Columns Playlists
@@ -98,9 +100,7 @@ public class Controller implements Initializable {
         playlistModel = PlaylistModel.createOrGetInstance();
         alertDisplayer = new AlertDisplayer();
         musicPlayer = new MusicPlayer();
-       playlistItemModel = PlaylistItemModel.createOrGetInstance();
-
-
+        playlistItemModel = PlaylistItemModel.createOrGetInstance();
     }
 
     /**
@@ -117,6 +117,7 @@ public class Controller implements Initializable {
         filterButton = true;
         // Music player
         volumeSlider = new Slider(0.1,1.0,0.5);
+        songList = songModel.getAllSongs();
 
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
@@ -128,10 +129,12 @@ public class Controller implements Initializable {
         mainImage.setImage(new Image("/Images/default.png"));
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if(newSelection.getSongs()!=null)
+            try {
                 songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
-        });
+            } catch (Exception e) {
 
+            }
+        });
         loadSongsFromThePlaylists();
     }
 
@@ -258,6 +261,7 @@ public class Controller implements Initializable {
     @FXML
     private void openAddWindow() {
         loadOpenAddSongWindow(null);
+        songList = songModel.getAllSongs();
     }
 
     /**
@@ -374,7 +378,7 @@ public class Controller implements Initializable {
         }
 
         if (songsTable.getSelectionModel().getSelectedItem() == null) {
-            alertDisplayer.displayInformationAlert("","Please select a song from the song list","Select a song");
+            musicPlayer.loadMedia(songList.get(0));
         }
 
         try {
@@ -390,6 +394,18 @@ public class Controller implements Initializable {
         } catch (Exception e) {
             System.out.println("Select a song");
         }
+
+        musicPlayer.getAudioPlayer().setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                songListIterator++;
+                try {
+                    musicPlayer.loadMedia(songList.get(songListIterator));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void addSongToPlaylist(ActionEvent actionEvent) {
@@ -407,7 +423,6 @@ public class Controller implements Initializable {
 
         } catch (Exception e) {
             System.out.println("No song or playlist selected");
-            e.printStackTrace();
         }
     }
 
@@ -428,11 +443,7 @@ public class Controller implements Initializable {
 
         //force TableView Playlists to refresh
         playlistModel.load();
-
-
     }
-
-
 
     /**
      * Method will be called whenever we remove a song from a PlaylistView
