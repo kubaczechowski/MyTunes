@@ -54,7 +54,6 @@ public class PlaylistModel {
     public void load() {
         try {
             playlists.clear();
-           // playlists.removeAll(playlistManager.getAllPlaylists());
             playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -106,7 +105,6 @@ public class PlaylistModel {
     public void newPlaylist(String name) {
         try {
             playlists.add(playlistManager.newPlaylist(name));
-            playlistManager.newPlaylist(name);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
         }

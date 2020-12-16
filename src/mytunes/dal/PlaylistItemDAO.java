@@ -1,6 +1,7 @@
 package mytunes.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import mytunes.be.Playlist;
 import mytunes.be.PlaylistItem;
 import mytunes.be.Song;
 import mytunes.dal.exception.DALexception;
@@ -67,9 +68,13 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
         List<Song> songsOnPlaylist = new ArrayList<>();
         try (Connection con = databaseConnector.getConnection()){
             for(Integer integer: songIds)
-            {   String sql2 = "SELECT * FROM Songs WHERE id=" + integer+ ";" ;
+
+            {  // String sql2 = "SELECT * FROM Songs WHERE id=" + integer+ ";" ;
+
+                String sql2 = "SELECT * FROM Songs WHERE id=?;" ;
+
                 PreparedStatement preparedStatement = con.prepareStatement(sql2);
-               // preparedStatement.setInt(1, integer);
+                preparedStatement.setInt(1, integer);
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
                     int id = rs.getInt("id");
@@ -200,7 +205,7 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
     public void deletePlaylistItem(int songId, int playlistId) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
-            String sql = "DELETE FROM PlaylistItems WHERE songID=?, playlistID=?;";
+            String sql = "DELETE FROM PlaylistItems WHERE (songID=? AND playlistID=?);";
             PreparedStatement pstat = con.prepareStatement(sql);
             pstat.setInt(1, songId);
             pstat.setInt(2, playlistId);
@@ -209,6 +214,44 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
         } catch (SQLServerException throwables) {
             throw new DALexception("Couldn't delete song", throwables);
            // throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throw new DALexception("Couldn't deleteSong", throwables);
+            //throwables.printStackTrace();
+
+        }
+    }
+
+    /**
+     * Deletes all playlistItems with a given playlistID (deleting a whole playlist)
+     */
+
+    public void safePlaylistDelete(Playlist playlist) throws DALexception{
+        try (Connection con = databaseConnector.getConnection()) {
+            String sql = "DELETE FROM PlaylistItems WHERE (playlistID=?);";
+            PreparedStatement pstat = con.prepareStatement(sql);
+            pstat.setInt(1, playlist.getId());
+
+            pstat.executeUpdate();
+        } catch (SQLServerException throwables) {
+            throw new DALexception("Couldn't delete song", throwables);
+            // throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throw new DALexception("Couldn't deleteSong", throwables);
+            //throwables.printStackTrace();
+
+        }
+    }
+
+    public void safeSongDelete(Song song) throws DALexception{
+        try (Connection con = databaseConnector.getConnection()) {
+            String sql = "DELETE FROM PlaylistItems WHERE (songID=?);";
+            PreparedStatement pstat = con.prepareStatement(sql);
+            pstat.setInt(1, song.getId());
+
+            pstat.executeUpdate();
+        } catch (SQLServerException throwables) {
+            throw new DALexception("Couldn't delete song", throwables);
+            // throwables.printStackTrace();
         } catch (SQLException throwables) {
             throw new DALexception("Couldn't deleteSong", throwables);
             //throwables.printStackTrace();

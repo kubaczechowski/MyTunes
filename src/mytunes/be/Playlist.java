@@ -17,9 +17,8 @@ public class Playlist {
     public Playlist(int id, String name, List<Song> songs, int numberOfSongs, int totalPlaytime) {
         this.id = id;
         this.name = name;
-        //this.songs = new ArrayList<>();
-       // this.songs.addAll(songs);
-        this.songs = songs;
+        if(songs==null) this.songs = new ArrayList<>();
+        else this.songs = songs;
         this.numberOfSongs = numberOfSongs;
         this.totalPlaytime = totalPlaytime;
     }
@@ -53,7 +52,9 @@ public class Playlist {
     }
 
     public int getNumberOfSongs() {
-        return numberOfSongs;
+        if(songs!=null) return songs.size();
+        else return 0;
+        //return numberOfSongs;
     }
 
     public void setNumberOfSongs(int numberOfSongs) {

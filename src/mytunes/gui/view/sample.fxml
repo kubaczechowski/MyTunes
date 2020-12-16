@@ -14,14 +14,14 @@
 
 <AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1081.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mytunes.gui.controller.Controller">
    <children>
-      <TableView fx:id="playlistsTable" layoutX="37.0" layoutY="151.0" prefHeight="408.0" prefWidth="256.0">
+      <TableView fx:id="playlistsTable" layoutX="37.0" layoutY="177.0" prefHeight="382.0" prefWidth="256.0">
         <columns>
           <TableColumn fx:id="columnName" prefWidth="119.77129364013672" text="Name" />
           <TableColumn fx:id="columnSong" prefWidth="64.0" text="Songs" />
             <TableColumn fx:id="columnTime" prefWidth="59.0" text="Time" />
         </columns>
       </TableView>
-      <ListView fx:id="songsOnPlaylistView" layoutX="306.0" layoutY="151.0" prefHeight="408.0" prefWidth="180.0" />
+      <ListView fx:id="songsOnPlaylistView" layoutX="306.0" layoutY="182.0" prefHeight="377.0" prefWidth="180.0" />
       <Button layoutX="37.0" layoutY="569.0" mnemonicParsing="false" onAction="#createPlaylist" prefHeight="25.0" text="New...">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -39,12 +39,12 @@
       </Button>
       <Button fx:id="arrowUP" layoutX="306.0" layoutY="569.0" mnemonicParsing="false" onAction="#sortAscending" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowUPButton.css" />
       <Button fx:id="arrowDOWN" layoutX="354.0" layoutY="569.0" mnemonicParsing="false" onAction="#sortDescending" prefHeight="25.0" prefWidth="35.0" stylesheets="/mytunes/gui/css/ArrowDOWNButton.css" />
-      <Text layoutX="41.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Playlists">
+      <Text layoutX="48.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Playlists">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Text>
-      <Text layoutX="309.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Songs on Playlist">
+      <Text layoutX="315.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Songs on Playlist">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
@@ -54,7 +54,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <TableView fx:id="songsTable" layoutX="569.0" layoutY="151.0" prefHeight="408.0" prefWidth="477.0">
+      <TableView fx:id="songsTable" layoutX="569.0" layoutY="182.0" prefHeight="377.0" prefWidth="477.0">
         <columns>
             <TableColumn fx:id="columnImage" prefWidth="35.87158203125" />
           <TableColumn fx:id="columnTitle" minWidth="0.0" prefWidth="153.21636962890625" text="Title" />
@@ -83,12 +83,12 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Text layoutX="576.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Songs">
+      <Text layoutX="575.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Songs">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Text>
-      <Text fx:id="nowPlaying" layoutX="387.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(none) ... Is Playing" wrappingWidth="306.0883483886719">
+      <Text fx:id="nowPlaying" layoutX="377.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(none) ... Is Playing" wrappingWidth="306.0883483886719">
          <font>
             <Font size="22.0" />
          </font>
@@ -98,7 +98,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <Button fx:id="arrowLEFTButton" layoutX="516.0" layoutY="160.0" mnemonicParsing="false" onAction="#addSongToPlaylist" prefHeight="25.0" prefWidth="48.0" stylesheets="/mytunes/gui/css/ArrowLEFTButton.css" />
+      <Button fx:id="arrowLEFTButton" layoutX="513.0" layoutY="203.0" mnemonicParsing="false" onAction="#addSongToPlaylist" prefHeight="25.0" prefWidth="48.0" stylesheets="/mytunes/gui/css/ArrowLEFTButton.css" />
       <TextField fx:id="searchBar" layoutX="885.0" layoutY="24.0" prefHeight="25.0" prefWidth="121.0" />
       <Button fx:id="lupaButton" layoutX="1013.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="33.0" stylesheets="/mytunes/gui/css/LupaButton.css" />
       <Button fx:id="playButton" layoutX="124.0" layoutY="12.0" mnemonicParsing="false" onAction="#play" prefHeight="66.0" prefWidth="67.0" stylesheets="/mytunes/gui/css/PlayButton.css" />
@@ -106,9 +106,9 @@
       <Button fx:id="buttonForward" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
       <Slider fx:id="volumeSlider" layoutX="55.0" layoutY="89.0" prefHeight="16.0" prefWidth="206.0" />
       <ImageView fx:id="mainImage" fitHeight="85.0" fitWidth="108.0" layoutX="279.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
-      <Text fx:id="nowPlayingArtist" layoutX="390.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="306.0883483886719">
+      <Text fx:id="nowPlayingArtist" fill="#4a4848" layoutX="384.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="306.0883483886719">
          <font>
-            <Font size="22.0" />
+            <Font size="18.0" />
          </font>
       </Text>
    </children>
