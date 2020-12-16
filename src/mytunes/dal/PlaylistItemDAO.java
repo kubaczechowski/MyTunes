@@ -45,6 +45,62 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
 
     public List<Song> getSongsFromSpecificPlaylist(int playlistID)
     {
+        List<Integer> songIds = new ArrayList<>();
+
+        //get list of songIds and save it to the list
+        String sql1 = "SELECT songID FROM PlaylistItems WHERE playlistID=?;";
+        try (Connection con = databaseConnector.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql1))
+        {
+         preparedStatement.setInt(1, playlistID);
+         ResultSet resultSet = preparedStatement.executeQuery();
+
+         while (resultSet.next())
+         {
+             int songID = resultSet.getInt("songID");
+             songIds.add(songID);
+         }
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        List<Song> songsOnPlaylist = new ArrayList<>();
+        //based on the previosly got list, get songs with that specific id
+       // String sql2 = "SELECT * FROM Songs WHERE id=?;";
+        try (Connection con = databaseConnector.getConnection()){
+
+            for(Integer integer: songIds)
+            {
+                String sql2 = "SELECT * FROM Songs WHERE id=" + integer+ ";" ;
+                PreparedStatement preparedStatement = con.prepareStatement(sql2);
+               // preparedStatement.setInt(1, integer);
+                ResultSet rs = preparedStatement.executeQuery();
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String artist = rs.getString("artist");
+                    String category = rs.getString("category");
+                    int playTime = rs.getInt("playtime");
+                    String filePath = rs.getString("filePath");
+                    String imagePath = rs.getString("imagePath");
+                    Song song = new Song(id, title, artist, category, playTime, filePath, imagePath);
+                    songsOnPlaylist.add(song);
+                }
+            }
+
+        } catch (SQLServerException throwables) {
+            throwables.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return songsOnPlaylist;
+    }
+
+    /*
+    public List<Song> getSongsFromSpecificPlaylist(int playlistID)
+    {
         List<Song> songsOnPlaylist = null;
 
         try (Connection con = databaseConnector.getConnection()) {
@@ -78,6 +134,7 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             }
              */
+    /*
             for(int key: map.keySet())
             {
                 preparedStatement2.setInt(1, key);
@@ -99,7 +156,6 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
             //cast Hashmap values to a list and return it
              songsOnPlaylist = new ArrayList<Song>(map.values());
 
-
         } catch (SQLServerException throwables) {
             throwables.printStackTrace();
         } catch (SQLException throwables) {
@@ -108,6 +164,11 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
         return  songsOnPlaylist;
 
     }
+
+     */
+
+
+
 
     /**
      * Creates a new playlistItem (adds a song to the playlist)
@@ -140,13 +201,13 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
     /**
      * Deletes given playlistItem (deleting song from a playlist)
      */
-    public void deleteSong(PlaylistItem playlistItem) throws DALexception {
+    public void deletePlaylistItem(int songId, int playlistId) throws DALexception {
 
         try (Connection con = databaseConnector.getConnection()) {
             String sql = "DELETE FROM PlaylistItems WHERE songID=?, playlistID=?;";
             PreparedStatement pstat = con.prepareStatement(sql);
-            pstat.setInt(1, playlistItem.getSongId());
-            pstat.setInt(2, playlistItem.getPlaylistId());
+            pstat.setInt(1, songId);
+            pstat.setInt(2, playlistId);
 
             pstat.executeUpdate();
         } catch (SQLServerException throwables) {

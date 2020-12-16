@@ -17,6 +17,8 @@ public class Playlist {
     public Playlist(int id, String name, List<Song> songs, int numberOfSongs, int totalPlaytime) {
         this.id = id;
         this.name = name;
+        //this.songs = new ArrayList<>();
+       // this.songs.addAll(songs);
         this.songs = songs;
         this.numberOfSongs = numberOfSongs;
         this.totalPlaytime = totalPlaytime;
@@ -68,6 +70,11 @@ public class Playlist {
 
     public void addSongToPlaylist(Song song) {
         songs.add(song);
+    }
+
+    public void removeSongFromPlaylist(Song song)
+    {
+        songs.remove(song);
     }
 }
 

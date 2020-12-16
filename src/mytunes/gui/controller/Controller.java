@@ -27,6 +27,7 @@ import javafx.util.Callback;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
 import mytunes.gui.model.MusicPlayer;
+import mytunes.gui.model.PlaylistItemModel;
 import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
 import mytunes.gui.util.AlertDisplayer;
@@ -54,6 +55,7 @@ public class Controller implements Initializable {
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
     public TextField searchBar;
+
 
 
     // Music Player
@@ -84,6 +86,7 @@ public class Controller implements Initializable {
     private PlaylistModel playlistModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
+    private PlaylistItemModel playlistItemModel;
   
 
     private boolean filterButton;
@@ -93,6 +96,7 @@ public class Controller implements Initializable {
         playlistModel = PlaylistModel.createOrGetInstance();
         alertDisplayer = new AlertDisplayer();
         musicPlayer = new MusicPlayer();
+        playlistItemModel = PlaylistItemModel.createOrGetInstance();
     }
 
     /**
@@ -105,11 +109,8 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setObservableTableSongs(songModel);
         setObservableTablePlaylists(playlistModel);
-
-
         //I don't remember what it means
         filterButton = true;
-
         // Music player
         volumeSlider = new Slider(0.1,1.0,0.5);
 
@@ -123,38 +124,19 @@ public class Controller implements Initializable {
         mainImage.setImage(new Image("/Images/default.png"));
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
+            if(newSelection.getSongs()!=null)
+                songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
         });
 
+        loadSongsFromThePlaylists();
     }
 
     /**
-     * Method will be called whenever we will add a new song to PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
+     * loads into the memory the songs that are in each playlist
      */
-    private void addingNewSongToPlaylist(Playlist playlist, int addedSongTime)
-    {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
-        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
+    private void loadSongsFromThePlaylists() {
+        //load the hashmap or whaever we have for that songs
 
-        //force TableView Playlists to refresh
-        playlistModel.load();
-    }
-
-
-    /**
-     * Method will be called whenever we remove a song from a PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
-     */
-    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
-    {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
-        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
-
-        //force TableView Playlists to refresh
-        playlistModel.load();
     }
 
 
@@ -347,7 +329,7 @@ public class Controller implements Initializable {
         Comparator<Song> compareByTitle = new Comparator<Song>() {
             @Override
             public int compare(Song o1, Song o2) {
-                return o1.getTitle().compareTo(o2.getTitle());
+                return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
             }
         };
 
@@ -369,7 +351,8 @@ public class Controller implements Initializable {
         Comparator<Song> compareByTitle = new Comparator<Song>() {
             @Override
             public int compare(Song o1, Song o2) {
-                return o2.getTitle().compareTo(o1.getTitle());
+
+                return o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase());
             }
         };
 
@@ -411,14 +394,50 @@ public class Controller implements Initializable {
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
             Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
             playlistSelected.addSongToPlaylist(songSelected);
-            songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
+            //just for a second
+           // songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
 
-            //addingNewSongToPlaylist(playlistSelected, songSelected.getPlaytime());
-
+            //update the Playlist in playlist Table in DB and in view
+           // just outcommented for now
+            addingNewSongToPlaylist(playlistSelected, songSelected);
 
         } catch (Exception e) {
             System.out.println("No song or playlist selected");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Method will be called whenever we will add a new song to PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+    private void addingNewSongToPlaylist(Playlist playlist, Song song)
+    {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistADD(playlist, song.getPlaytime());
+        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
+
+        //it should also update the hashmap or whatever we have for that playlist in PlaylistModel
+        playlistModel.addSongToPlaylist(playlist, song);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
+
+
+    }
+
+
+    /**
+     * Method will be called whenever we remove a song from a PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
+    {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
+        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
     }
 }

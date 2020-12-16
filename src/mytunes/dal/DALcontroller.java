@@ -133,8 +133,8 @@ public class DALcontroller implements IDALFacade {
     }
 
     @Override
-    public void deleteSong(PlaylistItem playlistItem) throws DALexception {
-            playlistItemAccess.deleteSong(playlistItem);
+    public void deletePlaylistItem(int songId, int playlistId) throws DALexception {
+            playlistItemAccess.deletePlaylistItem( songId,  playlistId);
     }
 
 }
