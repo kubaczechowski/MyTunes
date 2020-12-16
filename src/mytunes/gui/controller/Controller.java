@@ -46,6 +46,10 @@ public class Controller implements Initializable {
 
     //Tables and Lists
     public TableView<Playlist> playlistsTable;
+<<<<<<< Updated upstream
+=======
+    //public TableView<PlaylistItem> playlistItemTableView;
+>>>>>>> Stashed changes
     public TableView<Song> songsTable;
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
@@ -87,12 +91,21 @@ public class Controller implements Initializable {
     private boolean filterButton;
 
     public Controller() {
+<<<<<<< Updated upstream
      songModel = SongModel.createOrGetInstance();
      playlistModel = PlaylistModel.createOrGetInstance();
      alertDisplayer = new AlertDisplayer();
 
      musicPlayer = new MusicPlayer();
      volumeSlider = new Slider(0.0,1.0,0.5);
+=======
+        songModel = SongModel.createOrGetInstance();
+        playlistModel = PlaylistModel.createOrGetInstance();
+        alertDisplayer = new AlertDisplayer();
+        musicPlayer = new MusicPlayer();
+       playlistItemModel = PlaylistItemModel.createOrGetInstance();
+
+>>>>>>> Stashed changes
     }
 
     /**
@@ -127,6 +140,7 @@ public class Controller implements Initializable {
         playlistModel.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
         playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
 
+<<<<<<< Updated upstream
         //force TableView Playlists to refresh
         playlistModel.load();
     }
@@ -144,6 +158,8 @@ public class Controller implements Initializable {
 
         //force TableView Playlists to refresh
         playlistModel.load();
+=======
+>>>>>>> Stashed changes
     }
 
 
@@ -409,4 +425,53 @@ public class Controller implements Initializable {
             nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
         }
     }
+<<<<<<< Updated upstream
+=======
+
+
+    /**
+     * Method will be called whenever we will add a new song to PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+
+    private void addingNewSongToPlaylist(Playlist playlist, Song song)
+    {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistADD(playlist, song.getPlaytime());
+        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
+
+        //it should also update the hashmap or whatever we have for that playlist in PlaylistModel
+        playlistModel.addSongToPlaylist(playlist, song);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
+    }
+
+
+
+    /**
+     * Method will be called whenever we remove a song from a PlaylistView
+     * it will update a properties number of songs and playtime in TableView Playlist
+     */
+    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime) {
+        //updating DB
+        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
+        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
+
+        //force TableView Playlists to refresh
+        playlistModel.load();
+    }
+
+    public void btnClose(ActionEvent event) {
+        System.exit(0);
+    }
+
+    public void btnDeleteSongsFromPlaylist(ActionEvent event) {
+        //playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
+        Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+        Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+        playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
+
+    }
+>>>>>>> Stashed changes
 }
