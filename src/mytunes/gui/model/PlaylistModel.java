@@ -3,6 +3,7 @@ package mytunes.gui.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.Playlist;
+import mytunes.be.Song;
 import mytunes.bll.BLLFacade;
 import mytunes.bll.BLLcontroller;
 import mytunes.bll.PlaylistManager;
@@ -20,39 +21,40 @@ public class PlaylistModel {
     private ObservableList<Playlist> playlists;
     private static PlaylistModel playlistModelInstance;
     private TimeConverter timeConverter;
+    private PlaylistItemModel playlistItemModel;
 
     public PlaylistModel() {
-       playlistManager = new PlaylistManager();
+        playlistManager = new PlaylistManager();
         playlists = FXCollections.observableArrayList();
         timeConverter = new TimeConverter();
+        //playlistItemModel = PlaylistItemModel.createOrGetInstance();
+        playlistItemModel = new PlaylistItemModel();
     }
 
     /**
      * method used to create instance. when created in this
      * way we ensure that we only use one instance when its needed
+     *
      * @return PlaylistModel
      */
     public static PlaylistModel createOrGetInstance() {
-        if(  playlistModelInstance== null)
-        {
+        if (playlistModelInstance == null) {
             playlistModelInstance = new PlaylistModel();
         }
         return playlistModelInstance;
-
     }
 
-    public String convertToString(int timeInMilis)
-    {
+    public String convertToString(int timeInMilis) {
         return timeConverter.convertToString(timeInMilis);
     }
 
     /**
      * method loads all playlist objects into observable list
      */
-    public void load()
-    {
+    public void load() {
         try {
             playlists.clear();
+           // playlists.removeAll(playlistManager.getAllPlaylists());
             playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -63,9 +65,28 @@ public class PlaylistModel {
         return playlists;
     }
 
+    public void addSongToPlaylist(Playlist playlist, Song song)
+    {
+        //in the memory
+        playlist.addSongToPlaylist(song);
+
+        //in the DB
+        //meybe call playlistItem manager
+        playlistItemModel.addPlaylistItem(playlist, song);
+    }
+
+    public void removeSongFromPlaylist(Playlist playlist, Song song)
+    {
+        playlist.removeSongFromPlaylist(song);
+
+        //in the DB
+        playlistItemModel.deletePlaylistItem(playlist, song);
+    }
+
     /**
      * method is used to delete object from both TableView and
      * database
+     *
      * @param playlist
      */
     public void deletePlaylist(Playlist playlist) {
@@ -81,11 +102,12 @@ public class PlaylistModel {
     /**
      * method creates a new playlist that will be both in
      * Database and TableView
+     *
      * @param name
      */
     public void newPlaylist(String name) {
         try {
-            playlists.add( playlistManager.newPlaylist(name));
+            playlists.add(playlistManager.newPlaylist(name));
             playlistManager.newPlaylist(name);
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -95,6 +117,7 @@ public class PlaylistModel {
     /**
      * method is used to update a playlist in both TableView
      * and Database
+     *
      * @param name
      * @param playlist
      */
@@ -109,17 +132,14 @@ public class PlaylistModel {
 
     }
 
-    private void updateListOfPlaylists(Playlist playlist)
-    {
+    private void updateListOfPlaylists(Playlist playlist) {
         int index = playlists.indexOf(playlist);
 
-        playlists.set(index, new Playlist(playlist.getId(),playlist.getName(),playlist.getSongs(),
-                playlist.getNumberOfSongs(),playlist.getTotalPlaytime()));
+        playlists.set(index, new Playlist(playlist.getId(), playlist.getName(), playlist.getSongs(),
+                playlist.getNumberOfSongs(), playlist.getTotalPlaytime()));
     }
 
-    /**
-     *
-     */
+    //methods turned out to be not needed
     /*
     public int getNumberOfSongsOnPlaylist(Playlist playlist)
     {
@@ -131,11 +151,6 @@ public class PlaylistModel {
         return -1;
     }
 
-     */
-
-    /**
-     *
-     */
 
     public double getTotalTimeOnPlaylist(Playlist playlist)
     {
@@ -148,8 +163,14 @@ public class PlaylistModel {
 
     }
 
+ */
+
     public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) {
-        playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        try {
+            playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public void updateTotalTimeOnPlaylistRemove(Playlist playlist, int removedSongTime) {
@@ -157,15 +178,18 @@ public class PlaylistModel {
     }
 
     public void incrementNumberOfSongsOnPlaylist(Playlist playlist) {
-        playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+        try {
+            playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
     }
 
     public void decrementNumberOfSongsOnPlaylist(Playlist playlist) {
         playlistManager.decrementNumberOfSongsOnPlaylist(playlist);
     }
 
-
-    //updateNumberOfSongsOnPlaylist
-
-    //updateTotalTimeOnPlaylist
 }
+
+
+

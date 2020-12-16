@@ -41,12 +41,12 @@ public interface IDALFacade {
     List<Song> getAllSongs() throws DALexception;
 
     void createSong(String title, String artist,
-                    String category, int time, String filePath) throws DALexception;
+                    String category, int time, String filePath, String imagePath) throws DALexception;
 
     void deleteSong(Song song) throws DALexception;
 
     void updateSong(Song song, String title,
-               String artist, String category, String filePath) throws DALexception;
+               String artist, String category, String filePath, String imagePath) throws DALexception;
 
     Song getSong(int id) throws DALexception;
 
@@ -57,5 +57,5 @@ public interface IDALFacade {
 
     PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception;
 
-    void deleteSong(PlaylistItem playlistItem) throws DALexception;
+    void deletePlaylistItem(int songId, int playlistId) throws DALexception;
 }

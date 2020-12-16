@@ -21,7 +21,7 @@ import java.nio.file.Path;
 public class MusicPlayer {
 
     private BLLFacade bllFacade;
-    private String currentlyPlaying;
+    private Song currentlyPlaying;
     private Media media;
     private MediaPlayer audioPlayer;
     private Song song;
@@ -31,35 +31,17 @@ public class MusicPlayer {
     public MusicPlayer() {
         bllFacade = new BLLcontroller();
         songList = FXCollections.observableArrayList();
-       /* try {
-            songList.addAll(songManager.getAllSongs());
-        } catch (BLLexception blLexception) {
-            blLexception.printStackTrace();
-            }
-        */
-
-        }
-
-
-    /**
-     * @return list of all songs
-     */
-    public ObservableList<Song> getSongList() {
-        return songList;
     }
-
 
     /**
      * Checks if song is paused, if it is, then play.
      */
-    public void play(){
-        if (audioPlayer != null){
-            if (isPaused()) {
-                audioPlayer.play();
-            } else {
-                audioPlayer.pause();
-            }
-        }
+    public void play() {
+        audioPlayer.play();
+    }
+
+    public void pause() {
+        audioPlayer.pause();
     }
 
     /**
@@ -81,7 +63,7 @@ public class MusicPlayer {
         media = new Media(filePath.toUri().toURL().toExternalForm());
        // System.out.println(audioPath.toUri().toURL().toExternalForm());
         audioPlayer = new MediaPlayer(media);
-        currentlyPlaying = song.getTitle();
+        currentlyPlaying = song;
     }
 
     /**
@@ -90,9 +72,9 @@ public class MusicPlayer {
      */
     public void setCurrentlyPlaying() {
         if (!isPaused()) {
-            currentlyPlaying = "Paused";
+            currentlyPlaying.setTitle("Paused");
         } else {
-            currentlyPlaying = song.getTitle();
+            currentlyPlaying = song;
         }
     }
 
@@ -100,7 +82,7 @@ public class MusicPlayer {
      * Updates the current playing song and returns it.
      * @return the current playing song
      */
-    public String getCurrentlyPlaying() {
+    public Song getCurrentlyPlaying() {
         setCurrentlyPlaying();
         return currentlyPlaying;
     }
@@ -117,4 +99,12 @@ public class MusicPlayer {
         return song;
     }
 
+
+    public MediaPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
+
+    public boolean isOver() {
+        return audioPlayer.onEndOfMediaProperty().isBound();
+    }
 }

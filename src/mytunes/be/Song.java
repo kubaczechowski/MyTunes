@@ -1,5 +1,8 @@
 package mytunes.be;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Song {
 
     private int id;
@@ -8,15 +11,26 @@ public class Song {
     private String category;
     private int playtime;
     private String filePath;
+    private String imagePath;
+    private ImageView image;
 
-    public Song(int id, String title, String artist,
-                String category, int playTime, String filePath) {
+    public Song(int id, String title, String artist, String category, int playTime, String filePath, String imagePath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.category = category;
         this.playtime = playTime;
         this.filePath = filePath;
+        this.imagePath = imagePath;
+
+        if(imagePath==null) {
+            image = new ImageView("/Images/default.png");
+        } else {
+            image = new ImageView(imagePath.replace("src", ""));
+        }
+
+        this.image.setFitHeight(20);
+        this.image.setFitWidth(20);
     }
 
 
@@ -63,5 +77,27 @@ public class Song {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

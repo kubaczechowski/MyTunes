@@ -17,6 +17,8 @@ public class Playlist {
     public Playlist(int id, String name, List<Song> songs, int numberOfSongs, int totalPlaytime) {
         this.id = id;
         this.name = name;
+        //this.songs = new ArrayList<>();
+       // this.songs.addAll(songs);
         this.songs = songs;
         this.numberOfSongs = numberOfSongs;
         this.totalPlaytime = totalPlaytime;
@@ -26,8 +28,8 @@ public class Playlist {
      * I don't know what this method does
      * @return
      */
-    public ObservableList<Song> getSongs() {
-        return FXCollections.observableArrayList(songs);
+    public List<Song> getSongs() {
+        return songs;
     }
 
     public int getId() {
@@ -64,6 +66,15 @@ public class Playlist {
 
     public void setTotalPlaytime(int totalPlaytime) {
         this.totalPlaytime = totalPlaytime;
+    }
+
+    public void addSongToPlaylist(Song song) {
+        songs.add(song);
+    }
+
+    public void removeSongFromPlaylist(Song song)
+    {
+        songs.remove(song);
     }
 }
 

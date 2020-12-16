@@ -2,6 +2,8 @@ package mytunes.gui.controller;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +16,8 @@ import javafx.scene.Scene;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -21,8 +25,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import mytunes.be.Playlist;
+import mytunes.be.PlaylistItem;
 import mytunes.be.Song;
 import mytunes.gui.model.MusicPlayer;
+import mytunes.gui.model.PlaylistItemModel;
 import mytunes.gui.model.PlaylistModel;
 import mytunes.gui.model.SongModel;
 import mytunes.gui.util.AlertDisplayer;
@@ -46,22 +52,21 @@ public class Controller implements Initializable {
 
     //Tables and Lists
     public TableView<Playlist> playlistsTable;
-<<<<<<< Updated upstream
-=======
-    //public TableView<PlaylistItem> playlistItemTableView;
->>>>>>> Stashed changes
+    public TableView<PlaylistItem> playlistItemTableView;
     public TableView<Song> songsTable;
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
     public TextField searchBar;
 
+
+
     // Music Player
     private MusicPlayer musicPlayer;
-    @FXML
-    private Slider volumeSlider;
-    @FXML
-    private Text nowPlaying;
+    @FXML private Slider volumeSlider;
+    @FXML private Text nowPlaying;
+    @FXML private Text nowPlayingArtist;
     private Song song;
+    public ImageView mainImage;
 
 
     //TableView Columns Playlists
@@ -73,17 +78,15 @@ public class Controller implements Initializable {
     private TableColumn<Playlist, String> columnTime;
 
     //TableView Columns Songs
-    @FXML
-    private  TableColumn<Song, String> columnTitle;
-    @FXML
-    private  TableColumn<Song, String> columnArtist;
-    @FXML
-    private TableColumn<Song, String > columnCategory;
-    @FXML
-    TableColumn<Song, String> columnTimeSong;
+    @FXML private TableColumn<Song, ImageView> columnImage;
+    @FXML private  TableColumn<Song, String> columnTitle;
+    @FXML private  TableColumn<Song, String> columnArtist;
+    @FXML private TableColumn<Song, String > columnCategory;
+    @FXML TableColumn<Song, String> columnTimeSong;
 
     //instances of models
     private PlaylistModel playlistModel;
+    private PlaylistItemModel playlistItemModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
   
@@ -91,21 +94,13 @@ public class Controller implements Initializable {
     private boolean filterButton;
 
     public Controller() {
-<<<<<<< Updated upstream
-     songModel = SongModel.createOrGetInstance();
-     playlistModel = PlaylistModel.createOrGetInstance();
-     alertDisplayer = new AlertDisplayer();
-
-     musicPlayer = new MusicPlayer();
-     volumeSlider = new Slider(0.0,1.0,0.5);
-=======
         songModel = SongModel.createOrGetInstance();
         playlistModel = PlaylistModel.createOrGetInstance();
         alertDisplayer = new AlertDisplayer();
         musicPlayer = new MusicPlayer();
        playlistItemModel = PlaylistItemModel.createOrGetInstance();
 
->>>>>>> Stashed changes
+
     }
 
     /**
@@ -120,46 +115,32 @@ public class Controller implements Initializable {
         setObservableTablePlaylists(playlistModel);
         //I don't remember what it means
         filterButton = true;
-
         // Music player
+        volumeSlider = new Slider(0.1,1.0,0.5);
+
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 musicPlayer.setVolume(volumeSlider.getValue());
             }
         });
+
+        mainImage.setImage(new Image("/Images/default.png"));
+
+        playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if(newSelection.getSongs()!=null)
+                songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
+        });
+
+        loadSongsFromThePlaylists();
     }
 
     /**
-     * Method will be called whenever we will add a new song to PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
+     * loads into the memory the songs that are in each playlist
      */
-    private void addingNewSongToPlaylist(Playlist playlist, int addedSongTime)
-    {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
-        playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
+    private void loadSongsFromThePlaylists() {
+        //load the hashmap or whaever we have for that songs
 
-<<<<<<< Updated upstream
-        //force TableView Playlists to refresh
-        playlistModel.load();
-    }
-
-
-    /**
-     * Method will be called whenever we remove a song from a PlaylistView
-     * it will update a properties number of songs and playtime in TableView Playlist
-     */
-    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
-    {
-        //updating DB
-        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
-        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
-
-        //force TableView Playlists to refresh
-        playlistModel.load();
-=======
->>>>>>> Stashed changes
     }
 
 
@@ -170,6 +151,7 @@ public class Controller implements Initializable {
      */
     private void setObservableTableSongs(SongModel songModel) {
         //Initialize TableView Songs
+        columnImage.setCellValueFactory(new PropertyValueFactory<Song, ImageView>("image"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
@@ -237,7 +219,7 @@ public class Controller implements Initializable {
         //EditPlaylistController editPlaylistController = loader.getController();
         //editPlaylistController.sendPlaylist(playlistsTable.getSelectionModel().getSelectedItem());
         EditPlaylistController editPlaylistController = loader.getController();
-        if(selectedItem!=null)
+        if (selectedItem!=null)
         {editPlaylistController.sendPlaylist(selectedItem);
         //playlistModel.updatePlaylist();
         }
@@ -253,13 +235,6 @@ public class Controller implements Initializable {
     public void deletePlaylist(ActionEvent actionEvent) {
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
-
-    //???
-    public void playlistSelected(MouseEvent mouseEvent) {
-        Playlist p = playlistsTable.getSelectionModel().getSelectedItem();
-    }
-
-
 
     public void searchAction(ActionEvent actionEvent) {
         if(filterButton) {
@@ -327,8 +302,6 @@ public class Controller implements Initializable {
         stage.show();
     }
 
-
-
     /**
      * Method opens confirmation window that is used to ensure
      * that user wants to delete a song
@@ -354,27 +327,21 @@ public class Controller implements Initializable {
      */
 
     public void sortAscending(ActionEvent event) {
-        //get all songs from the ListView
-        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
-        //sort
-        allSongsOnPlaylistSorted.sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        //Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+         List<Song> unsortedList = songsOnPlaylistView.getItems();
 
-        //upload the ListView
-        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
-        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+        Comparator<Song> compareByTitle = new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
+                return o1.getTitle().toLowerCase().compareTo(o2.getTitle().toLowerCase());
+            }
+        };
 
-        /*
-        //get all songs in the table
-        ArrayList<Song> songArrayList= new ArrayList<>();
-        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
+        Collections.sort(unsortedList, compareByTitle);
 
-        songArrayList.sort(Comparator.comparing(Song::getTitle));
-        songsOnPlaylistView.getItems().removeAll();
+       songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
 
-        songsOnPlaylistView.getItems().addAll(songArrayList);
-       // songsOnPlaylistView
 
-         */
     }
 
     /**
@@ -383,50 +350,66 @@ public class Controller implements Initializable {
      * @param event
      */
     public void sortDescending(ActionEvent event) {
+        List<Song> unsortedList = songsOnPlaylistView.getItems();
 
-        //get all songs from the ListView
-        List<Song> allSongsOnPlaylistSorted = songsOnPlaylistView.getItems();
-        //sort
-        allSongsOnPlaylistSorted.sort((o1, o2) -> o2.getTitle().compareTo(o1.getTitle()));
+        Comparator<Song> compareByTitle = new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
 
-        //upload the ListView
-        songsOnPlaylistView.getItems().removeAll(songsOnPlaylistView.getItems());
-        songsOnPlaylistView.getItems().addAll(allSongsOnPlaylistSorted);
+                return o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase());
+            }
+        };
 
-        /*
+        Collections.sort(unsortedList, compareByTitle);
 
-        Comparator comparatorDesc = Collections.reverseOrder();
+        songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
 
-        //get all songs in the table
-        ArrayList<Song> songArrayList= new ArrayList<>();
-        songArrayList = (ArrayList<Song>) songsOnPlaylistView.getItems() ;
-
-        songArrayList.sort(Comparator.comparing(Song::getTitle).reversed());
-        songsOnPlaylistView.getItems().removeAll();
-
-        songsOnPlaylistView.getItems().addAll(songArrayList);
-        // songsOnPlaylistView
-
-         */
     }
 
 
     public void play(ActionEvent actionEvent) throws MalformedURLException {
-        //musicPlayer.setVolume(volumeSlider.getValue());
-        if (songsTable.getSelectionModel().getSelectedItem() != null) {
+        if (songsTable.getSelectionModel().getSelectedItem() != null && musicPlayer.getSong() == null) {
             song = songsTable.getSelectionModel().getSelectedItem();
             musicPlayer.loadMedia(song);
-        } else {
-            musicPlayer.loadMedia(songModel.getAllSongs().get(0));
         }
-        if (musicPlayer.getSong() != null) {
-            musicPlayer.setVolume(volumeSlider.getValue());
-            musicPlayer.play();
-            nowPlaying.setText(musicPlayer.getCurrentlyPlaying());
+
+        if (songsTable.getSelectionModel().getSelectedItem() == null) {
+            alertDisplayer.displayInformationAlert("","Please select a song from the song list","Select a song");
+        }
+
+        try {
+            if (!musicPlayer.isPaused()) {
+                musicPlayer.pause();
+                nowPlaying.setText("Paused");
+            }
+
+            if (musicPlayer.isPaused()) {
+                musicPlayer.play();
+                nowPlaying.setText(musicPlayer.getCurrentlyPlaying().getTitle());
+            }
+        } catch (Exception e) {
+            System.out.println("Select a song");
         }
     }
-<<<<<<< Updated upstream
-=======
+
+    public void addSongToPlaylist(ActionEvent actionEvent) {
+        try {
+
+            Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+            Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+            playlistSelected.addSongToPlaylist(songSelected);
+            //just for a second
+           // songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
+
+            //update the Playlist in playlist Table in DB and in view
+           // just outcommented for now
+            addingNewSongToPlaylist(playlistSelected, songSelected);
+
+        } catch (Exception e) {
+            System.out.println("No song or playlist selected");
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -445,6 +428,8 @@ public class Controller implements Initializable {
 
         //force TableView Playlists to refresh
         playlistModel.load();
+
+
     }
 
 
@@ -473,5 +458,4 @@ public class Controller implements Initializable {
         playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
 
     }
->>>>>>> Stashed changes
 }
