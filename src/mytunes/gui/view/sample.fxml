@@ -49,7 +49,7 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Text>
-      <Button layoutX="408.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Delete">
+      <Button layoutX="408.0" layoutY="569.0" mnemonicParsing="false" onAction="#btnDeleteSongsFromPlaylist" prefHeight="25.0" prefWidth="78.0" text="Delete">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -78,7 +78,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="968.0" layoutY="569.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Close">
+      <Button layoutX="968.0" layoutY="569.0" mnemonicParsing="false" onAction="#btnClose" prefHeight="25.0" prefWidth="78.0" text="Close">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

@@ -25,6 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import mytunes.be.Playlist;
+import mytunes.be.PlaylistItem;
 import mytunes.be.Song;
 import mytunes.gui.model.MusicPlayer;
 import mytunes.gui.model.PlaylistItemModel;
@@ -51,6 +52,7 @@ public class Controller implements Initializable {
 
     //Tables and Lists
     public TableView<Playlist> playlistsTable;
+    public TableView<PlaylistItem> playlistItemTableView;
     public TableView<Song> songsTable;
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
@@ -84,6 +86,7 @@ public class Controller implements Initializable {
 
     //instances of models
     private PlaylistModel playlistModel;
+    private PlaylistItemModel playlistItemModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
     private PlaylistItemModel playlistItemModel;
@@ -407,10 +410,12 @@ public class Controller implements Initializable {
         }
     }
 
+
     /**
      * Method will be called whenever we will add a new song to PlaylistView
      * it will update a properties number of songs and playtime in TableView Playlist
      */
+    /*
     private void addingNewSongToPlaylist(Playlist playlist, Song song)
     {
         //updating DB
@@ -425,6 +430,7 @@ public class Controller implements Initializable {
 
 
     }
+    */
 
 
     /**
@@ -439,5 +445,12 @@ public class Controller implements Initializable {
 
         //force TableView Playlists to refresh
         playlistModel.load();
+
+    public void btnClose(ActionEvent event) {
+        System.exit(0);
+    }
+
+    public void btnDeleteSongsFromPlaylist(ActionEvent event) {
+        playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
     }
 }
