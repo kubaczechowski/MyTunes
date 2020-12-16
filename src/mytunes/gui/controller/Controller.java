@@ -89,7 +89,6 @@ public class Controller implements Initializable {
     private PlaylistItemModel playlistItemModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
-    private PlaylistItemModel playlistItemModel;
   
 
     private boolean filterButton;
@@ -99,7 +98,9 @@ public class Controller implements Initializable {
         playlistModel = PlaylistModel.createOrGetInstance();
         alertDisplayer = new AlertDisplayer();
         musicPlayer = new MusicPlayer();
-        playlistItemModel = PlaylistItemModel.createOrGetInstance();
+       playlistItemModel = PlaylistItemModel.createOrGetInstance();
+
+
     }
 
     /**
@@ -415,7 +416,7 @@ public class Controller implements Initializable {
      * Method will be called whenever we will add a new song to PlaylistView
      * it will update a properties number of songs and playtime in TableView Playlist
      */
-    /*
+
     private void addingNewSongToPlaylist(Playlist playlist, Song song)
     {
         //updating DB
@@ -430,27 +431,31 @@ public class Controller implements Initializable {
 
 
     }
-    */
+
 
 
     /**
      * Method will be called whenever we remove a song from a PlaylistView
      * it will update a properties number of songs and playtime in TableView Playlist
      */
-    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime)
-    {
+    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime) {
         //updating DB
         playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
         playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
 
         //force TableView Playlists to refresh
         playlistModel.load();
+    }
 
     public void btnClose(ActionEvent event) {
         System.exit(0);
     }
 
     public void btnDeleteSongsFromPlaylist(ActionEvent event) {
-        playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
+        //playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
+        Song songSelected = songsTable.getSelectionModel().getSelectedItem();
+        Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+        playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
+
     }
 }

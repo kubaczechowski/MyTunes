@@ -1,10 +1,13 @@
 package mytunes.bll;
 
 
+import mytunes.be.PlaylistItem;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.dal.DALcontroller;
 import mytunes.dal.IDALFacade;
 import mytunes.dal.exception.DALexception;
+
+import java.util.List;
 
 
 public class PlaylistItemManager {
@@ -35,7 +38,7 @@ public class PlaylistItemManager {
     }
 
 
-
+/*
         public void deleteSong(PlaylistItem playlistItem) throws BLLexception {
             try {
                 idalFacade.deleteSong(playlistItem);
@@ -45,6 +48,8 @@ public class PlaylistItemManager {
             }
 
         }
+
+ */
 
 
 

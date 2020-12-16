@@ -15,26 +15,23 @@ public class PlaylistItemModel {
     private static PlaylistItemModel playlistItemModel;
     //private ObservableMap<Playlist, List<Song>> observableMap;
     private PlaylistItemManager playlistItemManager;
-    private  SongModel songModel;
+    private SongModel songModel;
 
     //laslos
-     private ObservableList<PlaylistItem> playlistItems;
+    private ObservableList<PlaylistItem> playlistItems;
 
 
-    public PlaylistItemModel()
-    {
+    public PlaylistItemModel() {
         playlistItemManager = new PlaylistItemManager();
         playlistItems = FXCollections.observableArrayList();
         songModel = SongModel.createOrGetInstance();
     }
 
     public static PlaylistItemModel createOrGetInstance() {
-        if(  playlistItemModel == null)
-        {
+        if (playlistItemModel == null) {
             playlistItemModel = new PlaylistItemModel();
             return playlistItemModel;
-        }
-        else
+        } else
             return playlistItemModel;
     }
 
@@ -42,6 +39,7 @@ public class PlaylistItemModel {
         return playlistItems;
     }
 
+    /*
     public void deleteSong(PlaylistItem playlistItem){
         try {
             playlistItemManager.deleteSong(playlistItem);
@@ -51,6 +49,20 @@ public class PlaylistItemModel {
         playlistItems.remove(playlistItem);
 
     }
+
+     */
+
+  /*  public void deleteSong(PlaylistItem playlistItem){
+        try {
+            playlistItemManager.deleteSong(playlistItem);
+        }catch (BLLexception blLexception){
+            blLexception.printStackTrace();
+        }
+        playlistItems.remove(playlistItem);
+
+    }
+
+   */
 /*
     public ObservableMap<Playlist, List<Song>> getAllPlaylistItems(){
         return observableMap;
@@ -83,8 +95,7 @@ public class PlaylistItemModel {
     }
 
      */
-    public void addPlaylistItem(Playlist playlist, Song song)
-    {
+    public void addPlaylistItem(Playlist playlist, Song song) {
         //add to DB
         try {
             playlistItemManager.add(song.getId(), playlist.getId());
@@ -96,8 +107,8 @@ public class PlaylistItemModel {
 
 
     }
-    public void deletePlaylistItem(Playlist playlist, Song song)
-    {
+
+    public void deletePlaylistItem(Playlist playlist, Song song) {
         //remove from DB
         try {
             playlistItemManager.remove(song.getId(), playlist.getId());
@@ -108,6 +119,7 @@ public class PlaylistItemModel {
         //remove from map
 
     }
+}
 
 /*
 
