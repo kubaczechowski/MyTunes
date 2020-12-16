@@ -26,8 +26,9 @@ public class DeleteSongPrompt {
      * @param event
      */
     public void yesButton(ActionEvent event) {
+        songModel.safeSongDelete(songToBeDeleted);
         songModel.delete(songToBeDeleted);
-
+        songModel.load();
         // close the window
         closeTheWindow(event);
     }
@@ -53,7 +54,9 @@ public class DeleteSongPrompt {
     }
 
     public void yesSong(ActionEvent event) {
+        songModel.safeSongDelete(songToBeDeleted);
         songModel.delete(songToBeDeleted);
+        songModel.load();
         try {
             Files.delete(Path.of(songToBeDeleted.getFilePath()));
         } catch (IOException e) {

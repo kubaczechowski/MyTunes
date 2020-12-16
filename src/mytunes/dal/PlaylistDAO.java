@@ -254,14 +254,14 @@ public class PlaylistDAO implements IPlaylistRepository {
     /**
      * method will be called when removing an item from Playlist ListView
      * @param playlist
-     * @param addedSongTime
+     * @param deletedSongTime
      */
-    public void updateTotalTimeOnPlaylistREMOVE(Playlist playlist, int addedSongTime) throws DALexception {
+    public void updateTotalTimeOnPlaylistREMOVE(Playlist playlist, int deletedSongTime) throws DALexception {
         String sql = "UPDATE Playlists SET totalPlaytime=? WHERE id=?;";
         try (Connection con = databaseConnector.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, addedSongTime - playlist.getTotalPlaytime());
+            preparedStatement.setInt(1, playlist.getTotalPlaytime() - deletedSongTime);
             preparedStatement.setInt(2, playlist.getId());
 
             preparedStatement.execute();

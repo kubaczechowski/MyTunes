@@ -58,4 +58,8 @@ public interface IDALFacade {
     PlaylistItem createPlaylistItem(int songId, int playlistId) throws DALexception;
 
     void deletePlaylistItem(int songId, int playlistId) throws DALexception;
+
+    void safePlaylistDelete(Playlist playlist) throws DALexception;
+
+    void safeSongDelete(Song song) throws DALexception;
 }

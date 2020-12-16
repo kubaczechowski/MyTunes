@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.PlaylistItem;
 import mytunes.dal.PlaylistItemDAO;
+import mytunes.dal.exception.DALexception;
 
 
 public class PlaylistItemModel {
@@ -118,6 +119,14 @@ public class PlaylistItemModel {
 
         //remove from map
 
+    }
+
+    public void safePlaylistDelete(Playlist playlist) {
+        try {
+            playlistItemManager.safePlaylistDelete(playlist);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+        }
     }
 }
 

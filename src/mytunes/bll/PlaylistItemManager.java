@@ -1,6 +1,7 @@
 package mytunes.bll;
 
 
+import mytunes.be.Playlist;
 import mytunes.be.PlaylistItem;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.dal.DALcontroller;
@@ -62,6 +63,10 @@ public class PlaylistItemManager {
             }
 
         }
+
+    public void safePlaylistDelete(Playlist playlist) throws DALexception {
+            idalFacade.safePlaylistDelete(playlist);
+    }
 }
 
 

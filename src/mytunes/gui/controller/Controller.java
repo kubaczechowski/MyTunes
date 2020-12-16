@@ -128,8 +128,10 @@ public class Controller implements Initializable {
         mainImage.setImage(new Image("/Images/default.png"));
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if(newSelection.getSongs()!=null)
-                songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
+            if(newSelection!=null) {
+                if (newSelection.getSongs()==null) songsOnPlaylistView.getItems().clear();
+                else songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
+            }
         });
 
         loadSongsFromThePlaylists();
@@ -233,6 +235,7 @@ public class Controller implements Initializable {
     }
 
     public void deletePlaylist(ActionEvent actionEvent) {
+        playlistItemModel.safePlaylistDelete(playlistsTable.getSelectionModel().getSelectedItem());
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
 
@@ -386,6 +389,8 @@ public class Controller implements Initializable {
             if (musicPlayer.isPaused()) {
                 musicPlayer.play();
                 nowPlaying.setText(musicPlayer.getCurrentlyPlaying().getTitle());
+                nowPlayingArtist.setText(musicPlayer.getCurrentlyPlaying().getArtist());
+                mainImage.setImage(new Image(musicPlayer.getCurrentlyPlaying().getImagePath().replace("src", "")));
             }
         } catch (Exception e) {
             System.out.println("Select a song");
@@ -397,14 +402,8 @@ public class Controller implements Initializable {
 
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
             Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
-            playlistSelected.addSongToPlaylist(songSelected);
-            //just for a second
-           // songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
-
-            //update the Playlist in playlist Table in DB and in view
-           // just outcommented for now
             addingNewSongToPlaylist(playlistSelected, songSelected);
-
+            songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
         } catch (Exception e) {
             System.out.println("No song or playlist selected");
             e.printStackTrace();
@@ -433,29 +432,26 @@ public class Controller implements Initializable {
     }
 
 
-
     /**
      * Method will be called whenever we remove a song from a PlaylistView
      * it will update a properties number of songs and playtime in TableView Playlist
      */
-    private void removingSongFromPlaylist(Playlist playlist, int removedSongTime) {
+    public void btnDeleteSongsFromPlaylist(ActionEvent event) {
+
+        Song songSelected = songsOnPlaylistView.getSelectionModel().getSelectedItem();
+        Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
+        playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
+
         //updating DB
-        playlistModel.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
-        playlistModel.decrementNumberOfSongsOnPlaylist(playlist);
+        playlistModel.updateTotalTimeOnPlaylistRemove(playlistSelected, songSelected.getPlaytime());
+        playlistModel.decrementNumberOfSongsOnPlaylist(playlistSelected);
 
         //force TableView Playlists to refresh
         playlistModel.load();
+        songsOnPlaylistView.setItems(FXCollections.observableList(playlistSelected.getSongs()));
     }
 
     public void btnClose(ActionEvent event) {
         System.exit(0);
-    }
-
-    public void btnDeleteSongsFromPlaylist(ActionEvent event) {
-        //playlistItemModel.deleteSong(playlistItemTableView.getSelectionModel().getSelectedItem());
-        Song songSelected = songsTable.getSelectionModel().getSelectedItem();
-        Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
-        playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
-
     }
 }

@@ -137,4 +137,14 @@ public class DALcontroller implements IDALFacade {
             playlistItemAccess.deletePlaylistItem( songId,  playlistId);
     }
 
+    @Override
+    public void safePlaylistDelete(Playlist playlist) throws DALexception {
+        playlistItemAccess.safePlaylistDelete(playlist);
+    }
+
+    @Override
+    public void safeSongDelete(Song song) throws DALexception {
+        playlistItemAccess.safeSongDelete(song);
+    }
+
 }

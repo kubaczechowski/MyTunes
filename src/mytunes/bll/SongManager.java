@@ -85,4 +85,8 @@ public class SongManager {
             throw new BLLexception("couldn't update a song");
         }
     }
+
+    public void safeSongDelete(Song song) throws DALexception{
+        idalFacade.safeSongDelete(song);
+    }
 }

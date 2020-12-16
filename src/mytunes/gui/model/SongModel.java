@@ -7,6 +7,7 @@ import mytunes.be.Song;
 import mytunes.bll.SongManager;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.bll.util.TimeConverter;
+import mytunes.dal.exception.DALexception;
 
 import java.net.URL;
 
@@ -79,7 +80,7 @@ public class SongModel {
     public ObservableList<Song> searchSongs(String text) {
         List<Song> searchedSongs = new ArrayList<>();
         for(Song song : songs) {
-            if(song.getTitle().contains(text) || song.getArtist().contains(text)) searchedSongs.add(song);
+            if(song.getTitle().toUpperCase().contains(text.toUpperCase()) || song.getArtist().toUpperCase().contains(text.toUpperCase())) searchedSongs.add(song);
         }
         return FXCollections.observableArrayList(searchedSongs);
     }
@@ -130,6 +131,14 @@ public class SongModel {
                 song.getFilePath()));
 
         */
+    }
+
+    public void safeSongDelete(Song song) {
+        try {
+            songManager.safeSongDelete(song);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+        }
     }
 
    /* private void updateSong(Song song) {

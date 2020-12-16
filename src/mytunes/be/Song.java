@@ -26,7 +26,8 @@ public class Song {
         if(imagePath==null) {
             image = new ImageView("/Images/default.png");
         } else {
-            image = new ImageView(imagePath.replace("src", ""));
+            String imgp = imagePath.replace("src", "").replace("\\", "/");
+            image = new ImageView(new Image(imgp));
         }
 
         this.image.setFitHeight(20);
