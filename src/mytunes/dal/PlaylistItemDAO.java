@@ -43,8 +43,7 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
         return all;
     }
 
-    public List<Song> getSongsFromSpecificPlaylist(int playlistID)
-    {
+    public List<Song> getSongsFromSpecificPlaylist(int playlistID) throws DALexception {
         List<Integer> songIds = new ArrayList<>();
 
         //get list of songIds and save it to the list
@@ -65,15 +64,10 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         List<Song> songsOnPlaylist = new ArrayList<>();
-        //based on the previosly got list, get songs with that specific id
-       // String sql2 = "SELECT * FROM Songs WHERE id=?;";
         try (Connection con = databaseConnector.getConnection()){
-
             for(Integer integer: songIds)
-            {
-                String sql2 = "SELECT * FROM Songs WHERE id=" + integer+ ";" ;
+            {   String sql2 = "SELECT * FROM Songs WHERE id=" + integer+ ";" ;
                 PreparedStatement preparedStatement = con.prepareStatement(sql2);
                // preparedStatement.setInt(1, integer);
                 ResultSet rs = preparedStatement.executeQuery();
@@ -91,9 +85,11 @@ public class PlaylistItemDAO implements IPlaylistItemRepository {
             }
 
         } catch (SQLServerException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            throw new DALexception("coudlnt get songs on teh playlist", throwables);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            //throwables.printStackTrace();
+            throw new DALexception("coudlnt get songs on teh playlist", throwables);
         }
         return songsOnPlaylist;
     }

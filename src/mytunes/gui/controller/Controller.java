@@ -154,9 +154,9 @@ public class Controller implements Initializable {
         columnImage.setCellValueFactory(new PropertyValueFactory<Song, ImageView>("image"));
         columnTitle.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("artist"));
+
+
         columnCategory.setCellValueFactory(new PropertyValueFactory<Song, String>("category"));
-
-
         columnTimeSong.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Song, String>,
                 ObservableValue<String>>() {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Song, String> p) {
@@ -422,10 +422,8 @@ public class Controller implements Initializable {
         //updating DB
         playlistModel.updateTotalTimeOnPlaylistADD(playlist, song.getPlaytime());
         playlistModel.incrementNumberOfSongsOnPlaylist(playlist);
-
-        //it should also update the hashmap or whatever we have for that playlist in PlaylistModel
+        //update observable list of Playlsits in playlistmodel
         playlistModel.addSongToPlaylist(playlist, song);
-
         //force TableView Playlists to refresh
         playlistModel.load();
 

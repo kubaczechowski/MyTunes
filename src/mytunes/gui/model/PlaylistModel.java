@@ -69,9 +69,7 @@ public class PlaylistModel {
     {
         //in the memory
         playlist.addSongToPlaylist(song);
-
         //in the DB
-        //meybe call playlistItem manager
         playlistItemModel.addPlaylistItem(playlist, song);
     }
 
