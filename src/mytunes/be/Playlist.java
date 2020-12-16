@@ -26,8 +26,8 @@ public class Playlist {
      * I don't know what this method does
      * @return
      */
-    public ObservableList<Song> getSongs() {
-        return FXCollections.observableArrayList(songs);
+    public List<Song> getSongs() {
+        return songs;
     }
 
     public int getId() {

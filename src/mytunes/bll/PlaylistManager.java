@@ -70,4 +70,34 @@ public class PlaylistManager {
             throw new BLLexception("Couldn't get total time on playlist");
         }
     }
+
+
+
+    public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) throws BLLexception {
+        //method called when adding a song
+        try {
+            idalFacade.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+            throw new BLLexception("Couldn't update playtime on playlist: " + playlist.getName());
+        }
+    }
+
+    public void updateTotalTimeOnPlaylistRemove(Playlist playlist, int removedSongTime) {
+
+
+    }
+
+    public void decrementNumberOfSongsOnPlaylist(Playlist playlist) {
+    }
+
+    public void increamentNumberOfSongsOnPlaylist(Playlist playlist) throws BLLexception {
+        try {
+            idalFacade.incrementTheNumberOfSongsOnPlaylist(playlist);
+        } catch (DALexception daLexception) {
+            daLexception.printStackTrace();
+            throw new BLLexception("Couldn't increament number of songs on the playlist" + playlist.getName() );
+
+        }
+    }
 }

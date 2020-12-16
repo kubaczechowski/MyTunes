@@ -14,8 +14,7 @@ public class Song {
     private String imagePath;
     private ImageView image;
 
-    public Song(int id, String title, String artist,
-                String category, int playTime, String filePath, String imagePath) {
+    public Song(int id, String title, String artist, String category, int playTime, String filePath, String imagePath) {
         this.id = id;
         this.title = title;
         this.artist = artist;
@@ -30,9 +29,6 @@ public class Song {
             image = new ImageView(imagePath.replace("src", ""));
         }
 
-        //Image image = new Image(getClass().getResource(filePath).toURI().toString());
-        // this.image = new ImageView(new Image(imagePath.replace("src/", "")));
-      //  this.image = new ImageView(image);
         this.image.setFitHeight(20);
         this.image.setFitWidth(20);
     }
@@ -83,6 +79,7 @@ public class Song {
         this.filePath = filePath;
     }
 
+
     public String getImagePath() {
         return imagePath;
     }
@@ -97,5 +94,10 @@ public class Song {
 
     public void setImage(ImageView image) {
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

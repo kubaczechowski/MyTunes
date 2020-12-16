@@ -27,6 +27,14 @@ public interface IDALFacade {
 
     double getTotalTimeOnPlaylist(Playlist playlist) throws DALexception;
 
+    //updating a playlist when we add a new item
+   void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) throws DALexception;
+
+    void incrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception;
+
+    void decrementTheNumberOfSongsOnPlaylist(Playlist playlist) throws DALexception;
+    void updateTotalTimeOnPlaylistREMOVE(Playlist playlist, int addedSongTime) throws DALexception;
+
     Playlist getPlaylist(int id) throws DALexception;
 
     //songDAO

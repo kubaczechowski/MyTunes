@@ -53,6 +53,7 @@ public class PlaylistModel {
     {
         try {
             playlists.clear();
+            //playlists.removeAll(playlistManager.getAllPlaylists());
             playlists.addAll(playlistManager.getAllPlaylists());
         } catch (BLLexception blLexception) {
             blLexception.printStackTrace();
@@ -148,6 +149,29 @@ public class PlaylistModel {
 
     }
 
+    public void updateTotalTimeOnPlaylistADD(Playlist playlist, int addedSongTime) {
+        try {
+            playlistManager.updateTotalTimeOnPlaylistADD(playlist, addedSongTime);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+    }
+
+    public void updateTotalTimeOnPlaylistRemove(Playlist playlist, int removedSongTime) {
+        playlistManager.updateTotalTimeOnPlaylistRemove(playlist, removedSongTime);
+    }
+
+    public void incrementNumberOfSongsOnPlaylist(Playlist playlist) {
+        try {
+            playlistManager.increamentNumberOfSongsOnPlaylist(playlist);
+        } catch (BLLexception blLexception) {
+            blLexception.printStackTrace();
+        }
+    }
+
+    public void decrementNumberOfSongsOnPlaylist(Playlist playlist) {
+        playlistManager.decrementNumberOfSongsOnPlaylist(playlist);
+    }
 
 
     //updateNumberOfSongsOnPlaylist
