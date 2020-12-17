@@ -46,10 +46,10 @@ import java.util.*;
  * Controller of main view window (sample.fxml)
  * It enables the user to choose CRUD operations on both songs
  * and playlists. Also it provides the functionality of playing songs
- * and searching them based on title
+ * and searching them based on a title
  *
- * @author kuba
- */
+ * @author Kjell&& && Kamila &&Kuba
+ * */
 
 public class Controller implements Initializable {
 
