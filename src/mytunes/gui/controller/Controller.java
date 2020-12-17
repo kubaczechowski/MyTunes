@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
@@ -67,6 +68,7 @@ public class Controller implements Initializable {
     @FXML private Slider volumeSlider;
     @FXML private Text nowPlaying;
     @FXML private Text nowPlayingArtist;
+    @FXML private Text nowPlayingPlaylist;
     private Song song;
     public ImageView mainImage;
 
@@ -120,7 +122,6 @@ public class Controller implements Initializable {
 
         // Music player
 
-        musicPlayer.setSongList(songsTable.getItems());
         songsTable.getItems().addListener(new ListChangeListener<Song>() {
             @Override
             public void onChanged(Change<? extends Song> change) {
@@ -144,6 +145,42 @@ public class Controller implements Initializable {
 
         mainImage.setImage(new Image("/Images/default.png"));
         loadSongsFromThePlaylists();
+
+        songsOnPlaylistView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    musicPlayer.setSongList(songsOnPlaylistView.getItems());
+                    nowPlayingPlaylist.setText("playing from "+playlistsTable.getSelectionModel().getSelectedItem().getName());
+                    try {
+                        musicPlayer.loadMedia(songsOnPlaylistView.getSelectionModel().getSelectedItem());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    musicPlayer.setVolume(volumeSlider.getValue());
+                    musicPlayer.play();
+                    updateSongInfo(musicPlayer.getSong());
+                }
+            }
+        });
+
+        songsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent click) {
+                if (click.getClickCount() == 2) {
+                    musicPlayer.setSongList(songsTable.getItems());
+                    nowPlayingPlaylist.setText("");
+                    try {
+                        musicPlayer.loadMedia(songsTable.getSelectionModel().getSelectedItem());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    musicPlayer.setVolume(volumeSlider.getValue());
+                    musicPlayer.play();
+                    updateSongInfo(musicPlayer.getSong());
+                }
+            }
+        });
     }
 
     /**
@@ -374,22 +411,6 @@ public class Controller implements Initializable {
     }
 
 
-    public void play(ActionEvent actionEvent) throws MalformedURLException {
-        if (songsTable.getSelectionModel().getSelectedItem() != musicPlayer.getSong()) {
-            musicPlayer.loadMedia(songsTable.getSelectionModel().getSelectedItem());
-            musicPlayer.setVolume(volumeSlider.getValue());
-            musicPlayer.play();
-            updateSongInfo(musicPlayer.getSong());
-        } else if(!musicPlayer.isPaused()){
-            musicPlayer.pause();
-        } else if(musicPlayer.isPaused()) {
-            musicPlayer.setVolume(volumeSlider.getValue());
-            musicPlayer.play();
-        }
-
-
-    }
-
     public void addSongToPlaylist(ActionEvent actionEvent) {
         try {
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
@@ -438,6 +459,17 @@ public class Controller implements Initializable {
 
     public void btnClose(ActionEvent event) {
         System.exit(0);
+    }
+
+    public void play(ActionEvent actionEvent) throws MalformedURLException {
+        if(!musicPlayer.isPaused()){
+            musicPlayer.pause();
+        } else if(musicPlayer.isPaused()) {
+            musicPlayer.setVolume(volumeSlider.getValue());
+            musicPlayer.play();
+        }
+
+
     }
 
     public void previousSong(ActionEvent actionEvent) throws MalformedURLException {

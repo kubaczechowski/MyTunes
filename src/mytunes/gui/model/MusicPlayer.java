@@ -29,15 +29,6 @@ public class MusicPlayer {
     private Path filePath;
     private List<Song> songList;
 
-
-    public void setSongList(List<Song> songList) {
-        this.songList = songList;
-    }
-
-    public List<Song> getSongList() {
-        return songList;
-    }
-
     public MusicPlayer() {
         bllFacade = new BLLcontroller();
     }
@@ -95,6 +86,14 @@ public class MusicPlayer {
     public Song getCurrentlyPlaying() {
         setCurrentlyPlaying();
         return currentlyPlaying;
+    }
+
+    public void setSongList(List<Song> songList) {
+        this.songList = songList;
+    }
+
+    public List<Song> getSongList() {
+        return songList;
     }
 
     /**

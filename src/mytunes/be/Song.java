@@ -23,12 +23,17 @@ public class Song {
         this.filePath = filePath;
         this.imagePath = imagePath;
 
+        image = new ImageView("/Images/default.png");
+
+        /*
         if(imagePath==null) {
             image = new ImageView("/Images/default.png");
         } else {
             String imgp = imagePath.replace("src", "").replace("\\", "/");
             image = new ImageView(new Image(imgp));
         }
+
+         */
 
         this.image.setFitHeight(20);
         this.image.setFitWidth(20);
