@@ -190,8 +190,7 @@ public class EditSongController implements Initializable {
     public void saveButtonAction(ActionEvent event) {
         //when creating a new row in a tableview
         if(selectedItem==null) {
-            //song goes down in the 3-layer architecture
-            songModel.save(getSongFromTable());
+
 
             //create a copy of the song and image in the program package song
             try {
@@ -203,6 +202,10 @@ public class EditSongController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            //song goes down in the 3-layer architecture
+            songModel.save(getSongFromTable());
+
         }
 
         //editing existing row

@@ -2,7 +2,6 @@ package mytunes.be;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.net.URISyntaxException;
 
 public class Song {
@@ -32,6 +31,7 @@ public class Song {
             image = new ImageView("/Images/default.png");
         } else {
 
+
             String imgp = imagePath.replace("src", "").replace("\\", "/");
             // image = new ImageView(new Image(imgp));
 
@@ -41,6 +41,30 @@ public class Song {
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
+
+        // String imgp = imagePath.replace("src/", "").replace("\\", "/");
+           // String imgp = imagePath.replace("src", "");
+           // image = new ImageView(new Image(imgp));
+
+            //experimenting
+            //you can add but you cant see images
+            //image = new ImageView( new Image( new File(imgp).toURI().toString()));
+
+
+            //now i have null pointer exception
+            /*
+            try {
+                image = new ImageView( new Image( getClass().getResource(imgp).toURI().toString()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+             */
+            //getClass().getResource("za.jpg").toURI().toString()
+
+
+
+
         }
 
 
