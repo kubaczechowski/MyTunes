@@ -208,18 +208,20 @@ public class EditSongController implements Initializable {
         //editing existing row
         else if(selectedItem != null)
         {
+            destinationPath = Path.of( filepathField.getText());
+    /*
             try {
                 Files.delete(destinationPath);
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+            if(pathOrigin!=null) {
+                try {
+                    Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
-            try {
-                Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
 
             //update song not save another one
             int id = selectedItem.getId();
