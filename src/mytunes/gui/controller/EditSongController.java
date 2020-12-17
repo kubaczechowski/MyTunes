@@ -76,7 +76,7 @@ public class EditSongController implements Initializable {
         categoryMenu.setText(selectedItem.getCategory());
         timeField.setText(String.valueOf(selectedItem.getPlaytime()));
         filepathField.setText(selectedItem.getFilePath());
-        imagePathField.setText(selectedItem.getImagePath());
+        //imagePathField.setText(selectedItem.getImagePath());
     }
 
     @Override
@@ -127,6 +127,7 @@ public class EditSongController implements Initializable {
         timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
     }
 
+    /*
     public void chooseImageAction(ActionEvent actionEvent) {
         pathImageOrigin=null;
         destinationImagePath=null;
@@ -142,16 +143,18 @@ public class EditSongController implements Initializable {
         //set a new path
 
         if (pathImageOrigin.toString().contains(".png")) {
-            destinationImagePath = Path.of("src/Images/" + titleField.getText() + ".png");
+            destinationImagePath = Path.of("/Images/" + titleField.getText() + ".png");
         } else if (pathImageOrigin.toString().contains(".jpg")) {
-            destinationImagePath = Path.of("src/Images/" + titleField.getText() + ".jpg");
+            destinationImagePath = Path.of("/Images/" + titleField.getText() + ".jpg");
         } else {
-            destinationImagePath = Path.of("src/Images/default.png");
+            destinationImagePath = Path.of("/Images/default.png");
         }
 
         //show it in the text field
         imagePathField.setText(String.valueOf(destinationImagePath));
     }
+
+     */
 
     /**
      * method based on the inserted information to the
@@ -166,11 +169,9 @@ public class EditSongController implements Initializable {
         String category = this.categoryMenu.getText();
         String filepath = filepathField.getText();
         String imagePath;
-        if(imagePathField.getText().equals("")) {
+
             imagePath = "src/Images/default.png";
-        } else {
-            imagePath = imagePathField.getText();
-        }
+
        // int time = Integer.parseInt(timeField.getText());
         String preparedTimeField = timeField.getText().substring(0, timeField.getText().length()-3);
         int timeInMillis = (int) Float.parseFloat(preparedTimeField);
@@ -197,18 +198,23 @@ public class EditSongController implements Initializable {
                 // here it creates a copy in the shown destination
                 Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
-               if(pathImageOrigin!=null)
+            /*   if(pathImageOrigin!=null)
                     Files.copy(pathImageOrigin, destinationImagePath, COPY_ATTRIBUTES, REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+             */
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //song goes down in the 3-layer architecture
             songModel.save(getSongFromTable());
-
         }
 
-        //editing existing row
+            //editing existing row
         else if(selectedItem != null)
         {
             destinationPath = Path.of( filepathField.getText());
@@ -232,10 +238,11 @@ public class EditSongController implements Initializable {
             String artist = artistField.getText();
             String category = this.categoryMenu.getText();
             String filepath = filepathField.getText();
-            String imagePath = imagePathField.getText();
+           // String imagePath = imagePathField.getText();
             String preparedtime = timeField.getText().substring(0, timeField.getText().length()-3);
             int time = (int) Float.parseFloat(preparedtime);
-            Song songToUpdate = new Song(id, title, artist, category, time, filepath, imagePath);
+            Song songToUpdate = new Song(id, title, artist, category, time, filepath,
+                    "src/Images/default.png");
             songModel.update(songToUpdate);
             songModel.load();
         }
@@ -267,3 +274,4 @@ public class EditSongController implements Initializable {
         categoryMenu.setText("rock");
     }
 }
+

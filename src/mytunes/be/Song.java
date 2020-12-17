@@ -2,6 +2,8 @@ package mytunes.be;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 public class Song {
@@ -32,16 +34,18 @@ public class Song {
         } else {
 
 
-            String imgp = imagePath.replace("src", "").replace("\\", "/");
-            // image = new ImageView(new Image(imgp));
-
+            String imgp = imagePath.replace("src","").replace("\\", "/");
+            System.out.println(">"+imgp+"<");
+            this.image = new ImageView(imgp);
+/*
             //experimenting here
             try {
-                image = new ImageView(new Image(getClass().getResource(imgp).toURI().toString()));
+                Image img = new Image(getClass().getResource(imgp).toURI().toString());
+                image = new ImageView(img);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-
+*/
         // String imgp = imagePath.replace("src/", "").replace("\\", "/");
            // String imgp = imagePath.replace("src", "");
            // image = new ImageView(new Image(imgp));

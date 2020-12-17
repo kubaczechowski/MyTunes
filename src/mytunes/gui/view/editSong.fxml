@@ -36,16 +36,10 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <Text layoutX="82.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image:" wrappingWidth="52.0">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Text>
       <TextField fx:id="titleField" layoutX="132.0" layoutY="26.0" prefHeight="25.0" prefWidth="217.0" />
       <TextField fx:id="artistField" layoutX="132.0" layoutY="57.0" prefHeight="25.0" prefWidth="217.0" />
       <TextField fx:id="timeField" layoutX="132.0" layoutY="122.0" prefHeight="25.0" prefWidth="93.0" />
       <TextField fx:id="filepathField" layoutX="132.0" layoutY="153.0" prefHeight="25.0" prefWidth="217.0" />
-      <TextField fx:id="imagePathField" layoutX="132.0" layoutY="185.0" prefHeight="25.0" prefWidth="217.0" />
       <Button fx:id="chooseButton" layoutX="362.0" layoutY="153.0" mnemonicParsing="false" onAction="#chooseButtonAction" text="Choose...">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -70,11 +64,6 @@
            <MenuItem mnemonicParsing="false" onAction="#rock" text="rock" />
         </items>
       </SplitMenuButton>
-      <Button fx:id="chooseImagePathButton" layoutX="363.0" layoutY="188.0" mnemonicParsing="false" onAction="#chooseImageAction" text="Choose...">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
    </children>
    <stylesheets>
       <URL value="@../css/TextButtonsStyle.css" />
