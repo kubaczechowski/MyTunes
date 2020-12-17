@@ -377,11 +377,17 @@ public class Controller implements Initializable {
     public void play(ActionEvent actionEvent) throws MalformedURLException {
         if (songsTable.getSelectionModel().getSelectedItem() != musicPlayer.getSong()) {
             musicPlayer.loadMedia(songsTable.getSelectionModel().getSelectedItem());
+            musicPlayer.setVolume(volumeSlider.getValue());
+            musicPlayer.play();
+            updateSongInfo(musicPlayer.getSong());
+        } else if(!musicPlayer.isPaused()){
+            musicPlayer.pause();
+        } else if(musicPlayer.isPaused()) {
+            musicPlayer.setVolume(volumeSlider.getValue());
+            musicPlayer.play();
         }
 
-        musicPlayer.setVolume(volumeSlider.getValue());
-        musicPlayer.play();
-        updateSongInfo(musicPlayer.getSong());
+
     }
 
     public void addSongToPlaylist(ActionEvent actionEvent) {
