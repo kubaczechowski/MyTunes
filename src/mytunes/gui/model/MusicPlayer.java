@@ -16,6 +16,7 @@ import mytunes.bll.BLLcontroller;
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 
 public class MusicPlayer {
@@ -26,11 +27,19 @@ public class MusicPlayer {
     private MediaPlayer audioPlayer;
     private Song song;
     private Path filePath;
-    private ObservableList<Song> songList;
+    private List<Song> songList;
+
+
+    public void setSongList(List<Song> songList) {
+        this.songList = songList;
+    }
+
+    public List<Song> getSongList() {
+        return songList;
+    }
 
     public MusicPlayer() {
         bllFacade = new BLLcontroller();
-        songList = FXCollections.observableArrayList();
     }
 
     /**
@@ -59,11 +68,16 @@ public class MusicPlayer {
      */
     public void loadMedia(Song song) throws MalformedURLException {
         this.song = song;
+
+        if (audioPlayer != null) {
+            audioPlayer.dispose();
+        }
+
         filePath = FileSystems.getDefault().getPath(song.getFilePath());
         media = new Media(filePath.toUri().toURL().toExternalForm());
        // System.out.println(audioPath.toUri().toURL().toExternalForm());
         audioPlayer = new MediaPlayer(media);
-        currentlyPlaying = song;
+        setCurrentlyPlaying();
     }
 
     /**
@@ -71,11 +85,7 @@ public class MusicPlayer {
      * and if paused, it sets the string to paused.
      */
     public void setCurrentlyPlaying() {
-        if (!isPaused()) {
-            currentlyPlaying.setTitle("Paused");
-        } else {
-            currentlyPlaying = song;
-        }
+        currentlyPlaying = song;
     }
 
     /**
@@ -99,12 +109,21 @@ public class MusicPlayer {
         return song;
     }
 
-
     public MediaPlayer getAudioPlayer() {
         return audioPlayer;
     }
 
-    public boolean isOver() {
-        return audioPlayer.onEndOfMediaProperty().isBound();
+    public Song getNextSongInList() {
+        if (songList.indexOf(song) == songList.size()-1) {
+            return songList.get(0);
+        }
+        return songList.get(songList.indexOf(song) + 1);
+    }
+
+    public Song getPreviousSongInList() {
+        if (songList.indexOf(song) == 0) {
+            return songList.get(songList.size() - 1);
+        }
+        return songList.get(songList.indexOf(song) - 1);
     }
 }

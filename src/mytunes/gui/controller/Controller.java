@@ -2,7 +2,9 @@ package mytunes.gui.controller;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -98,9 +100,8 @@ public class Controller implements Initializable {
         playlistModel = PlaylistModel.createOrGetInstance();
         alertDisplayer = new AlertDisplayer();
         musicPlayer = new MusicPlayer();
-       playlistItemModel = PlaylistItemModel.createOrGetInstance();
-
-
+        song = musicPlayer.getSong();
+        playlistItemModel = PlaylistItemModel.createOrGetInstance();
     }
 
     /**
@@ -113,19 +114,26 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setObservableTableSongs(songModel);
         setObservableTablePlaylists(playlistModel);
+
         //I don't remember what it means
         filterButton = true;
-        // Music player
-        volumeSlider = new Slider(0.1,1.0,0.5);
 
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+        // Music player
+
+        musicPlayer.setSongList(songsTable.getItems());
+        songsTable.getItems().addListener(new ListChangeListener<Song>() {
             @Override
-            public void invalidated(Observable observable) {
-                musicPlayer.setVolume(volumeSlider.getValue());
+            public void onChanged(Change<? extends Song> change) {
+                musicPlayer.setSongList(songsTable.getItems());
             }
         });
 
-        mainImage.setImage(new Image("/Images/default.png"));
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+             @Override
+             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                 musicPlayer.setVolume(volumeSlider.getValue());
+             }
+         });
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if(newSelection!=null) {
@@ -134,6 +142,7 @@ public class Controller implements Initializable {
             }
         });
 
+        mainImage.setImage(new Image("/Images/default.png"));
         loadSongsFromThePlaylists();
     }
 
@@ -144,7 +153,6 @@ public class Controller implements Initializable {
         //load the hashmap or whaever we have for that songs
 
     }
-
 
     /**
      * method sets the TableView Songs so that whenever change happen
@@ -191,7 +199,6 @@ public class Controller implements Initializable {
 
         playlistModel.load();
         playlistsTable.setItems(playlistModel.getAllPlaylists());
-
     }
 
 
@@ -206,7 +213,6 @@ public class Controller implements Initializable {
                     "Select playlist");
         else
             openCreateOrEditPlaylistWindow(playlistsTable.getSelectionModel().getSelectedItem());
-
     }
 
     private void openCreateOrEditPlaylistWindow(Playlist selectedItem)
@@ -251,7 +257,6 @@ public class Controller implements Initializable {
     }
 
 
-
     /**
      *method opens a new window when button new is pressed.
      * When selectedItem is null it is the signal in the later part of the
@@ -290,15 +295,18 @@ public class Controller implements Initializable {
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mytunes/gui/view/editSong.fxml"));
         Parent root = null;
+
         try {
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         EditSongController editSongController= loader.getController();
         //Create a file chooser object which then will be send to the EditSongController
         FileChooser fileChooser = new FileChooser();
         editSongController.setModel(songModel, fileChooser, selectedItem);
+
         Stage stage = new Stage();
         stage.setTitle("New/Edit Song");
         stage.setScene(new Scene(root));
@@ -328,7 +336,6 @@ public class Controller implements Initializable {
      * It sorts alfabeticaly at the top is A and at the bottom is Z
      * @param event
      */
-
     public void sortAscending(ActionEvent event) {
         //Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
          List<Song> unsortedList = songsOnPlaylistView.getItems();
@@ -371,35 +378,17 @@ public class Controller implements Initializable {
 
 
     public void play(ActionEvent actionEvent) throws MalformedURLException {
-        if (songsTable.getSelectionModel().getSelectedItem() != null && musicPlayer.getSong() == null) {
-            song = songsTable.getSelectionModel().getSelectedItem();
-            musicPlayer.loadMedia(song);
+        if (songsTable.getSelectionModel().getSelectedItem() != musicPlayer.getSong()) {
+            musicPlayer.loadMedia(songsTable.getSelectionModel().getSelectedItem());
         }
-
-        if (songsTable.getSelectionModel().getSelectedItem() == null) {
-            alertDisplayer.displayInformationAlert("","Please select a song from the song list","Select a song");
-        }
-
-        try {
-            if (!musicPlayer.isPaused()) {
-                musicPlayer.pause();
-                nowPlaying.setText("Paused");
-            }
-
-            if (musicPlayer.isPaused()) {
-                musicPlayer.play();
-                nowPlaying.setText(musicPlayer.getCurrentlyPlaying().getTitle());
-                nowPlayingArtist.setText(musicPlayer.getCurrentlyPlaying().getArtist());
-                mainImage.setImage(new Image(musicPlayer.getCurrentlyPlaying().getImagePath().replace("src", "")));
-            }
-        } catch (Exception e) {
-            System.out.println("Select a song");
-        }
+        
+        musicPlayer.setVolume(volumeSlider.getValue());
+        musicPlayer.play();
+        updateSongInfo(musicPlayer.getSong());
     }
 
     public void addSongToPlaylist(ActionEvent actionEvent) {
         try {
-
             Song songSelected = songsTable.getSelectionModel().getSelectedItem();
             Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
             addingNewSongToPlaylist(playlistSelected, songSelected);
@@ -410,12 +399,10 @@ public class Controller implements Initializable {
         }
     }
 
-
     /**
      * Method will be called whenever we will add a new song to PlaylistView
      * it will update a properties number of songs and playtime in TableView Playlist
      */
-
     private void addingNewSongToPlaylist(Playlist playlist, Song song)
     {
         //updating DB
@@ -425,8 +412,6 @@ public class Controller implements Initializable {
         playlistModel.addSongToPlaylist(playlist, song);
         //force TableView Playlists to refresh
         playlistModel.load();
-
-
     }
 
 
@@ -435,7 +420,6 @@ public class Controller implements Initializable {
      * it will update a properties number of songs and playtime in TableView Playlist
      */
     public void btnDeleteSongsFromPlaylist(ActionEvent event) {
-
         Song songSelected = songsOnPlaylistView.getSelectionModel().getSelectedItem();
         Playlist playlistSelected = playlistsTable.getSelectionModel().getSelectedItem();
         playlistItemModel.deletePlaylistItem(playlistSelected, songSelected);
@@ -451,5 +435,35 @@ public class Controller implements Initializable {
 
     public void btnClose(ActionEvent event) {
         System.exit(0);
+    }
+
+    public void previousSong(ActionEvent actionEvent) throws MalformedURLException {
+        Song s = musicPlayer.getPreviousSongInList();
+
+        musicPlayer.pause();
+        musicPlayer.loadMedia(s);
+
+        songsTable.getSelectionModel().select(s);
+        updateSongInfo(s);
+
+        musicPlayer.play();
+    }
+
+    public void nextSong(ActionEvent actionEvent) throws MalformedURLException {
+        Song s = musicPlayer.getNextSongInList();
+
+        musicPlayer.pause();
+        musicPlayer.loadMedia(s);
+
+        songsTable.getSelectionModel().select(s);
+        updateSongInfo(s);
+
+        musicPlayer.play();
+    }
+
+    private void updateSongInfo(Song song) {
+        nowPlaying.setText(song.getTitle());
+        nowPlayingArtist.setText(song.getArtist());
+        mainImage.setImage(new Image(song.getImagePath().replace("src", "")));
     }
 }

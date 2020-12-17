@@ -219,7 +219,7 @@ public class SongDAO implements ISongRepository {
     public int getSongTime(String mediaStringUrl){
         Media media = new Media(mediaStringUrl);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
+       // mediaPlayer.play();
 
         if(mediaPlayer.getStatus()==MediaPlayer.Status.READY)
             return (int) mediaPlayer.getStopTime().toSeconds();

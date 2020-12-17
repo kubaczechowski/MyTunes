@@ -40,7 +40,6 @@ public class EditSongController implements Initializable {
     @FXML
     private SplitMenuButton categoryMenu;
 
-
     private FileChooser fileChooser;
     private SongModel songModel;
     private Song selectedItem;
@@ -50,7 +49,6 @@ public class EditSongController implements Initializable {
 
     private Path pathImageOrigin;
     private Path destinationImagePath;
-
 
     public void setModel(SongModel songModel, FileChooser fileChooser, Song selectedItem) {
         this.songModel = songModel;

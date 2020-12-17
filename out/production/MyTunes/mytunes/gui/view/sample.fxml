@@ -88,7 +88,7 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Text>
-      <Text fx:id="nowPlaying" layoutX="377.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(none) ... Is Playing" wrappingWidth="306.0883483886719">
+      <Text fx:id="nowPlaying" layoutX="377.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paused" textAlignment="CENTER" wrappingWidth="306.0883483886719">
          <font>
             <Font size="22.0" />
          </font>
@@ -102,9 +102,9 @@
       <TextField fx:id="searchBar" layoutX="885.0" layoutY="24.0" prefHeight="25.0" prefWidth="121.0" />
       <Button fx:id="lupaButton" layoutX="1013.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchAction" prefHeight="25.0" prefWidth="33.0" stylesheets="/mytunes/gui/css/LupaButton.css" />
       <Button fx:id="playButton" layoutX="124.0" layoutY="12.0" mnemonicParsing="false" onAction="#play" prefHeight="66.0" prefWidth="67.0" stylesheets="/mytunes/gui/css/PlayButton.css" />
-      <Button fx:id="buttonBack" layoutX="58.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/BackButton.css" />
-      <Button fx:id="buttonForward" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
-      <Slider fx:id="volumeSlider" layoutX="55.0" layoutY="89.0" prefHeight="16.0" prefWidth="206.0" />
+      <Button fx:id="buttonBack" layoutX="58.0" layoutY="15.0" mnemonicParsing="false" onAction="#previousSong" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/BackButton.css" />
+      <Button fx:id="buttonForward" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" onAction="#nextSong" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
+      <Slider fx:id="volumeSlider" blockIncrement="0.1" layoutX="55.0" layoutY="89.0" max="1.0" prefHeight="16.0" prefWidth="206.0" value="0.1" />
       <ImageView fx:id="mainImage" fitHeight="85.0" fitWidth="108.0" layoutX="279.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="nowPlayingArtist" fill="#4a4848" layoutX="384.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="306.0883483886719">
          <font>
