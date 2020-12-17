@@ -136,8 +136,8 @@ public class Controller implements Initializable {
          });
 
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if(newSelection!=null) {
-                if (newSelection.getSongs()==null) songsOnPlaylistView.getItems().clear();
+            if(newSelection != null) {
+                if (newSelection.getSongs() == null) songsOnPlaylistView.getItems().clear();
                 else songsOnPlaylistView.setItems(FXCollections.observableArrayList(newSelection.getSongs()));
             }
         });
@@ -369,11 +369,8 @@ public class Controller implements Initializable {
                 return o2.getTitle().toLowerCase().compareTo(o1.getTitle().toLowerCase());
             }
         };
-
         Collections.sort(unsortedList, compareByTitle);
-
         songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
-
     }
 
 
@@ -381,7 +378,7 @@ public class Controller implements Initializable {
         if (songsTable.getSelectionModel().getSelectedItem() != musicPlayer.getSong()) {
             musicPlayer.loadMedia(songsTable.getSelectionModel().getSelectedItem());
         }
-        
+
         musicPlayer.setVolume(volumeSlider.getValue());
         musicPlayer.play();
         updateSongInfo(musicPlayer.getSong());
@@ -442,10 +439,10 @@ public class Controller implements Initializable {
 
         musicPlayer.pause();
         musicPlayer.loadMedia(s);
-
         songsTable.getSelectionModel().select(s);
-        updateSongInfo(s);
 
+        musicPlayer.setVolume(volumeSlider.getValue());
+        updateSongInfo(s);
         musicPlayer.play();
     }
 
@@ -454,10 +451,10 @@ public class Controller implements Initializable {
 
         musicPlayer.pause();
         musicPlayer.loadMedia(s);
-
         songsTable.getSelectionModel().select(s);
-        updateSongInfo(s);
 
+        updateSongInfo(s);
+        musicPlayer.setVolume(volumeSlider.getValue());
         musicPlayer.play();
     }
 

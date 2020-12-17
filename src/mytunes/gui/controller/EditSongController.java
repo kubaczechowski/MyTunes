@@ -96,8 +96,8 @@ public class EditSongController implements Initializable {
 
 
     public void chooseButtonAction(ActionEvent event) {
-        pathOrigin=null;
-        destinationPath=null;
+        pathOrigin = null;
+        destinationPath = null;
 
         //open a file explorer
         Node n = (Node) event.getSource();
