@@ -35,7 +35,7 @@ public class Song {
 
 
             String imgp = imagePath.replace("src","").replace("\\", "/");
-            System.out.println(">"+imgp+"<");
+            //System.out.println(">"+imgp+"<");
             this.image = new ImageView(imgp);
 /*
             //experimenting here
