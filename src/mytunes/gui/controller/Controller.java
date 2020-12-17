@@ -1,6 +1,7 @@
 package mytunes.gui.controller;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -19,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -45,8 +47,7 @@ import java.util.*;
  *
  * @author Kjell&& && Kamila &&Kuba
  * */
-
-public class Controller extends SongModel implements Initializable {
+public class Controller implements Initializable {
 
     //Tables and Lists
     public TableView<Playlist> playlistsTable;
@@ -83,6 +84,14 @@ public class Controller extends SongModel implements Initializable {
     private final PlaylistItemModel playlistItemModel;
     private final SongModel songModel;
     private final AlertDisplayer alertDisplayer;
+    private PlaylistModel playlistModel;
+    private PlaylistItemModel playlistItemModel;
+    private SongModel songModel;
+    private AlertDisplayer alertDisplayer;
+
+    private javafx.scene.media.MediaPlayer mediaPlayer;
+    private javafx.scene.media.MediaPlayer mediaPlayer2;
+
     private boolean filterButton;
 
     public Controller() {
@@ -112,6 +121,7 @@ public class Controller extends SongModel implements Initializable {
             }
         });
 
+        //changing the volume
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
              @Override
              public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -119,6 +129,7 @@ public class Controller extends SongModel implements Initializable {
              }
          });
 
+        //set songs from the playlist in ListView
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 if (newSelection.getSongs() == null) songsOnPlaylistView.getItems().clear();
@@ -126,17 +137,42 @@ public class Controller extends SongModel implements Initializable {
             }
         });
 
+        mainImage.setImage(new Image("/Images/default.png"));
+        loadSongsFromThePlaylists();
+
+        //playing songs from the Playlist if double-clicked on the songs on Playlist ListView
         songsOnPlaylistView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent click) {
                 if (click.getClickCount() == 2) {
                     musicPlayer.setSongList(songsOnPlaylistView.getItems());
-                    //nowPlayingPlaylist.setText("playing from "+ playlistsTable.getSelectionModel().getSelectedItem().getName());
+                    nowPlayingPlaylist.setText("playing from "+playlistsTable.getSelectionModel().getSelectedItem().getName());
                     try {
                         musicPlayer.loadMedia(songsOnPlaylistView.getSelectionModel().getSelectedItem());
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
+
+                    musicPlayer.getAudioPlayer().setOnEndOfMedia(new Runnable() {
+                        @Override
+                        public void run() {
+                            //System.out.println("bla bla");
+                            Song s = musicPlayer.getNextSongInList();
+
+                            musicPlayer.pause();
+                            try {
+                                musicPlayer.loadMedia(s);
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            songsOnPlaylistView.getSelectionModel().select(s);
+
+                            updateSongInfo(s);
+                            musicPlayer.setVolume(volumeSlider.getValue());
+                            musicPlayer.play();
+
+                        }
+                    });
                     musicPlayer.setVolume(volumeSlider.getValue());
                     musicPlayer.play();
                     updateSongInfo(musicPlayer.getSong());
@@ -144,6 +180,7 @@ public class Controller extends SongModel implements Initializable {
             }
         });
 
+        //if double clicked on songs TableView play song
         songsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent click) {
@@ -155,6 +192,28 @@ public class Controller extends SongModel implements Initializable {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
+
+                    musicPlayer.getAudioPlayer().setOnEndOfMedia(new Runnable() {
+                        @Override
+                        public void run() {
+                            //System.out.println("bla bla");
+                            Song s = musicPlayer.getNextSongInList();
+
+                            musicPlayer.pause();
+                            try {
+                                musicPlayer.loadMedia(s);
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            songsTable.getSelectionModel().select(s);
+
+                            updateSongInfo(s);
+                            musicPlayer.setVolume(volumeSlider.getValue());
+                            musicPlayer.play();
+
+                        }
+                    });
+
                     musicPlayer.setVolume(volumeSlider.getValue());
                     musicPlayer.play();
                     updateSongInfo(musicPlayer.getSong());

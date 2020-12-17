@@ -8,9 +8,11 @@ import mytunes.be.Song;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class MusicPlayer {
@@ -58,6 +60,13 @@ public class MusicPlayer {
             System.out.println("Unable to load song file");
         }
 
+    /**
+     * Updates the current playing song and returns it.
+     * @return the current playing song
+     */
+    public Song getCurrentlyPlaying() {
+        setCurrentlyPlaying();
+        return currentlyPlaying;
     }
 
     // Sets the songList
