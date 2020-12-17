@@ -1,0 +1,20 @@
+.list-cell {
+    -fx-background-color: transparent;
+}
+.list-view {
+    -fx-background-color: transparent;
+}
+
+.list-view: odd {
+    -fx-background-color: white;
+    -fx-opacity: 0.4;
+    -fx-text-fill: black;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.list-view: even{
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}

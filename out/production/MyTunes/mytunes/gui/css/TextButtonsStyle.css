@@ -1,0 +1,36 @@
+.button {
+   -fx-background-color: white;
+    -fx-opacity: 0.8;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-opacity: 0.8;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 0);
+}
+
+.split-menu-button {
+    -fx-background-color: white;
+    -fx-opacity: 0.8;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+}
+
+.split-menu-button .label {
+    -fx-background-color: white;
+    -fx-opacity: 0.8;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+}
+
+.split-menu-button .arrow-button {
+    -fx-background-color: white;
+    -fx-opacity: 0.8;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+}

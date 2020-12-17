@@ -3,6 +3,8 @@ package mytunes.be;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.net.URISyntaxException;
+
 public class Song {
 
     private int id;
@@ -23,17 +25,26 @@ public class Song {
         this.filePath = filePath;
         this.imagePath = imagePath;
 
-        image = new ImageView("/Images/default.png");
+        //image = new ImageView("/Images/default.png");
 
-        /*
+
         if(imagePath==null) {
             image = new ImageView("/Images/default.png");
         } else {
+
             String imgp = imagePath.replace("src", "").replace("\\", "/");
-            image = new ImageView(new Image(imgp));
+            // image = new ImageView(new Image(imgp));
+
+            //experimenting here
+            try {
+                image = new ImageView(new Image(getClass().getResource(imgp).toURI().toString()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
 
-         */
+
+
 
         this.image.setFitHeight(20);
         this.image.setFitWidth(20);
