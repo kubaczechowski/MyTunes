@@ -3,6 +3,7 @@ package mytunes.gui.controller;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -41,7 +43,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-
 /**
  * Controller of main view window (sample.fxml)
  * It enables the user to choose CRUD operations on both songs
@@ -50,7 +51,6 @@ import java.util.*;
  *
  * @author Kjell&& && Kamila &&Kuba
  * */
-
 public class Controller implements Initializable {
 
     //Tables and Lists
@@ -60,8 +60,6 @@ public class Controller implements Initializable {
     public ListView<Song> songsOnPlaylistView;
     //used for the searching functionality
     public TextField searchBar;
-
-
 
     // Music Player
     private MusicPlayer musicPlayer;
@@ -93,9 +91,12 @@ public class Controller implements Initializable {
     private PlaylistItemModel playlistItemModel;
     private SongModel songModel;
     private AlertDisplayer alertDisplayer;
-  
+
+    private javafx.scene.media.MediaPlayer mediaPlayer;
+    private javafx.scene.media.MediaPlayer mediaPlayer2;
 
     private boolean filterButton;
+
 
     public Controller() {
         songModel = SongModel.createOrGetInstance();
@@ -104,11 +105,15 @@ public class Controller implements Initializable {
         musicPlayer = new MusicPlayer();
         song = musicPlayer.getSong();
         playlistItemModel = PlaylistItemModel.createOrGetInstance();
+
+        //mediaPlayer = musicPlayer.getAudioPlayer();
+
+        //mediaPlayer = mediaPlayer2.addMediaPlayerListener();
     }
 
     /**
      * method is called then insance Controller is created
-     * it is used to prepare the TableViews and set initial values
+     * it is used to prepare the TableViews and to set initial values
      * @param url
      * @param resourceBundle
      */
@@ -120,8 +125,8 @@ public class Controller implements Initializable {
         //I don't remember what it means
         filterButton = true;
 
-        // Music player
 
+        // Music player for TableView
         songsTable.getItems().addListener(new ListChangeListener<Song>() {
             @Override
             public void onChanged(Change<? extends Song> change) {
@@ -129,6 +134,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //changing the volume
         volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
              @Override
              public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -136,6 +142,7 @@ public class Controller implements Initializable {
              }
          });
 
+        //set songs from the playlist in ListView
         playlistsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if(newSelection != null) {
                 if (newSelection.getSongs() == null) songsOnPlaylistView.getItems().clear();
@@ -146,6 +153,7 @@ public class Controller implements Initializable {
         mainImage.setImage(new Image("/Images/default.png"));
         loadSongsFromThePlaylists();
 
+        //playing songs from the Playlist if double-clicked on the songs on Playlist ListView
         songsOnPlaylistView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent click) {
@@ -157,6 +165,27 @@ public class Controller implements Initializable {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
+
+                    musicPlayer.getAudioPlayer().setOnEndOfMedia(new Runnable() {
+                        @Override
+                        public void run() {
+                            //System.out.println("bla bla");
+                            Song s = musicPlayer.getNextSongInList();
+
+                            musicPlayer.pause();
+                            try {
+                                musicPlayer.loadMedia(s);
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            songsOnPlaylistView.getSelectionModel().select(s);
+
+                            updateSongInfo(s);
+                            musicPlayer.setVolume(volumeSlider.getValue());
+                            musicPlayer.play();
+
+                        }
+                    });
                     musicPlayer.setVolume(volumeSlider.getValue());
                     musicPlayer.play();
                     updateSongInfo(musicPlayer.getSong());
@@ -164,6 +193,7 @@ public class Controller implements Initializable {
             }
         });
 
+        //if double clicked on songs TableView play song
         songsTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent click) {
@@ -175,12 +205,40 @@ public class Controller implements Initializable {
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
+                    musicPlayer.getAudioPlayer().setOnEndOfMedia(new Runnable() {
+                        @Override
+                        public void run() {
+                            //System.out.println("bla bla");
+                            Song s = musicPlayer.getNextSongInList();
+
+                            musicPlayer.pause();
+                            try {
+                                musicPlayer.loadMedia(s);
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            songsTable.getSelectionModel().select(s);
+
+                            updateSongInfo(s);
+                            musicPlayer.setVolume(volumeSlider.getValue());
+                            musicPlayer.play();
+
+                        }
+                    });
+
                     musicPlayer.setVolume(volumeSlider.getValue());
                     musicPlayer.play();
                     updateSongInfo(musicPlayer.getSong());
                 }
             }
         });
+
+        if(musicPlayer!=null){
+
+
+
+        }
+
     }
 
     /**
@@ -385,10 +443,7 @@ public class Controller implements Initializable {
         };
 
         Collections.sort(unsortedList, compareByTitle);
-
        songsOnPlaylistView.setItems(FXCollections.observableList(unsortedList));
-
-
     }
 
     /**

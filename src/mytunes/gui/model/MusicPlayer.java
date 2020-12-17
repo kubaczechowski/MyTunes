@@ -5,6 +5,7 @@
 package mytunes.gui.model;
 
 
+import javafx.fxml.Initializable;
 import mytunes.be.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,9 +15,11 @@ import mytunes.bll.BLLFacade;
 import mytunes.bll.BLLcontroller;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class MusicPlayer {
@@ -32,6 +35,8 @@ public class MusicPlayer {
     public MusicPlayer() {
         bllFacade = new BLLcontroller();
     }
+
+
 
     /**
      * Checks if song is paused, if it is, then play.
@@ -125,4 +130,16 @@ public class MusicPlayer {
         }
         return songList.get(songList.indexOf(song) - 1);
     }
+
+    /*
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        audioPlayer.onEndOfMediaProperty().addListener((observableValue, runnable, t1) -> invokePlayingNewSong() );
+    }
+
+    public int invokePlayingNewSong() {
+        return 1;
+    }
+
+     */
 }
