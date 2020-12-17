@@ -99,7 +99,7 @@
       <Button fx:id="playButton" layoutX="124.0" layoutY="12.0" mnemonicParsing="false" onAction="#play" prefHeight="66.0" prefWidth="67.0" stylesheets="/mytunes/gui/css/PlayButton.css" />
       <Button fx:id="buttonBack" layoutX="58.0" layoutY="15.0" mnemonicParsing="false" onAction="#previousSong" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/BackButton.css" />
       <Button fx:id="buttonForward" layoutX="196.0" layoutY="15.0" mnemonicParsing="false" onAction="#nextSong" prefHeight="58.0" prefWidth="58.0" stylesheets="/mytunes/gui/css/ForwardButton.css" />
-      <Slider fx:id="volumeSlider" blockIncrement="0.1" layoutX="55.0" layoutY="89.0" max="1.0" prefHeight="16.0" prefWidth="206.0" value="0.1" />
+      <Slider fx:id="volumeSlider" blockIncrement="0.05" layoutX="55.0" layoutY="89.0" max="1.0" prefHeight="16.0" prefWidth="206.0" value="0.1" />
       <ImageView fx:id="mainImage" fitHeight="85.0" fitWidth="108.0" layoutX="279.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="nowPlaying" layoutX="374.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Paused" wrappingWidth="306.0883483886719">
          <font>

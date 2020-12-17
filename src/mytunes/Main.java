@@ -19,9 +19,6 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        String musicPath = "src/Music/song2.wav";
-        MusicPlayer player = new MusicPlayer();
-      //  player.play(musicPath);
         launch(args);
     }
 }
