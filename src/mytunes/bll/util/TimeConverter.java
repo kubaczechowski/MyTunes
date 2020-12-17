@@ -17,7 +17,10 @@ public class TimeConverter {
             int minutes = (int) (timeInSec - hours*60*60)/60;
             int seconds = (int) (timeInSec - minutes*60);
 
-            return hours + ":" + minutes + ":" + seconds;
+            if(seconds>9)
+                return hours + ":" + minutes + ":" + seconds;
+            else
+                return hours + ":" + minutes + ":0" + seconds;
         }
         //if a time is smaller than an hour
         else
