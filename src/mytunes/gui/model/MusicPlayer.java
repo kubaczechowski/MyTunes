@@ -19,6 +19,7 @@ public class MusicPlayer {
     private MediaPlayer audioPlayer;
     private Song song;
     private List<Song> songList;
+    private Song currentlyPlaying;
 
 
     // Starts the media player
@@ -33,6 +34,7 @@ public class MusicPlayer {
 
     /**
      * Returns true if audio player is paused
+     *
      * @return boolean
      */
     public boolean isPaused() {
@@ -41,6 +43,7 @@ public class MusicPlayer {
 
     /**
      * Loads music file into the media player by it's path
+     *
      * @param song song to be loaded
      * @throws MalformedURLException
      */
@@ -59,60 +62,66 @@ public class MusicPlayer {
         } catch (Exception e) {
             System.out.println("Unable to load song file");
         }
-
-    /**
-     * Updates the current playing song and returns it.
-     * @return the current playing song
-     */
-    public Song getCurrentlyPlaying() {
-        setCurrentlyPlaying();
-        return currentlyPlaying;
     }
 
-    // Sets the songList
-    public void setSongList(List<Song> songList) {
-        this.songList = songList;
-    }
 
-    /**
-     * Sets the volume based a sliders value
-     * @param sliderValue value of slider
-     */
-    public void setVolume(double sliderValue) {
-        audioPlayer.setVolume(sliderValue);
-    }
-
-    // Returns the current song
-    public Song getSong() {
-        return song;
-    }
-
-    /**
-     * If the index iterator has reached the size of the list, it returns the first index of the songList.
-     * Else it returns the next index of songList.
-     * @return index of next song
-     */
-    public Song getNextSongInList() {
-        if (songList.indexOf(song) == songList.size()-1) {
-            return songList.get(0);
+        /**
+         * Updates the current playing song and returns it.
+         * @return the current playing song
+         */
+        public Song getCurrentlyPlaying () {
+            setCurrentlyPlaying();
+            return currentlyPlaying;
         }
-        return songList.get(songList.indexOf(song) + 1);
+
+    public void setCurrentlyPlaying() {
+        currentlyPlaying = song;
     }
 
-    public MediaPlayer getAudioPlayer() {
-        return audioPlayer;
-    }
-
-    /**
-     * If the index iterator has reached the first index in the list, it returns the last index of the songList.
-     * Else it returns the previous index of songList
-     * @return index of previous song
-     */
-    public Song getPreviousSongInList() {
-        if (songList.indexOf(song) == 0) {
-            return songList.get(songList.size() - 1);
+        // Sets the songList
+        public void setSongList (List < Song > songList) {
+            this.songList = songList;
         }
-        return songList.get(songList.indexOf(song) - 1);
-    }
 
-}
+        /**
+         * Sets the volume based a sliders value
+         * @param sliderValue value of slider
+         */
+        public void setVolume ( double sliderValue){
+            audioPlayer.setVolume(sliderValue);
+        }
+
+        // Returns the current song
+        public Song getSong () {
+            return song;
+        }
+
+        /**
+         * If the index iterator has reached the size of the list, it returns the first index of the songList.
+         * Else it returns the next index of songList.
+         * @return index of next song
+         */
+        public Song getNextSongInList () {
+            if (songList.indexOf(song) == songList.size() - 1) {
+                return songList.get(0);
+            }
+            return songList.get(songList.indexOf(song) + 1);
+        }
+
+        public MediaPlayer getAudioPlayer () {
+            return audioPlayer;
+        }
+
+        /**
+         * If the index iterator has reached the first index in the list, it returns the last index of the songList.
+         * Else it returns the previous index of songList
+         * @return index of previous song
+         */
+        public Song getPreviousSongInList () {
+            if (songList.indexOf(song) == 0) {
+                return songList.get(songList.size() - 1);
+            }
+            return songList.get(songList.indexOf(song) - 1);
+        }
+
+    }

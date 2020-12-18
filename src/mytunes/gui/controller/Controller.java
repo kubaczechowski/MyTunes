@@ -84,10 +84,6 @@ public class Controller implements Initializable {
     private final PlaylistItemModel playlistItemModel;
     private final SongModel songModel;
     private final AlertDisplayer alertDisplayer;
-    private PlaylistModel playlistModel;
-    private PlaylistItemModel playlistItemModel;
-    private SongModel songModel;
-    private AlertDisplayer alertDisplayer;
 
     private javafx.scene.media.MediaPlayer mediaPlayer;
     private javafx.scene.media.MediaPlayer mediaPlayer2;
@@ -138,7 +134,7 @@ public class Controller implements Initializable {
         });
 
         mainImage.setImage(new Image("/Images/default.png"));
-        loadSongsFromThePlaylists();
+        //loadSongsFromThePlaylists();
 
         //playing songs from the Playlist if double-clicked on the songs on Playlist ListView
         songsOnPlaylistView.setOnMouseClicked(new EventHandler<MouseEvent>() {
