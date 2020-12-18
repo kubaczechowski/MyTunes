@@ -37,23 +37,6 @@ public class PlaylistItemManager {
             throw new BLLexception("couldn't delete playlistItem");
         }
     }
-
-
-/*
-        public void deleteSong(PlaylistItem playlistItem) throws BLLexception {
-            try {
-                idalFacade.deleteSong(playlistItem);
-            }catch (DALexception daLexception) {
-                daLexception.printStackTrace();
-                throw new BLLexception("Couldn't delete Song");
-            }
-
-        }
-
- */
-
-
-
         public List<PlaylistItem> getAllPlaylistItems() throws BLLexception{
             try {
                 return idalFacade.getAllPlaylistItems();

@@ -20,7 +20,6 @@ import java.lang.Object;
 /**
  * Class is a kind of connector between methods in GUI
  * and DAO.
- * author kuba czechowski
  */
 
 public class SongManager {
@@ -49,7 +48,12 @@ public class SongManager {
     }
 
 
-
+    /**
+     * method is called if new song is being created
+     * it calls DAO facade
+     * @param song
+     * @throws BLLexception
+     */
     public void save(Song song) throws BLLexception {
         try {
             idalFacade.createSong(
@@ -63,10 +67,13 @@ public class SongManager {
             daLexception.printStackTrace();
             throw new BLLexception("couldn't save song");
         }
-
-
     }
 
+    /**
+     * method is called if song is to be deleted
+     * @param songToBeDeleted
+     * @throws BLLexception
+     */
     public void delete(Song songToBeDeleted) throws BLLexception {
         try {
             idalFacade.deleteSong(songToBeDeleted);
@@ -76,6 +83,12 @@ public class SongManager {
         }
     }
 
+    /**
+     * if some properties of the song have been changed it u calls
+     * the DAO layer to update them
+     * @param song
+     * @throws BLLexception
+     */
     public void update(Song song) throws BLLexception {
         try {
             idalFacade.updateSong(song, song.getTitle(), song.getArtist(),

@@ -305,6 +305,10 @@ public class Controller implements Initializable {
         playlistModel.deletePlaylist(playlistsTable.getSelectionModel().getSelectedItem());
     }
 
+    /**
+     * Button used for the searching functionality
+     * @param actionEvent
+     */
     public void searchAction(ActionEvent actionEvent) {
         if(filterButton) {
             songsTable.setItems(songModel.searchSongs(searchBar.getText()));
