@@ -4,8 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mytunes.be.Playlist;
 import mytunes.be.Song;
-import mytunes.bll.BLLFacade;
-import mytunes.bll.BLLcontroller;
 import mytunes.bll.PlaylistManager;
 import mytunes.bll.exeption.BLLexception;
 import mytunes.bll.util.TimeConverter;

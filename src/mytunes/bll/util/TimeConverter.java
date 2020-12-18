@@ -1,5 +1,10 @@
 package mytunes.bll.util;
 
+/**
+ * method convert time given in miliseconds into
+ * a string format HH:MM:SS
+ * @author kuba
+ */
 public class TimeConverter {
 
     public String convertToString(int timeInMillis)

@@ -253,6 +253,7 @@ public class PlaylistDAO implements IPlaylistRepository {
 
     /**
      * method will be called when removing an item from Playlist ListView
+     * then row in Playlits table is updated with current number of songs
      * @param playlist
      * @param deletedSongTime
      */
@@ -274,7 +275,8 @@ public class PlaylistDAO implements IPlaylistRepository {
     }
 
     /**
-     * method will be called when removing an item from Playlist ListView
+     * method will be called when removing an item from Playlist ListView.
+     * then row in Playlits table is updated with current number of songs
      * @param playlist
      * @return
      */

@@ -9,6 +9,9 @@ import mytunes.dal.exception.DALexception;
 
 import java.util.List;
 
+/**
+ * operations on the playlists go through this method
+ */
 public class PlaylistManager {
 
     private IDALFacade idalFacade;

@@ -127,7 +127,9 @@ public class EditSongController implements Initializable {
         timeField.textProperty().bind(mediaPlayer.totalDurationProperty().asString());
     }
 
+    //disabled functionality
     /*
+
     public void chooseImageAction(ActionEvent actionEvent) {
         pathImageOrigin=null;
         destinationImagePath=null;
@@ -198,6 +200,7 @@ public class EditSongController implements Initializable {
                 // here it creates a copy in the shown destination
                 Files.copy(pathOrigin, destinationPath, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
+                //functionality disabled
             /*   if(pathImageOrigin!=null)
                     Files.copy(pathImageOrigin, destinationImagePath, COPY_ATTRIBUTES, REPLACE_EXISTING);
             } catch (IOException e) {
@@ -253,6 +256,7 @@ public class EditSongController implements Initializable {
         stage.close();
     }
 
+    // categories to choose
 
     public void rap(ActionEvent event) {
         categoryMenu.setText("rap");

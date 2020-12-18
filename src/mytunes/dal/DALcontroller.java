@@ -14,12 +14,14 @@ import mytunes.dal.interfaces.ISongRepository;
 
 import java.util.List;
 
+/**
+ * methods of this class are called by the higher layer
+ */
 public class DALcontroller implements IDALFacade {
 
     private IPlaylistRepository playlistAccess;
     private ISongRepository songAccess;
     private IPlaylistItemRepository playlistItemAccess;
-    private IPlaylistItemRepository itemAccess;
 
     public DALcontroller() {
         playlistAccess = new PlaylistDAO();

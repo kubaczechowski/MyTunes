@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
 
+/**
+ * class used for connecting with DB
+ */
 public class DatabaseConnector {
 
     private SQLServerDataSource dataSource;
