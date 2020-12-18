@@ -63,5 +63,6 @@ public class DeleteSongPrompt {
             System.out.println("couldn't delete song");
             e.printStackTrace();
         }
+        closeTheWindow(event);
     }
 }
